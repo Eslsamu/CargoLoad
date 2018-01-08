@@ -1,3 +1,6 @@
+import Model.ContainerModel;
+import View.AppView;
+import View.ViewController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,9 +16,9 @@ public class Main extends Application{
 	
 	//@Override
 	public void start(Stage primaryStage) throws Exception {
-		CargoModel model = new CargoModel();
-		CargoController controller = new CargoController(model);
-		CargoView view = new CargoView(model,controller);
+		ContainerModel model = new ContainerModel();
+		ViewController controller = new ViewController(model);
+		AppView view = new AppView(model,controller);
 				
 		
 	}
