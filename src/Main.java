@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 /**
  * This class initializes and starts the JavaFX application. 
  * 
- * @author Jordan, Basia, Blazej, Yvar, Stijn, Samue
+ * @author Jordan, Basia, Blazej, Yvar, Stijn, Samuel
  */
 public class Main extends Application{
 	
@@ -17,6 +17,7 @@ public class Main extends Application{
 		CargoController controller = new CargoController(model);
 		CargoView view = new CargoView(model,controller);
 				
+		
 	}
 
 }
