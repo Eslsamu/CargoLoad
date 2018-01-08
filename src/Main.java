@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 /**
  * This class initializes and starts the JavaFX application. 
  * 
- * @author Jordan, Basia, Blazej, Yvar, Stijn, Samuel
+ * @author Jordan, Basia, Blazej, Yvar, Stijn, Samue
  */
 public class Main extends Application{
 	
