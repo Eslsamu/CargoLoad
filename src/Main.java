@@ -9,12 +9,14 @@ import javafx.stage.Stage;
 public class Main extends Application{
 	
 	// VERSION
-	public static final String VERSION = "1.2"; 
+	public static final String VERSION = "1.0"; 
 	
-//	@Override
-	public void start(Stage arg0) throws Exception {
-		// TODO Auto-generated method stub
-		
+	//@Override
+	public void start(Stage primaryStage) throws Exception {
+		CargoModel model = new CargoModel();
+		CargoController controller = new CargoController(model);
+		CargoView view = new CargoView(model,controller);
+				
 	}
 
 }
