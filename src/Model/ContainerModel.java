@@ -19,10 +19,10 @@ public class ContainerModel {
     private final int containerX = 5;
     private final int containerZ = 33;
     private int value = 0;
-    private final int[][][] values = new int[containerZ][containerY][containerX];
-    private ParcelShape[] parcels;
+    private int[][][] values = new int[containerZ][containerY][containerX];
+    private ArrayList<ParcelShape> parcels;
 
-    public ContainerModel(ParcelShape[] parcels){
+    public ContainerModel(ArrayList<ParcelShape> parcels){
         this.parcels = parcels;
     }
 
@@ -44,7 +44,7 @@ public class ContainerModel {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerY;y++){
                 for (int x=0;x<containerX;x++){
-                    System.out.print(values[z][containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(values[z][y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
                 }
                 System.out.println();
             }
@@ -92,7 +92,9 @@ public class ContainerModel {
         for (int zCoord = z; zCoord < z + parcel.getShape()[0]; zCoord++) {
             for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
                 for (int xCoord = x; xCoord < x + parcel.getShape()[2]; xCoord++) {
-                    values[z][y][x] = 1;
+                    System.out.println("set value " + zCoord + " " + yCoord + " " + xCoord);
+                    values[zCoord][yCoord][xCoord] = 1;
+                    System.out.println(values[z][y][x]);
                 }
             }
         }

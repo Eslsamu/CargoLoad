@@ -25,13 +25,13 @@ public class Main extends Application{
 		// ViewController controller = new ViewController(model);
 		// AppView view = new AppView(model,controller);
 				
-		Scene scene = new Scene(view.asParent());
+		//Scene scene = new Scene(view.asParent());
 		
 		// setup primary stage
 		primaryStage.setTitle("CargoLoad");
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
-		primaryStage.setScene(scene);	
+	//	primaryStage.setScene(scene);
 				
 		primaryStage.show();
 	}
