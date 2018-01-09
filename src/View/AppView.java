@@ -1,8 +1,13 @@
 package View;
 
 import Model.ContainerModel;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 public class AppView {
 
@@ -10,6 +15,8 @@ public class AppView {
 	private final ViewController controller;
 	private final BorderPane mainView;
 	private final ContainerPane containerP;
+	
+	private Color BACKGROUND_COLOR = Color.BLACK;
 	
 	public AppView(ContainerModel model, ViewController controller) {
 		this.model = model;
@@ -19,6 +26,7 @@ public class AppView {
 		containerP = new ContainerPane();
 		
 		mainView.setCenter(containerP);
+		mainView.setBackground(new Background(new BackgroundFill(BACKGROUND_COLOR,CornerRadii.EMPTY, Insets.EMPTY)));
 	}
 	
 	/**

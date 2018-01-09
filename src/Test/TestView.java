@@ -18,7 +18,7 @@ public class TestView extends Application{
 		
 		BorderPane testPane = createTestPane();
 		
-		Scene scene = new Scene(testPane);
+		Scene scene = new Scene(testPane,500,500);
 		
 		// setup primary stage
 		primaryStage.setTitle("CargoLoad");
