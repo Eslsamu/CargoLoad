@@ -97,8 +97,8 @@ public class Container{
 
           // else if(!doesFit(tempPlacementCoords, container, parcelList.get(i).get(j)) && parcelList.size() == 1)
           //  {
-                removeLastParcel(tempPlacementCoords, container, parcelList.get(i).get(j));
-                parcelList.add(parcelList.get(i));
+        //        removeLastParcel(tempPlacementCoords, container, parcelList.get(i).get(j));
+         //       parcelList.add(parcelList.get(i));
            // }
         //}
     }
