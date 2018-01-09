@@ -1,7 +1,8 @@
 package Shapes;
 
-import Util.Coordinates;
+public class ParcelA {
 
+<<<<<<< HEAD
 public class ParcelA extends ParcelShape{
 	
 	protected static ShapeColor color = ShapeColor.BLUE;
@@ -19,4 +20,6 @@ public class ParcelA extends ParcelShape{
 	}
 	
 	
+=======
+>>>>>>> a967f02b93d181c6c000fb742fa6f9222f2c91e4
 }
