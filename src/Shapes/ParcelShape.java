@@ -12,10 +12,9 @@ public abstract class ParcelShape {
 	final ShapeColor color;
 	final int[] shape;
 	final int value;
-	final ArrayList<Cube> childCubes;
 	
 	/*
-	 * The coordinates onto which the mainCube parcel is currently placed in the container
+	 * The coordinates onto which the fixed point 
 	 */
 	protected Coordinates currentCoords;
 	
@@ -30,13 +29,8 @@ public abstract class ParcelShape {
 		this.value = value;
 		this.currentCoords = coords;
 		this.direction = d;
-		
-		getCubes();
 	}
 	
-	/*
-	 * instantiates cube object that construct this shape together
-	 */
 	
 	
 	/**
