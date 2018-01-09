@@ -2,12 +2,12 @@ package Shapes;
 
 import javafx.scene.paint.Color;
 
-public enum ParcelColor {
+public enum ShapeColor {
 	
 	EMPTY,
-	BLUE, //A
-	GREEN, //B
-	RED; //C
+	BLUE, //A & L
+	GREEN, //B & P
+	RED; //C & T
 	
 	public Color toColor() {
         switch (this) {
