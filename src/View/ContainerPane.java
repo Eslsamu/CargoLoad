@@ -13,7 +13,6 @@ import javafx.scene.transform.Rotate;
 
 public class ContainerPane extends Pane {
 	
-	private Color BACKGROUND_COLOR = Color.BLACK;
 	private double CONTAINER_LENGTH = 16.5;
 	private double CONTAINER_WIDTH = 2.5;
 	private double CONTAINER_HEIGHT = 4.0;
@@ -26,7 +25,7 @@ public class ContainerPane extends Pane {
     private double angleZ = 0;
     
     public ContainerPane() {
-    	this.setBackground(new Background(new BackgroundFill(BACKGROUND_COLOR,CornerRadii.EMPTY, Insets.EMPTY)));
+    	setPrefSize(200,200);
     	
     	//shifts the origin of the space 
     	setTranslateX(200);
