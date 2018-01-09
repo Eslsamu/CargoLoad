@@ -1,1 +1,11 @@
 /bin/
+<<<<<<< HEAD
+/CargoLoad/nbproject/private/
+/Project3/nbproject/private/
+/nbproject/private/
+=======
+
+.idea
+*.iml
+*.md
+>>>>>>> 889ccf65718df07f673e013e2f5e69e1e4bbc6d7
