@@ -1,5 +1,7 @@
 package Shapes;
 
+import java.util.ArrayList;
+
 import Util.Coordinates;
 
 /*
@@ -10,6 +12,7 @@ public abstract class ParcelShape {
 	final ShapeColor color;
 	final int[] shape;
 	final int value;
+	final ArrayList<Cube> childCubes;
 	
 	/*
 	 * The coordinates onto which the mainCube parcel is currently placed in the container
@@ -32,7 +35,7 @@ public abstract class ParcelShape {
 	}
 	
 	/*
-	 * instantiates 
+	 * instantiates cube object that construct this shape together
 	 */
 	
 	
