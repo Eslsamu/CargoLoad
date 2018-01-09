@@ -1,7 +1,9 @@
 package Test;
 
+import View.ContainerPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -14,7 +16,7 @@ public class TestView extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Pane testPane = createTestPane();
+		BorderPane testPane = createTestPane();
 		
 		Scene scene = new Scene(testPane);
 		
@@ -27,10 +29,10 @@ public class TestView extends Application{
 		primaryStage.show();
 	}
 	
-	public Pane createTestPane() {
-		Pane testPane = new Pane();
+	public BorderPane createTestPane() {
+		BorderPane testPane = new BorderPane();
 		
-		
+		testPane.setCenter(new ContainerPane());
 		
 		return testPane;
 		
