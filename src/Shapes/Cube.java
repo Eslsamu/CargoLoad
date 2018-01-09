@@ -5,6 +5,8 @@ package Shapes;
  * can be childs of pentominoes or parcels
  * an element of the container class will be either a box or null
  */
-public class Box {
-
+public class Cube {
+	
+	Coordinates coords 
+	
 }

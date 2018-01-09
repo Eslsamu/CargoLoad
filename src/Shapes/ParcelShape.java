@@ -12,16 +12,29 @@ public abstract class ParcelShape {
 	final int value;
 	
 	/*
-	 * The coordinates onto which the parcel is currently placed in the container
+	 * The coordinates onto which the mainCube parcel is currently placed in the container
 	 */
-	Coordinates currentCoords;
+	protected Coordinates currentCoords;
 	
-	public ParcelShape(ShapeColor color, int[] shape, int value, Coordinates coords) {
+	/*
+	 * A Parcel can face towards 3 different directions --> up/down, left/right, front/back
+	 */
+	protected Facing direction;
+	
+	public ParcelShape(ShapeColor color, int[] shape, int value, Coordinates coords, Facing d) {
 		this.color = color;
 		this.shape = shape;
 		this.value = value;
 		this.currentCoords = coords;
+		this.direction = d;
+		
+		getCubes();
 	}
+	
+	/*
+	 * instantiates 
+	 */
+	
 	
 	/**
 	 * @return the color

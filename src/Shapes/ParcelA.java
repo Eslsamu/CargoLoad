@@ -17,4 +17,6 @@ public class ParcelA extends ParcelShape{
 		ParcelShape cloneC = new ParcelA(new Coordinates(currentCoords.x,currentCoords.y,currentCoords.z));
 		return cloneC;
 	}
+	
+	
 }
