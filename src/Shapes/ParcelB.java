@@ -4,17 +4,19 @@ import Util.Coordinates;
 
 public class ParcelB extends ParcelShape{
 	
-	protected static ShapeColor color = ShapeColor.GREEN;
-	protected static int[] shape = {2,3,4};
-	protected static int value = 4;
+	protected static ShapeColor color = ShapeColor.BLUE;
+	protected static int[] shape = {3,3,3};
+	protected static int value = 3;
 	
-	public ParcelB(Coordinates coords) {
-		super(color, shape, value, coords);
+	public ParcelB(Coordinates coords, Facing d) {
+		super(color, shape, value, coords, d);
 	}
-
+	public ParcelB(Facing d) {
+		super(color, shape, value, d);
+	}
 	@Override
 	public ParcelShape clone() {
-		ParcelShape cloneC = new ParcelB(new Coordinates(currentCoords.x,currentCoords.y,currentCoords.z));
+		ParcelShape cloneC = new ParcelA(new Coordinates(currentCoords.x,currentCoords.y,currentCoords.z),super.direction);
 		return cloneC;
 	}
 }

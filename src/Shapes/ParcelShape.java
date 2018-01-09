@@ -1,5 +1,7 @@
 package Shapes;
 
+import java.util.ArrayList;
+
 import Util.Coordinates;
 
 /*
@@ -8,20 +10,41 @@ import Util.Coordinates;
 public abstract class ParcelShape {
 	
 	final ShapeColor color;
-	final int[] shape;
-	final int value;
+	int[] shape;
+	int value;
 	
 	/*
-	 * The coordinates onto which the parcel is currently placed in the container
+	 * The coordinates onto which the head of the parcel is placed
 	 */
-	Coordinates currentCoords;
+	protected Coordinates currentCoords;
 	
-	public ParcelShape(ShapeColor color, int[] shape, int value, Coordinates coords) {
+	/*
+	 * A Parcel can face towards 3 different directions --> up/down, left/right, front/back
+	 */
+	protected Facing direction;
+	
+	public ParcelShape(ShapeColor color, int[] shape, int value, Coordinates coords, Facing d) {
 		this.color = color;
 		this.shape = shape;
 		this.value = value;
 		this.currentCoords = coords;
+		this.direction = d;
 	}
+
+	public ParcelShape(ShapeColor color, int[] shape, int value, Facing d) {
+		this.color = color;
+		this.shape = shape;
+		this.value = value;
+		this.direction = d;
+	}
+
+	public int[] getShape(){
+	    return shape;
+    }
+
+    public int getValue(){
+	    return value;
+    }
 	
 	/**
 	 * @return the color
