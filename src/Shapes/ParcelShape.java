@@ -14,7 +14,7 @@ public abstract class ParcelShape {
 	final int value;
 	
 	/*
-	 * The coordinates onto which the fixed point 
+	 * The coordinates onto which the head of the parcel is placed
 	 */
 	protected Coordinates currentCoords;
 	
@@ -30,8 +30,6 @@ public abstract class ParcelShape {
 		this.currentCoords = coords;
 		this.direction = d;
 	}
-	
-	
 	
 	/**
 	 * @return the color
