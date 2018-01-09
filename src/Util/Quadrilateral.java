@@ -1,0 +1,34 @@
+package Util;
+
+import Shapes.ShapeColor;
+import javafx.scene.paint.Color;
+
+public class Quadrilateral {
+	
+	private Coordinates vertex1;
+	private Coordinates vertex2;
+	private Coordinates vertex3;
+	private Coordinates vertex4;
+	private ShapeColor color;
+	
+	public Quadrilateral(Coordinates v1, Coordinates v2, Coordinates v3, Coordinates v4, ShapeColor c) {
+		vertex1 = v1;
+		vertex2 = v2;
+		vertex3 = v3;
+		vertex4 = v4;
+		
+		color = c;
+	}
+	
+	/**
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public Quadrilateral clone() {
+		return new Quadrilateral(
+				new Coordinates(vertex1.x,vertex1.y,vertex1.z),
+				new Coordinates(vertex2.x,vertex2.y,vertex2.z),
+				new Coordinates(vertex3.x,vertex3.y,vertex3.z),
+				new Coordinates(vertex4.x,vertex4.y,vertex4.z), color);
+	}
+}
