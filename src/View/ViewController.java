@@ -1,5 +1,3 @@
 package View;
-
-public class ViewController {
-
+public class ViewController{
 }
