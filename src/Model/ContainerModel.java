@@ -1,5 +1,7 @@
 package Model;
 
+import Shapes.ParcelShape;
+
 public class ContainerModel {
     /**
      * How it should work:
@@ -15,8 +17,14 @@ public class ContainerModel {
         container.printContainer();
     }
 
-    public static boolean solve(){
-        // this method works pretty similar to solve() method for phase 1
+    /**
+     * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
+     * @param container A container that we want to fill with parcels
+     * @param parcels An array of parcels we can use. In the first version it is A, B, C and in the second it's L, P, T.
+     * @param maxValueContainer The container that has been already packed and reached the maximal value so far
+     * @return
+     */
+    public static boolean solve(Container container, ParcelShape[] parcels, Container maxValueContainer){
         return true;
     }
 }

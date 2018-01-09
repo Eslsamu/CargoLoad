@@ -6,10 +6,13 @@ public class Container {
     private final int containerY = 8;
     private final int containerX = 5;
     private final int containerZ = 33;
+    private int value = 0;
     private final int[][][] values = new int[containerZ][containerY][containerX];
 
+    /**
+     * The method prints the layers of the container one after another. It's a very crude substitution until we don't have GUI.
+     */
     public void printContainer(){
-        values[0][0][0] = 1;
         for(int z=0;z<containerZ;z++){
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerY;y++){
@@ -43,6 +46,14 @@ public class Container {
      */
     // TODO
     public void placeParcel(int z, int y, int x, ParcelShape parcel){
+
+    }
+
+    /**
+     * Removes the parcel from the container.
+     */
+    // TODO
+    public void removeParcel(){
 
     }
 
