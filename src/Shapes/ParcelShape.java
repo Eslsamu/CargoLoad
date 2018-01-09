@@ -31,6 +31,13 @@ public abstract class ParcelShape {
 		this.direction = d;
 	}
 
+	public ParcelShape(ShapeColor color, int[] shape, int value, Facing d) {
+		this.color = color;
+		this.shape = shape;
+		this.value = value;
+		this.direction = d;
+	}
+
 	public int[] getShape(){
 	    return shape;
     }

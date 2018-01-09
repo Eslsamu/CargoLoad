@@ -11,7 +11,9 @@ public class ParcelC extends ParcelShape{
 	public ParcelC(Coordinates coords, Facing d) {
 		super(color, shape, value, coords, d);
 	}
-
+	public ParcelC(Facing d) {
+		super(color, shape, value, d);
+	}
 	@Override
 	public ParcelShape clone() {
 		ParcelShape cloneC = new ParcelA(new Coordinates(super.currentCoords.x,super.currentCoords.y,super.currentCoords.z),super.direction);

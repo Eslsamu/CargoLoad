@@ -2,6 +2,8 @@ package Model;
 
 import Shapes.ParcelShape;
 
+import java.util.ArrayList;
+
 public class ContainerModel {
     /**
      * How it should work:
@@ -12,27 +14,27 @@ public class ContainerModel {
      *
      */
 
-
-
-    /**
-     * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
-     * @param container A container that we want to fill with parcels
-     * @param parcels An array of parcels we can use. In the first version it is A, B, C and in the second it's L, P, T.
-     * @param maxValueContainer The container that has been already packed and reached the maximal value so far
-     * @return
-     */
-    public static boolean solve(ContainerTest container, ParcelShape[] parcels, ContainerTest maxValueContainer){
-        return true;
-    }
-
     // in 0.5 meters
     private final int containerY = 8;
     private final int containerX = 5;
     private final int containerZ = 33;
     private int value = 0;
     private final int[][][] values = new int[containerZ][containerY][containerX];
-    private ParcelShape lastParcel;
-    private int[] lastParcelCoords = new int[3];
+    private ParcelShape[] parcels;
+
+    public ContainerModel(ParcelShape[] parcels){
+        this.parcels = parcels;
+    }
+
+
+    /**
+     * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
+     * @param maxValueContainer The container that has been already packed and reached the maximal value so far
+     * @return
+     */
+    public boolean solve(ArrayList<ParcelShape> usedParcels, ContainerModel maxValueContainer){
+        return true;
+    }
 
     /**
      * The method prints the layers of the container one after another. It's a very crude substitution until we don't have GUI.
