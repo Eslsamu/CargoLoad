@@ -15,9 +15,9 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    private final int containerY = 8;
-    private final int containerX = 5;
-    private final int containerZ = 33;
+    protected static final int containerY = 8;
+    protected static final int containerX = 5;
+    protected static final int containerZ = 33;
     private int value = 0;
     private int[][][] values = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcels;

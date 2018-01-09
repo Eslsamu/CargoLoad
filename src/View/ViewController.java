@@ -19,6 +19,6 @@ public class ViewController{
 	}
 	
 	public void allowCameraHandler() {
-		_primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
+		primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
 	}
 }
