@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bfc7b679-0cd9-4abe-b787-b67190492602" name="Default" comment="Grasp algorithm structure and related MaximalSpace class&#10;(Also changed ContainerModel x,y,z variables so they are accesable there)">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/Model/Grasp.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/Model/MaximalSpace.java" />
+    <list default="true" id="bfc7b679-0cd9-4abe-b787-b67190492602" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/Model/ContainerModel.java" afterPath="$PROJECT_DIR$/src/Model/ContainerModel.java" />
-      <change beforePath="$PROJECT_DIR$/src/View/ViewController.java" afterPath="$PROJECT_DIR$/src/View/ViewController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -402,12 +398,20 @@
       <workItem from="1515430753054" duration="2112000" />
       <workItem from="1515497588492" duration="2210000" />
       <workItem from="1515528412609" duration="112000" />
-      <workItem from="1515528544482" duration="5583000" />
+      <workItem from="1515528544482" duration="5600000" />
     </task>
+    <task id="LOCAL-00001" summary="Grasp algorithm structure and related MaximalSpace class&#10;(Also changed ContainerModel x,y,z variables so they are accesable there)">
+      <created>1515534430825</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1515534430825</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10017000" />
+    <option name="totallyTimeSpent" value="10034000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
