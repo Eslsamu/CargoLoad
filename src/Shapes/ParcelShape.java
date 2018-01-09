@@ -10,8 +10,8 @@ import Util.Coordinates;
 public abstract class ParcelShape {
 	
 	final ShapeColor color;
-	final int[] shape;
-	final int value;
+	int[] shape;
+	int value;
 	
 	/*
 	 * The coordinates onto which the head of the parcel is placed
@@ -30,6 +30,14 @@ public abstract class ParcelShape {
 		this.currentCoords = coords;
 		this.direction = d;
 	}
+
+	public int[] getShape(){
+	    return shape;
+    }
+
+    public int getValue(){
+	    return value;
+    }
 	
 	/**
 	 * @return the color
