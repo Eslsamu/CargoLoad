@@ -48,16 +48,36 @@ public class Grasp {
 
         //we save a MaximalSpace's min and max coords, and using these we can find the coordinates of all 8 vertices
 
+        int minX = space.getMinCoords().getX();
+        int minY = space.getMinCoords().getY();
+        int minZ = space.getMinCoords().getZ();
+        int maxX = space.getMaxCoords().getX();
+        int maxY = space.getMaxCoords().getY();
+        int maxZ = space.getMaxCoords().getZ();
+
         Coordinates[] maximalSpaceVertices = new Coordinates[8];
         Coordinates v1 = space.getMinCoords();
-        Coordinates v2 = new Coordinates(space.getMinCoords().getX(), space.getMinCoords().getY(), space.getMaxCoords().getZ());
+        Coordinates v2 = new Coordinates(maxX, minY, minZ);
+        Coordinates v3 = new Coordinates(minX, maxY, minZ);
+        Coordinates v4 = new Coordinates(minX, minY, maxZ);
+        Coordinates v5 = new Coordinates(maxX, maxY, minZ);
+        Coordinates v6 = new Coordinates(maxX, minY, maxZ);
+        Coordinates v7 = new Coordinates(minX, maxY, maxZ);
+        Coordinates v8 = space.getMaxCoords();
 
-        double[] distance = new double[8]; //distance of MaximalSpace vertex to closest container corner
+        double[][] distance = new double[8][8]; //distance of each MaximalSpace vertex to each container corner
+        double[] minDistance = new double[8];   //distance of each MaximalSpace vertex to its closest container corner
 
         for (int i = 0; i < containerVertices.length; i++) {
             for(int j = 0; j < maximalSpaceVertices.length; j++){
-
+                distance[i][j] = Math.sqrt(
+                                  Math.pow(containerVertices[i].getX() - maximalSpaceVertices[j].getX(),2)
+                                + Math.pow(containerVertices[i].getY() - maximalSpaceVertices[j].getY(),2)
+                                + Math.pow(containerVertices[i].getZ() - maximalSpaceVertices[j].getZ(),2));
+                if(j == 0) minDistance[i] = distance[i][0];
+                else if (distance[i][j] < minDistance[i]) minDistance[i] = distance[i][j];
             }
+
         }
     }
 
