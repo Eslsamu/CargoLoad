@@ -34,7 +34,7 @@ public class Grasp {
         maximalSpaces.add(initialMaximalSpace);
     }
 
-    public Coordinates computeClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
+    public double computeDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
         /*
         "For each
         new maximal-space, we compute the distance from every corner of the
@@ -65,7 +65,7 @@ public class Grasp {
         Coordinates v7 = new Coordinates(minX, maxY, maxZ);
         Coordinates v8 = space.getMaxCoords();
 
-        Coordinates closestCorner = v1;
+        //Coordinates closestCorner = v1;
         double[][] distance = new double[8][8]; //distance of each MaximalSpace vertex to each container corner
         double[] minDistancePerVertex = new double[8];   //distance of each MaximalSpace vertex to its closest container corner
         double minDistance = 0;
@@ -82,14 +82,21 @@ public class Grasp {
             if(i == 0) minDistance = minDistancePerVertex[i];
             else if (minDistancePerVertex[i] < minDistance){
                 minDistance = minDistancePerVertex[i];
-                closestCorner = maximalSpaceVertices[i];
+                //closestCorner = maximalSpaceVertices[i];
             }
         }
-        return closestCorner;
+        return minDistance;
     }
 
     public MaximalSpace chooseMaximalSpace() {
 
+        double[] closestCornerDistances = new double[8];
+
+        for(int i = 0; i < maximalSpaces.size(); i++){
+        //for(MaximalSpace space : maximalSpaces){
+            //computeDistanceClosestCorner(space);
+            computeDistanceClosestCorner(maximalSpaces.get(i));
+        }
         int a = 0; //index of the maximalSpace we choose, the one closest to a corner of the container
         MaximalSpace chosenMaximalSpace = maximalSpaces.get(a);
 

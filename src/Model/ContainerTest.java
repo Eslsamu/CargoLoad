@@ -25,6 +25,6 @@ public class ContainerTest {
         ArrayList<ParcelShape> usedParcels = new ArrayList<>();
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        container.solve(usedParcels,maxValueContainer);
+        container.solve(maxValueContainer);
     }
 }
