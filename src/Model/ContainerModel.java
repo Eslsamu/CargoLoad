@@ -15,15 +15,17 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    protected static final int containerY = 8;
-    protected static final int containerX = 5;
-    protected static final int containerZ = 33;
-    private int value = 0;
+    private final int containerY = 8;
+    private final int containerX = 5;
+    private final int containerZ = 33;
     private int[][][] values = new int[containerZ][containerY][containerX];
-    private ArrayList<ParcelShape> parcels;
+    private ArrayList<ParcelShape> parcelList;
+    private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
 
-    public ContainerModel(ArrayList<ParcelShape> parcels){
-        this.parcels = parcels;
+
+
+    public void setParcelList(ArrayList<ParcelShape> newParcelList){
+        parcelList = newParcelList;
     }
 
 
@@ -44,12 +46,27 @@ public class ContainerModel {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerY;y++){
                 for (int x=0;x<containerX;x++){
-                    System.out.print(values[z][y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(values[z][containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
                 }
                 System.out.println();
             }
             System.out.println();
         }
+    }
+
+    public int computeTotalValue(){
+        int totalValue=0;
+        for(ParcelShape parcel:containedParcels){
+            totalValue+=parcel.getValue();
+        }
+        return totalValue;
+    }
+
+
+
+    public void showResults(ContainerModel container){
+        container.printContainer();
+        System.out.println("The best value is :"+container.computeTotalValue());
     }
 
     /**
@@ -114,4 +131,19 @@ public class ContainerModel {
         }
     }
 
+    public ContainerModel clone(){
+        ContainerModel model = new ContainerModel();
+        model.setParcelList(parcelList);
+        model.setValues(values);
+        model.setContainedParcels(containedParcels);
+        return model;
+    }
+
+    public void setValues(int[][][] newValues){
+        values = newValues;
+    }
+
+    public void setContainedParcels(ArrayList<ParcelShape> newContainedParcels) {
+        containedParcels = newContainedParcels;
+    }
 }
