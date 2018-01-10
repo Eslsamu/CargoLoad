@@ -28,7 +28,7 @@ public class ContainerModel {
         parcelList = newParcelList;
     }
 
-
+    
     /**
      * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
      * @param maxValueContainer The container that has been already packed and reached the maximal value so far
