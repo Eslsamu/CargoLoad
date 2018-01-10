@@ -1,5 +1,6 @@
 package Model;
 
+import Shapes.Facing;
 import Shapes.ParcelShape;
 import Util.Coordinates;
 
@@ -150,10 +151,13 @@ public class ContainerModel {
      * Places the parcel in a certain cell of the container with coordinates (z,y,x).
      */
     // TODO
-    public void placeParcel(int z, int y, int x, ParcelShape parcel){
+    public void placeParcel(int z, int y, int x, ParcelShape parcel, Facing o){
         System.out.println("Print z,y,x"+parcel.getClass() + z + y +x);
         System.out.println("Length y"+parcel.getShape()[0]+parcel.getShape()[1]+parcel.getShape()[2]);
+        
+        parcel.setOrientation(o);
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
+         
         for (int zCoord = z; zCoord < z + parcel.getShape()[0]; zCoord++) {
             for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
                 for (int xCoord = x; xCoord < x + parcel.getShape()[2]; xCoord++) {
@@ -161,6 +165,7 @@ public class ContainerModel {
                     System.out.println("Get shape "+parcel.getShape()[1]);
                     containerMatrix[zCoord][yCoord][xCoord] = 1;
                     System.out.println(containerMatrix[z][y][x]);
+                	}
                 }
             }
         }
