@@ -21,21 +21,12 @@ public abstract class ParcelShape {
 	/*
 	 * A Parcel can face towards 3 different directions --> up/down, left/right, front/back
 	 */
-	protected Facing direction;
+	protected Facing orientation;
 	
-	public ParcelShape(ShapeColor color, int[] shape, int value, Coordinates coords, Facing d) {
+	public ParcelShape(ShapeColor color, int[] shape, int value) {
 		this.color = color;
 		this.shape = shape;
 		this.value = value;
-		this.currentCoords = coords;
-		this.direction = d;
-	}
-
-	public ParcelShape(ShapeColor color, int[] shape, int value, Facing d) {
-		this.color = color;
-		this.shape = shape;
-		this.value = value;
-		this.direction = d;
 	}
 
 	public int[] getShape(){
@@ -45,7 +36,7 @@ public abstract class ParcelShape {
     public int getValue(){
 	    return value;
     }
-	
+    
 	/**
 	 * @return the color
 	 */
@@ -72,6 +63,4 @@ public abstract class ParcelShape {
 	 */
 	@Override
 	public abstract ParcelShape clone();
-	
-	
 }
