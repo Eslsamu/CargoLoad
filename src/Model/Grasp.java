@@ -34,7 +34,7 @@ public class Grasp {
         maximalSpaces.add(initialMaximalSpace);
     }
 
-    public void computeClosestCorner(MaximalSpace space){
+    public Coordinates computeClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
         /*
         "For each
         new maximal-space, we compute the distance from every corner of the
@@ -65,8 +65,10 @@ public class Grasp {
         Coordinates v7 = new Coordinates(minX, maxY, maxZ);
         Coordinates v8 = space.getMaxCoords();
 
+        Coordinates closestCorner = v1;
         double[][] distance = new double[8][8]; //distance of each MaximalSpace vertex to each container corner
-        double[] minDistance = new double[8];   //distance of each MaximalSpace vertex to its closest container corner
+        double[] minDistancePerVertex = new double[8];   //distance of each MaximalSpace vertex to its closest container corner
+        double minDistance = 0;
 
         for (int i = 0; i < containerVertices.length; i++) {
             for(int j = 0; j < maximalSpaceVertices.length; j++){
@@ -74,11 +76,16 @@ public class Grasp {
                                   Math.pow(containerVertices[i].getX() - maximalSpaceVertices[j].getX(),2)
                                 + Math.pow(containerVertices[i].getY() - maximalSpaceVertices[j].getY(),2)
                                 + Math.pow(containerVertices[i].getZ() - maximalSpaceVertices[j].getZ(),2));
-                if(j == 0) minDistance[i] = distance[i][0];
-                else if (distance[i][j] < minDistance[i]) minDistance[i] = distance[i][j];
+                if(j == 0) minDistancePerVertex[i] = distance[i][0];
+                else if (distance[i][j] < minDistancePerVertex[i]) minDistancePerVertex[i] = distance[i][j];
             }
-
+            if(i == 0) minDistance = minDistancePerVertex[i];
+            else if (minDistancePerVertex[i] < minDistance){
+                minDistance = minDistancePerVertex[i];
+                closestCorner = maximalSpaceVertices[i];
+            }
         }
+        return closestCorner;
     }
 
     public MaximalSpace chooseMaximalSpace() {

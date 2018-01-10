@@ -68,8 +68,8 @@
       <file leaf-file-name="Grasp.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Model/Grasp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="77" column="90" lean-forward="true" selection-start-line="77" selection-start-column="90" selection-end-line="77" selection-end-column="90" />
+            <state relative-caret-position="68">
+              <caret line="67" column="39" lean-forward="true" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -411,7 +411,7 @@
       <workItem from="1515497588492" duration="2210000" />
       <workItem from="1515528412609" duration="112000" />
       <workItem from="1515528544482" duration="5600000" />
-      <workItem from="1515580064597" duration="3146000" />
+      <workItem from="1515580064597" duration="3893000" />
     </task>
     <task id="LOCAL-00001" summary="Grasp algorithm structure and related MaximalSpace class&#10;(Also changed ContainerModel x,y,z variables so they are accesable there)">
       <created>1515534430825</created>
@@ -434,11 +434,18 @@
       <option name="project" value="LOCAL" />
       <updated>1515581686956</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Grasp changes">
+      <created>1515583366196</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1515583366196</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19287000" />
+    <option name="totallyTimeSpent" value="20034000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -852,8 +859,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Model/Grasp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="77" column="90" lean-forward="true" selection-start-line="77" selection-start-column="90" selection-end-line="77" selection-end-column="90" />
+        <state relative-caret-position="68">
+          <caret line="67" column="39" lean-forward="true" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
