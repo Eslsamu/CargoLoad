@@ -70,12 +70,12 @@ public class Grasp {
         double[] minDistancePerVertex = new double[8];   //distance of each MaximalSpace vertex to its closest container corner
         double minDistance = 0;
 
-        for (int i = 0; i < containerVertices.length; i++) {
-            for(int j = 0; j < maximalSpaceVertices.length; j++){
+        for (int i = 0; i < maximalSpaceVertices.length; i++) {
+            for(int j = 0; j < containerVertices.length; j++){
                 distance[i][j] = Math.sqrt(
-                                  Math.pow(containerVertices[i].getX() - maximalSpaceVertices[j].getX(),2)
-                                + Math.pow(containerVertices[i].getY() - maximalSpaceVertices[j].getY(),2)
-                                + Math.pow(containerVertices[i].getZ() - maximalSpaceVertices[j].getZ(),2));
+                                  Math.pow(containerVertices[j].getX() - maximalSpaceVertices[i].getX(),2)
+                                + Math.pow(containerVertices[j].getY() - maximalSpaceVertices[i].getY(),2)
+                                + Math.pow(containerVertices[j].getZ() - maximalSpaceVertices[i].getZ(),2));
                 if(j == 0) minDistancePerVertex[i] = distance[i][0];
                 else if (distance[i][j] < minDistancePerVertex[i]) minDistancePerVertex[i] = distance[i][j];
             }
@@ -89,8 +89,6 @@ public class Grasp {
     }
 
     public MaximalSpace chooseMaximalSpace() {
-
-
 
         int a = 0; //index of the maximalSpace we choose, the one closest to a corner of the container
         MaximalSpace chosenMaximalSpace = maximalSpaces.get(a);
