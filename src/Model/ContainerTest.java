@@ -10,15 +10,12 @@ public class ContainerTest {
 
 
     public static void main(String[] args) {
-        ArrayList<ParcelShape> givenParcels = new ArrayList<ParcelShape>();
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
 
-        int y=0;
-        for(Facing x: Facing.values()){
+
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
-            y+=3;
-        }
 
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
