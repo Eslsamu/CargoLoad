@@ -13,12 +13,12 @@ public class ViewController{
 	
 	public ViewController(ContainerModel model) {
 		this.model = model;
-		primaryStage = Main.getPrimaryStage();
+		//primaryStage = Main.getPrimaryStage();
 		
 		allowCameraHandler();
 	}
 	
 	public void allowCameraHandler() {
-		primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
+		//primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
 	}
 }
