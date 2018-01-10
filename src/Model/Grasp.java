@@ -95,10 +95,19 @@ public class Grasp {
         for(int i = 0; i < maximalSpaces.size(); i++){
         //for(MaximalSpace space : maximalSpaces){
             //computeDistanceClosestCorner(space);
-            computeDistanceClosestCorner(maximalSpaces.get(i));
+            closestCornerDistances[i] = computeDistanceClosestCorner(maximalSpaces.get(i));
         }
-        int a = 0; //index of the maximalSpace we choose, the one closest to a corner of the container
-        MaximalSpace chosenMaximalSpace = maximalSpaces.get(a);
+
+        double minimumClostestCornerDistance = 0;
+        int chosenSpaceIndex = 0;
+
+        for(; chosenSpaceIndex < closestCornerDistances.length; chosenSpaceIndex++){
+            if(chosenSpaceIndex == 1) minimumClostestCornerDistance = closestCornerDistances[chosenSpaceIndex];
+            else if(closestCornerDistances[chosenSpaceIndex] < minimumClostestCornerDistance)
+                minimumClostestCornerDistance = closestCornerDistances[chosenSpaceIndex];
+        }
+        //index of the maximalSpace we choose, the one closest to a corner of the container
+        MaximalSpace chosenMaximalSpace = maximalSpaces.get(chosenSpaceIndex);
 
         return chosenMaximalSpace;
     }
