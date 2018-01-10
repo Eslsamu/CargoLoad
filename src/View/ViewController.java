@@ -1,67 +1,56 @@
 package View;
 
-<<<<<<< HEAD
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
+/**
+ * This class controls the camera with keys
+ * @author Jordan, Basia
+ * @version 1.0
+ */
 public class ViewController implements EventHandler<KeyEvent>{
+    //instance of ContainerPane
     private ContainerPane pane;
-    double angleY = 0;
-    double angleX = 0;
-    double angleZ = 0;
-    
+    //doubles representing angles of rotation
+    private double angleY = 0;
+    private double angleX = 0;
+    private double angleZ = 0;
+    /**
+     * Constructor takes as a parameter the ContainerPane so it can call methods in it
+     * @param pane an instance of ContainerPane
+     */
     public ViewController(ContainerPane pane){
         this.pane = pane;
     }
+    /**
+     * Method handle handles the events. If a button is pressed, angle is changed.
+     * @param event a KeyEvent
+     */
     @Override
     public void handle(KeyEvent event){
         if(event.getCode() == KeyCode.RIGHT){
-                    angleY+= 10;
-                    pane.rotateY(angleY);
-                }
-                else if(event.getCode() == KeyCode.LEFT){
-                    angleY-= 10;
-                    pane.rotateY(angleY);
-                }
-                else if(event.getCode() == KeyCode.UP){
-                    angleX+= 10;
-                    pane.rotateX(angleX);
-                }
-                else if(event.getCode() == KeyCode.DOWN){
-                    angleX-= 10;
-                    pane.rotateX(angleX);
-                }
-                else if(event.getCode() == KeyCode.Q){
-                    angleZ+= 10;
-                    pane.rotateZ(angleZ);
-                }
-                else if(event.getCode() == KeyCode.W){
-                    angleZ-= 10;
-                    pane.rotateZ(angleZ);
-                }
+            angleY+= 10;
+            pane.rotateY(angleY);
+        }
+        else if(event.getCode() == KeyCode.LEFT){
+            angleY-= 10;
+            pane.rotateY(angleY);
+        }
+        else if(event.getCode() == KeyCode.UP){
+            angleX+= 10;
+            pane.rotateX(angleX);
+        }
+        else if(event.getCode() == KeyCode.DOWN){
+            angleX-= 10;
+            pane.rotateX(angleX);
+        }
+        else if(event.getCode() == KeyCode.Q){
+            angleZ+= 10;
+            pane.rotateZ(angleZ);
+        }
+        else if(event.getCode() == KeyCode.W){
+            angleZ-= 10;
+            pane.rotateZ(angleZ);
+        }
     }
-=======
-import Model.ContainerModel;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
-
-public class ViewController{
-	
-	private final ContainerModel model;
-	
-	private Stage primaryStage;
-	
-	public ViewController(ContainerModel model) {
-		this.model = model;
-		//primaryStage = Main.getPrimaryStage();
-		
-		allowCameraHandler();
-	}
-	
-	public void allowCameraHandler() {
-		//primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
-	}
->>>>>>> 908257d67774e9912aea4d8662e3106d274aa688
 }
