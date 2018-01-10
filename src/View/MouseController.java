@@ -14,16 +14,10 @@ public class MouseController implements EventHandler<MouseEvent> {
      @Override
     public void handle(MouseEvent event){
         if(event.getEventType().equals(MOUSE_PRESSED)){
-            /*
-            method in ContainerPane that gets the coordinates of the mouse, when pressed
-            event.getX() and event.getY()
-            */
+           pane.setRotationStart(event.getX(), event.getY());
         }
         if(event.getEventType().equals(MOUSE_DRAGGED)){
-            /*
-            method in ContainerPane that sets the rotation of the camera according to the coordinates
-            of the mouse
-            */
+            pane.rotate(event.getX(), event.getY());
         }
     }
 }
