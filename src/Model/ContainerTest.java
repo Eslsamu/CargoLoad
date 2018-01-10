@@ -14,9 +14,9 @@ public class ContainerTest {
 
         int y=0;
         for(Facing x: Facing.values()){
-            givenParcels.add(new ParcelA(x));
-            givenParcels.add(new ParcelB(x));
-            givenParcels.add(new ParcelC(x));
+            givenParcels.add(new ParcelA());
+            givenParcels.add(new ParcelB());
+            givenParcels.add(new ParcelC());
             y+=3;
         }
 

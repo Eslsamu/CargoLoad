@@ -3,6 +3,7 @@ package Util;
 
 /**
  * A simple class representing x,y,z coordinates in a space
+ * 
  */
 public class Coordinates {
 	

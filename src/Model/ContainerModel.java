@@ -1,6 +1,8 @@
 package Model;
 
+import Shapes.Facing;
 import Shapes.ParcelShape;
+import Util.Coordinates;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ public class ContainerModel {
     static protected final int containerY = 8;
     static protected final int containerX = 5;
     static protected final int containerZ = 33;
-    private int[][][] values = new int[containerZ][containerY][containerX];
+    private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
 
@@ -28,14 +30,14 @@ public class ContainerModel {
         parcelList = newParcelList;
     }
 
-
+    
     /**
      * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
      * @param maxValueContainer The container that has been already packed and reached the maximal value so far
      * @return
      */
 
-    public boolean solve(ArrayList<ParcelShape> containedParcels, ContainerModel maxValueContainer){
+    public boolean solve(ContainerModel maxValueContainer){
 
 
         if(checkIfFull()){
@@ -44,19 +46,18 @@ public class ContainerModel {
             return true;
         }
         for(int z=0;z<containerZ;z++){
-            for(int y=containerY-1;y>=0;y--){
+            for(int y=0;y<containerY;y++){
                 for(int x=0;x<containerX;x++){
-                    if(values[z][y][x]==0){
-                        //System.out.println("empty square");
-                        //System.out.println("parcellist size: " + usedParcels.size());
+                    if(containerMatrix[z][y][x]==0){
                         for(int parcel = 0;parcel<parcelList.size();parcel++){
                             ParcelShape currentParcel = parcelList.get(parcel);
                             if(doesFit(z,y,x,currentParcel)){
+                                System.out.println("Fits");
+                                printContainer();
                                 placeParcel(z,y,x,currentParcel);
                                 containedParcels.add(currentParcel);
-                                System.out.println("added parcel");
 
-                                if(solve(containedParcels,maxValueContainer)){
+                                if(solve(maxValueContainer)){
                                     return true;
                                 }
                                 else{
@@ -66,7 +67,10 @@ public class ContainerModel {
                             }
                         }
                         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+                            System.out.println("Total value container: "+computeTotalValue());
+                            System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
                             maxValueContainer = clone();
+                            maxValueContainer.printContainer();
                         }
                     }
                 }
@@ -86,7 +90,7 @@ public class ContainerModel {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerY;y++){
                 for (int x=0;x<containerX;x++){
-                    System.out.print(values[z][containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(containerMatrix[z][containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
                 }
                 System.out.println();
             }
@@ -115,21 +119,14 @@ public class ContainerModel {
     // TODO
     public boolean doesFit(int z, int y, int x, ParcelShape parcel) {
         if ((parcel.getShape()[0] + z > containerZ) ||
-                    (parcel.getShape()[0] + z < 0) ||
-                    (parcel.getShape()[1] + y > containerY) ||
-                  //  (parcel.getShape()[1] + y < 0) ||
-                    (parcel.getShape()[2] + x > containerX) ||
-                    (parcel.getShape()[2] + x < 0) ||
-                    (y + 1 - parcel.getShape()[1] < 0) ||
-                    values[z][y][x] == 1){
-            System.out.println("doesn't fit");
+                (parcel.getShape()[1] + y > containerY) ||
+                (parcel.getShape()[2] + x > containerX) ||
+                containerMatrix[z][y][x] == 1 ||  z + parcel.getShape()[0]< 0 ||
+        (y + parcel.getShape()[1]< 0) ||
+                (x + parcel.getShape()[2]<0))
             return false;
-        }
-        else{
-            System.out.println("fits");
+        else
             return true;
-        }
-
     }
     /**
      * Checks if the container is full
@@ -140,7 +137,7 @@ public class ContainerModel {
         for (int z = 0; z < containerZ; z++) {
             for (int y = 0; y < containerY; y++) {
                 for (int x = 0; x < containerX; x++) {
-                    if (values[z][y][x] == 0) {
+                    if (containerMatrix[z][y][x] == 0) {
                         full = false;
                         break;
                     }
@@ -154,13 +151,21 @@ public class ContainerModel {
      * Places the parcel in a certain cell of the container with coordinates (z,y,x).
      */
     // TODO
-    public void placeParcel(int z, int y, int x, ParcelShape parcel){
+    public void placeParcel(int z, int y, int x, ParcelShape parcel, Facing o){
+        System.out.println("Print z,y,x"+parcel.getClass() + z + y +x);
+        System.out.println("Length y"+parcel.getShape()[0]+parcel.getShape()[1]+parcel.getShape()[2]);
+        
+        parcel.setOrientation(o);
+        parcel.setCurrentCoordinates(new Coordinates(x,y,z));
+         
         for (int zCoord = z; zCoord < z + parcel.getShape()[0]; zCoord++) {
-            for (int yCoord = y ; yCoord > y - parcel.getShape()[1]; yCoord--) {
+            for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
                 for (int xCoord = x; xCoord < x + parcel.getShape()[2]; xCoord++) {
                     System.out.println("set value " + zCoord + " " + yCoord + " " + xCoord);
-                    values[zCoord][yCoord][xCoord] = 1;
-                    System.out.println(values[z][y][x]);
+                    System.out.println("Get shape "+parcel.getShape()[1]);
+                    containerMatrix[zCoord][yCoord][xCoord] = 1;
+                    System.out.println(containerMatrix[z][y][x]);
+                	}
                 }
             }
         }
@@ -174,7 +179,7 @@ public class ContainerModel {
         for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord < zCoord + parcel.getCurrentCoordinates().getZ(); zCoord++) {
             for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < yCoord + parcel.getCurrentCoordinates().getY(); yCoord++) {
                 for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < xCoord + parcel.getCurrentCoordinates().getX(); xCoord++) {
-                    values[zCoord][yCoord][xCoord] = 0;
+                    containerMatrix[zCoord][yCoord][xCoord] = 0;
                 }
             }
         }
@@ -183,13 +188,13 @@ public class ContainerModel {
     public ContainerModel clone(){
         ContainerModel model = new ContainerModel();
         model.setParcelList(parcelList);
-        model.setValues(values);
+        model.setValues(containerMatrix);
         model.setContainedParcels(containedParcels);
         return model;
     }
 
     public void setValues(int[][][] newValues){
-        values = newValues;
+        containerMatrix = newValues;
     }
 
     public void setContainedParcels(ArrayList<ParcelShape> newContainedParcels) {
