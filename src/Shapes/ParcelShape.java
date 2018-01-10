@@ -22,7 +22,7 @@ public abstract class ParcelShape {
 	/*
 	 * represents the way the parcel is positioned(orientation and rotation) in space with 3 vectors 
 	 */
-	private int[] shape;
+	private int[] shape = new int[3];
 	
 	/*
 	 * The coordinates onto which the of the parcel is placed from it's current shape
@@ -44,9 +44,9 @@ public abstract class ParcelShape {
 		this.length = l;
 		this.height = h;
 		
-		shape[0] = width;
-		shape[1] = height;
-		shape[2] = length;
+		shape[0] = w;
+		shape[1] = h;
+		shape[2] = l;
 	}
 
 	public int[] getShape(){
