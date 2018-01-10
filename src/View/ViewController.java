@@ -1,5 +1,6 @@
 package View;
 
+<<<<<<< HEAD
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -40,4 +41,27 @@ public class ViewController implements EventHandler<KeyEvent>{
                     pane.rotateZ(angleZ);
                 }
     }
+=======
+import Model.ContainerModel;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+
+public class ViewController{
+	
+	private final ContainerModel model;
+	
+	private Stage primaryStage;
+	
+	public ViewController(ContainerModel model) {
+		this.model = model;
+		//primaryStage = Main.getPrimaryStage();
+		
+		allowCameraHandler();
+	}
+	
+	public void allowCameraHandler() {
+		//primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
+	}
+>>>>>>> 908257d67774e9912aea4d8662e3106d274aa688
 }
