@@ -1,5 +1,6 @@
 package Test;
 
+import View.AppView;
 import View.ContainerPane;
 import View.MouseController;
 import View.ViewController;
@@ -17,10 +18,10 @@ public class TestView extends Application{
     public void start(Stage primaryStage) throws Exception {
 
         BorderPane testPane = createTestPane();
-        
-        Scene scene = new Scene(testPane);
-        ViewController controlls = new ViewController(pane);
-        MouseController controlls1 = new MouseController(pane);
+        AppView app = new AppView();
+        Scene scene = new Scene(app);
+        ViewController controlls = new ViewController(app.getContainer());
+        MouseController controlls1 = new MouseController(app.getContainer());
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, controlls1);
         scene.addEventFilter(MouseEvent.MOUSE_DRAGGED ,controlls1);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, controlls);
