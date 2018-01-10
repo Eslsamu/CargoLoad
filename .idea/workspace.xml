@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bfc7b679-0cd9-4abe-b787-b67190492602" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/Model/ContainerModel.java" afterPath="$PROJECT_DIR$/src/Model/ContainerModel.java" />
-      <change beforePath="$PROJECT_DIR$/src/Model/ContainerTest.java" afterPath="$PROJECT_DIR$/src/Model/ContainerTest.java" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Grasp.java" afterPath="$PROJECT_DIR$/src/Model/Grasp.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,7 +18,7 @@
       <file leaf-file-name="ContainerModel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Model/ContainerModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2132">
+            <state relative-caret-position="2420">
               <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
               <folding />
             </state>
@@ -51,24 +49,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContainerTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ContainerTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Model/ContainerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="24" column="24" lean-forward="false" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+            <state relative-caret-position="215">
+              <caret line="20" column="17" lean-forward="false" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1515597836000" expanded="false" signature="255:256" ph="&lt;~&gt;" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Grasp.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Grasp.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Model/Grasp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="74" column="43" lean-forward="false" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
+            <state relative-caret-position="144">
+              <caret line="101" column="33" lean-forward="true" selection-start-line="101" selection-start-column="33" selection-end-line="101" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#162#175#0" expanded="true" />
@@ -82,8 +79,8 @@
       <file leaf-file-name="GraspTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Model/GraspTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="14" lean-forward="true" selection-start-line="0" selection-start-column="14" selection-end-line="0" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -92,7 +89,7 @@
       <file leaf-file-name="MaximalSpace.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Model/MaximalSpace.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="-70">
               <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
                 <element signature="e#935#936#0" expanded="true" />
@@ -160,12 +157,12 @@
       <list>
         <option value="$PROJECT_DIR$/src/ParcelGenerator.java" />
         <option value="$PROJECT_DIR$/src/Main2.java" />
-        <option value="$PROJECT_DIR$/src/Model/Grasp.java" />
         <option value="$PROJECT_DIR$/src/Model/MaximalSpace.java" />
         <option value="$PROJECT_DIR$/src/View/ViewController.java" />
         <option value="$PROJECT_DIR$/src/Model/ContainerTest.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Model/ContainerModel.java" />
+        <option value="$PROJECT_DIR$/src/Model/Grasp.java" />
       </list>
     </option>
   </component>
@@ -376,7 +373,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ContainerTest">
+  <component name="RunManager" selected="Application.GraspTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -392,6 +389,25 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="Model.ContainerTest" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="CargoLoad" />
+      <envs />
+    </configuration>
+    <configuration name="GraspTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="Model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="Model.GraspTest" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -491,14 +507,16 @@
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Application.Main2" />
       <item index="1" class="java.lang.String" itemvalue="Application.ContainerTest" />
+      <item index="2" class="java.lang.String" itemvalue="Application.GraspTest" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Application.ContainerTest" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Main2" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Application.GraspTest" />
+        <item index="1" class="java.lang.String" itemvalue="Application.ContainerTest" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Main2" />
       </list>
     </recent_temporary>
   </component>
@@ -562,11 +580,18 @@
       <option name="project" value="LOCAL" />
       <updated>1515579614938</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Grasp changes">
+      <created>1515597892701</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1515597892701</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10044000" />
+    <option name="totallyTimeSpent" value="11601000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -671,21 +696,14 @@
     <MESSAGE value="Model update 10.01.18" />
     <MESSAGE value="Solve method added" />
     <MESSAGE value="Solve method fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Solve method fixed" />
+    <MESSAGE value="Grasp changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Grasp changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="22" column="60" lean-forward="false" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Model/ContainerModel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="526">
@@ -870,19 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Model/MaximalSpace.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="e#935#936#0" expanded="true" />
-            <element signature="e#967#968#0" expanded="true" />
-            <element signature="e#1007#1008#0" expanded="true" />
-            <element signature="e#1039#1040#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/View/ViewController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -896,19 +901,6 @@
         <state relative-caret-position="19">
           <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Model/Grasp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="74" column="43" lean-forward="false" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#162#175#0" expanded="true" />
-            <element signature="e#473#486#0" expanded="true" />
-            <element signature="e#555#569#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -964,17 +956,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Model/ContainerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="24" column="24" lean-forward="false" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1515597836000" expanded="false" signature="255:256" ph="&lt;~&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Shapes/ParcelShape.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58">
@@ -983,11 +964,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Model/MaximalSpace.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-70">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <element signature="e#935#936#0" expanded="true" />
+            <element signature="e#967#968#0" expanded="true" />
+            <element signature="e#1007#1008#0" expanded="true" />
+            <element signature="e#1039#1040#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Model/ContainerModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2132">
+        <state relative-caret-position="2420">
           <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Model/Grasp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="101" column="33" lean-forward="true" selection-start-line="101" selection-start-column="33" selection-end-line="101" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#162#175#0" expanded="true" />
+            <element signature="e#473#486#0" expanded="true" />
+            <element signature="e#555#569#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Model/GraspTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="14" lean-forward="true" selection-start-line="0" selection-start-column="14" selection-end-line="0" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Model/ContainerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="20" column="17" lean-forward="false" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
