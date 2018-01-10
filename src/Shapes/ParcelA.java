@@ -1,20 +1,15 @@
 package Shapes;
 
-import Util.Coordinates;
-
 public class ParcelA extends ParcelShape{
 	
-	protected static ShapeColor color = ShapeColor.BLUE;
-	protected static int[] shape = {2,2,4};
+	protected static ShapeColor color = ShapeColor.GREEN;
+	protected static int width = 2;
+	protected static int height = 2;
+	protected static int length = 4;
+	
 	protected static int value = 3;
 	
-	public ParcelA(Facing d) {
-		super(color, shape, value, d);
-	}
-
-	@Override
-	public ParcelShape clone() {
-		ParcelShape cloneC = new ParcelA(super.direction);
-		return cloneC;
+	public ParcelA() {
+		super(color, width, height, length, value);
 	}
 }
