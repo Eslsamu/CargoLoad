@@ -20,13 +20,11 @@ public class ContainerTest {
             y+=3;
         }
 
-
-
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
+        ArrayList<ParcelShape> usedParcels = new ArrayList<>();
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        container.solve(maxValueContainer);
-
+        container.solve(usedParcels,maxValueContainer);
     }
 }
