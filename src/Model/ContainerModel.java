@@ -34,9 +34,46 @@ public class ContainerModel {
      * @param maxValueContainer The container that has been already packed and reached the maximal value so far
      * @return
      */
+
     public boolean solve(ArrayList<ParcelShape> usedParcels, ContainerModel maxValueContainer){
-        return true;
+
+
+        if(checkIfFull()){
+            showResults(maxValueContainer);
+            System.out.println("The cargo is full.");
+            return true;
+        }
+        for(int z=0;z<containerZ;z++){
+            for(int y=containerY-1;y>=0;y--){
+                for(int x=0;x<containerX;x++){
+                    if(values[z][y][x]==0){
+                        for(int parcel = 0;parcel<usedParcels.size();parcel++){
+                            ParcelShape currentParcel = usedParcels.get(parcel);
+                            if(doesFit(z,y,x,currentParcel)){
+                                placeParcel(z,y,x,currentParcel);
+                                containedParcels.add(currentParcel);
+
+                                if(solve(usedParcels,maxValueContainer)){
+                                    return true;
+                                }
+                                else{
+                                    removeParcel(currentParcel);
+                                    containedParcels.remove(containedParcels.size()-1);
+                                }
+                            }
+                        }
+                        if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+                            maxValueContainer = clone();
+                        }
+                    }
+                }
+            }
+        }
+        showResults(maxValueContainer);
+        return false;
     }
+
+
 
     /**
      * The method prints the layers of the container one after another. It's a very crude substitution until we don't have GUI.

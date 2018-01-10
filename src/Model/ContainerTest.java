@@ -21,14 +21,13 @@ public class ContainerTest {
         }
 
 
-       // ParcelShape[] array = new ParcelShape[6];
-
 
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
-        container.printContainer();
-        container.placeParcel(0,0,0, givenParcels.get(1));
-        container.printContainer();
+        ArrayList<ParcelShape> usedParcels = new ArrayList<>();
+        ContainerModel maxValueContainer = new ContainerModel();
+        maxValueContainer.setParcelList(givenParcels);
+        container.solve(usedParcels,maxValueContainer);
 
     }
 }
