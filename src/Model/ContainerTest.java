@@ -17,13 +17,11 @@ public class ContainerTest {
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
 
-
-
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
+        ArrayList<ParcelShape> usedParcels = new ArrayList<>();
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
         container.solve(maxValueContainer);
-
     }
 }

@@ -24,7 +24,7 @@ public class ContainerModel {
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
 
-
+/*
 
     public void setParcelList(ArrayList<ParcelShape> newParcelList){
         parcelList = newParcelList;
