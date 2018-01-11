@@ -3,8 +3,6 @@ package Shapes;
 import java.util.ArrayList;
 
 import Util.Coordinates;
-import fko.tetris.tetriminos.T_Tetrimino;
-import fko.tetris.tetriminos.Tetrimino;
 
 /*
  * An abstraction of the Parcel classes
@@ -51,6 +49,9 @@ public abstract class ParcelShape {
 		shape[0] = w;
 		shape[1] = h;
 		shape[2] = l;
+		
+		orientation = Facing.UpA;
+		Coordinates coords = new Coordinates(0,0,0);	
 	}
 
 	public int[] getShape(){

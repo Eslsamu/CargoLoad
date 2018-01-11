@@ -198,7 +198,7 @@ public class ContainerModel {
         return model;
     }
 
-    public void setValues(int[][][] newValues){
+    public void setContainerMatrix(int[][][] newValues){
         containerMatrix = newValues;
     }
 

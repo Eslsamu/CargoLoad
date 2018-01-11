@@ -19,8 +19,6 @@ public class ParcelA extends ParcelShape{
 	@Override
 	public ParcelA clone() {
 		ParcelA clone = new ParcelA();
-	
-		clone.currentCoords = this.currentCoords.clone();
 		clone.setOrientation(this.orientation);
 		return clone;	
 	}

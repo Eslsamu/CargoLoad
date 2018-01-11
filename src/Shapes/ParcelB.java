@@ -20,8 +20,6 @@ public class ParcelB extends ParcelShape{
 	@Override
 	public ParcelB clone() {
 		ParcelB clone = new ParcelB();
-	
-		clone.currentCoords = this.currentCoords.clone();
 		clone.setOrientation(this.orientation);
 		return clone;	
 	}
