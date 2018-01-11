@@ -192,12 +192,10 @@ public class ContainerModel {
             }
         }
     }
-
+    
+    
     public ContainerModel clone(){
-        ContainerModel model = new ContainerModel();
-        model.setParcelList(parcelList);
-        model.setValues(containerMatrix);
-        model.setContainedParcels(containedParcels);
+    	//TODO
         return model;
     }
 
