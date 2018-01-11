@@ -25,7 +25,7 @@ public class Grasp {
     private final static Coordinates v7 = new Coordinates(0,ContainerModel.containerY,ContainerModel.containerZ);
     private final static Coordinates v8 = new Coordinates(ContainerModel.containerX,ContainerModel.containerY,ContainerModel.containerZ);
 
-    public void initialize(int nrOfA, int nrOfB, int nrOfC){
+    public Grasp(int nrOfA, int nrOfB, int nrOfC){
         A_ParcelsLeft = nrOfA;
         B_ParcelsLeft = nrOfB;
         C_ParcelsLeft = nrOfC;
