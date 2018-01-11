@@ -11,17 +11,16 @@ public class ContainerTest {
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
 
 
-            givenParcels.add(new ParcelA());
-            givenParcels.add(new ParcelB());
-            givenParcels.add(new ParcelC());
-
-
-
+        givenParcels.add(new ParcelA());
+        givenParcels.add(new ParcelB());
+        givenParcels.add(new ParcelC());
+        int i=0;
+        // parameter i is used only for test, delete after solve() will start working properly
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
+        ArrayList<ParcelShape> usedParcels = new ArrayList<>();
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        container.solve(maxValueContainer);
-
+        container.solve(maxValueContainer,i);
     }
 }
