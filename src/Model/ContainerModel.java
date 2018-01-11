@@ -39,6 +39,7 @@ public class ContainerModel {
 
     public boolean solve(ContainerModel maxValueContainer, int i){
         i ++;
+        printContainer();
         if(checkIfFull()){
             showResults(maxValueContainer);
             System.out.println("The cargo is full.");
@@ -59,7 +60,7 @@ public class ContainerModel {
                                     if (solve(maxValueContainer,i)) {
                                         return true;
                                     } else {
-                                        removeParcel(currentParcel);
+                                        removeParcel(currentParcel, o);
                                         containedParcels.remove(containedParcels.size() - 1);
                                     }
                                 }
@@ -178,7 +179,11 @@ public class ContainerModel {
      * Removes the parcel from the container.
      */
     // TODO
-    public void removeParcel(ParcelShape parcel){
+    public void removeParcel(ParcelShape parcel, Facing o){
+
+        parcel.setOrientation(o);
+        //parcel.setCurrentCoordinates(null); not sure if this is good
+
         for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord < zCoord + parcel.getCurrentCoordinates().getZ(); zCoord++) {
             for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < yCoord + parcel.getCurrentCoordinates().getY(); yCoord++) {
                 for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < xCoord + parcel.getCurrentCoordinates().getX(); xCoord++) {
