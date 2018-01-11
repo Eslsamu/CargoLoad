@@ -125,13 +125,50 @@ public class Grasp {
         return chosenMaximalSpace;
     }
 
-    public void fillChosenMaximalSpace(){
-        //we place parcels in the chosen space to try to either completely fill the container or get the highest value
+    public void testPlaceParcel(int z, int y, int x, ParcelShape parcel){
+        parcel.setCurrentCoordinates(new Coordinates(x,y,z));
+        //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
+        for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
+            for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
+                for (int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++) {
+                    containerMatrix[zCoord][yCoord][xCoord] = 1;
+                }
+            }
+        }
     }
 
-    public ArrayList<MaximalSpace> generateMaximalSpaces(){
+    public void testPrintContainer(){
+        for(int z=0;z<ContainerModel.containerZ;z++){
+            System.out.println("Layer for z = "+z);
+            for(int y =0;y<ContainerModel.containerY;y++){
+                for (int x=0;x<ContainerModel.containerX;x++){
+                    System.out.print(containerMatrix[z][ContainerModel.containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+    }
 
-        Coordinates[] blockVertices = new Coordinates[8];
+    public void fillChosenMaximalSpace(){
+        //we place parcels in the chosen space to try to either completely fill the container or get the highest value
+
+
+    }
+
+    public ArrayList<MaximalSpace> generateMaximalSpaces(ParcelShape lastPlacedParcel){ //should later use blocks (groups of parcels put into a layer) instead of single parcels
+
+        Coordinates coords = lastPlacedParcel.getCurrentCoordinates();
+        Coordinates minCoordsParcel = coords;
+        Coordinates maxCoordsParcel = new Coordinates
+        (coords.getX() + lastPlacedParcel.getShape()[0],
+        coords.getY() + lastPlacedParcel.getShape()[1],
+        coords.getZ() + lastPlacedParcel.getShape()[2]);
+        System.out.println("X-coord: " + coords.getX() + "Y-coord:  " + coords.getY() + "Z-coord: " + coords.getZ());
+
+        //Coordinates[] blockVertices = new Coordinates[8];
+        Coordinates[] blockVertices = findAllVertices(minCoordsParcel, maxCoordsParcel);
+
         //ArrayList<Coordinates> blockVertices = new ArrayList<>();
         ArrayList<MaximalSpace> generatedSpaces = new ArrayList<>();
 
@@ -161,16 +198,17 @@ public class Grasp {
             int y = blockVertices[i].getY();
             int x = blockVertices[i].getX();
 
-            for (; z < ContainerModel.containerZ || containerMatrix[z][y][x] == 1; z++) {
+            for (; z < ContainerModel.containerZ-1 || containerMatrix[z][y][x] == 1; z++) {
                 int zDimension = z;
             }
-            for (; y < ContainerModel.containerY || containerMatrix[z][y][x] == 1; y++) {
+            for (; y < ContainerModel.containerY-1 || containerMatrix[z][y][x] == 1; y++) {
                 int yDimension = y;
             }
-            for (; x < ContainerModel.containerX || containerMatrix[z][y][x] == 1; x++) {
+            for (; x < ContainerModel.containerX-1 || containerMatrix[z][y][x] == 1; x++) {
                 int xDimension = x;
             }
 
+            System.out.println(x + " " + y + " " + z);
             Coordinates minCoords = new Coordinates(blockVertices[i].getX(), y, blockVertices[i].getZ());
             Coordinates maxCoords = new Coordinates(x, blockVertices[i].getY(), z);
             currentMaxSpace = new MaximalSpace(minCoords, maxCoords);
