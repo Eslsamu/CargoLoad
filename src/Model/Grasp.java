@@ -6,6 +6,8 @@ import Util.Coordinates;
 
 public class Grasp {
 
+    private int[][][] containerMatrix = new int[ContainerModel.containerZ][ContainerModel.containerY][ContainerModel.containerX];
+
     private ArrayList<ParcelShape> typesLeft = new  ArrayList<ParcelShape>(); //parcel types (A,B,C) of which there are still atleast 1 parcel left (should maybe have type of chars or enums instead of ParcelShape?)
     private int A_ParcelsLeft;
     private int B_ParcelsLeft;
@@ -34,7 +36,7 @@ public class Grasp {
         maximalSpaces.add(initialMaximalSpace);
     }
 
-    public Coordinate[] findAllVertices(Coordinates minCoords, Coordinates maxCoords){
+    public Coordinates[] findAllVertices(Coordinates minCoords, Coordinates maxCoords){
         int minX = minCoords.getX();
         int minY = minCoords.getY();
         int minZ = minCoords.getZ();
@@ -45,14 +47,14 @@ public class Grasp {
 
         Coordinates[] vertices =  new Coordinates[8];
 
-        Coordinates[0] = new Coordinates(minX, minY, minZ);
-        Coordinates[1] = new Coordinates(maxX, minY, minZ);
-        Coordinates[2] = new Coordinates(minX, maxY, minZ);
-        Coordinates[3] = new Coordinates(minX, minY, maxZ);
-        Coordinates[4] = new Coordinates(maxX, maxY, minZ);
-        Coordinates[5] = new Coordinates(maxX, minY, maxZ);
-        Coordinates[6] = new Coordinates(minX, maxY, maxZ);
-        Coordinates[7] = new Coordinates(maxX, maxY, maxZ);
+        vertices[0] = new Coordinates(minX, minY, minZ);
+        vertices[1] = new Coordinates(maxX, minY, minZ);
+        vertices[2] = new Coordinates(minX, maxY, minZ);
+        vertices[3] = new Coordinates(minX, minY, maxZ);
+        vertices[4] = new Coordinates(maxX, maxY, minZ);
+        vertices[5] = new Coordinates(maxX, minY, maxZ);
+        vertices[6] = new Coordinates(minX, maxY, maxZ);
+        vertices[7] = new Coordinates(maxX, maxY, maxZ);
 
         return vertices;
     }
@@ -71,8 +73,8 @@ public class Grasp {
 
         //we save a MaximalSpace's min and max coords, and using these we can find the coordinates of all 8 vertices
 
-        Coordinates minCoords = new Coordinates(space.getMinCoords());
-        Coordinates maxCoords = new Coordinates(space.getMaxCoords());
+        Coordinates minCoords = space.getMinCoords();
+        Coordinates maxCoords = space.getMaxCoords();
 
         Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
 
@@ -127,7 +129,7 @@ public class Grasp {
         //we place parcels in the chosen space to try to either completely fill the container or get the highest value
     }
 
-    public MaximalSpace generateMaximalSpace(){
+    public ArrayList<MaximalSpace> generateMaximalSpaces(){
 
         Coordinates[] blockVertices = new Coordinates[8];
         //ArrayList<Coordinates> blockVertices = new ArrayList<>();
@@ -150,8 +152,33 @@ public class Grasp {
            for(int z = 0;
          */
 
-        Coordinates[] currentMaxSpaceVertices = new Coordinates[8];
+        //Coordinates[] currentMaxSpaceVertices = new Coordinates[8];
 
+        MaximalSpace currentMaxSpace;
+
+        for(int i = 0; i < blockVertices.length; i++) {
+            int z = blockVertices[i].getZ();
+            int y = blockVertices[i].getY();
+            int x = blockVertices[i].getX();
+
+            for (; z < ContainerModel.containerZ || containerMatrix[z][y][x] == 1; z++) {
+                int zDimension = z;
+            }
+            for (; y < ContainerModel.containerY || containerMatrix[z][y][x] == 1; y++) {
+                int yDimension = y;
+            }
+            for (; x < ContainerModel.containerX || containerMatrix[z][y][x] == 1; x++) {
+                int xDimension = x;
+            }
+
+            Coordinates minCoords = new Coordinates(blockVertices[i].getX(), y, blockVertices[i].getZ());
+            Coordinates maxCoords = new Coordinates(x, blockVertices[i].getY(), z);
+            currentMaxSpace = new MaximalSpace(minCoords, maxCoords);
+            generatedSpaces.add(currentMaxSpace);
+        }
+
+
+/*
         for(int i = 0; i < blockVertices.length; i++){
             for(int z = blockVertices[i].getZ(); z < ContainerModel.containerZ || containerMatrix[z][y][x] == 1; z++){
                 for(int y = blockVertices[i].getY(); y < ContainerModel.containerY || containerMatrix[z][y][x] == 1; y++){
@@ -166,6 +193,7 @@ public class Grasp {
 
             }
         }
-
+*/      return generatedSpaces;
       }
+
 }
