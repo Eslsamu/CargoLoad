@@ -17,9 +17,9 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    static protected final int containerY = 20;
-    static protected final int containerX = 20;
-    static protected final int containerZ = 40;
+    static protected final int containerY = 8;
+    static protected final int containerX = 5;
+    static protected final int containerZ = 33;
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
@@ -47,6 +47,7 @@ public class ContainerModel {
                 maxValueContainer = this;
             }
             showResults(maxValueContainer);
+            System.out.println("Size "+maxValueContainer.getContainedParcels().size());
             System.out.println("The cargo is full.");
             return true;
         }
@@ -69,11 +70,15 @@ public class ContainerModel {
                                     placeParcel(z, y, x, currentParcel);
                                     //add the parcel object to the containedParcel list
                                     System.out.println("checkList");
-                                    containedParcels.add(currentParcel);                         
+                                    containedParcels.add(currentParcel);
+                                    for(int i=0;i<containedParcels.size();i++){
+                                        System.out.println("1"+containedParcels.get(i));
+                                    }
                                     if (solve(maxValueContainer)) {
                                         return true;
-                                    } else {
-                                        removeParcel(currentParcel, o);
+                                    }
+                                    else {
+                                        removeParcel(currentParcel);
                                         containedParcels.remove(containedParcels.size() - 1);
                                     }
                                 }
@@ -89,7 +94,12 @@ public class ContainerModel {
             //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
             maxValueContainer = this;
         }
-        return false;
+        showResults(maxValueContainer);
+        System.out.println("Size "+maxValueContainer.getContainedParcels().size());
+        for(ParcelShape parcel:maxValueContainer.getContainedParcels()){
+            System.out.println(parcel.getCurrentCoordinates().getZ()+" "+parcel.getCurrentCoordinates().getY()+" "+parcel.getCurrentCoordinates().getX());
+        }
+        return true;
     }
 
 
@@ -183,14 +193,17 @@ public class ContainerModel {
      * Removes the parcel from the container.
      */
     // TODO
-    public void removeParcel(ParcelShape parcel, Facing o){
-    	System.out.println("checkRemove");
-        parcel.setOrientation(o);
+    public void removeParcel(ParcelShape parcel){
+        System.out.println(parcel.getShape()[2]);
+        System.out.println(parcel.getShape()[1]);
+        System.out.println(parcel.getShape()[0]);
+        System.out.println("checkRemove");
         //parcel.setCurrentCoordinates(null); not sure if this is good
 
-        for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord < zCoord + parcel.getCurrentCoordinates().getZ(); zCoord++) {
-            for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < yCoord + parcel.getCurrentCoordinates().getY(); yCoord++) {
-                for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < xCoord + parcel.getCurrentCoordinates().getX(); xCoord++) {
+        for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord <parcel.getCurrentCoordinates().getZ()  + parcel.getShape()[2]; zCoord++) {
+            for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < parcel.getCurrentCoordinates().getY() + parcel.getShape()[1]; yCoord++) {
+                for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < parcel.getCurrentCoordinates().getX() + parcel.getShape()[0]; xCoord++) {
+                    System.out.println("z" +zCoord+"y "+yCoord+"x "+xCoord);
                     containerMatrix[zCoord][yCoord][xCoord] = 0;
                 }
             }
