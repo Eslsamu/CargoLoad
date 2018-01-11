@@ -34,6 +34,29 @@ public class Grasp {
         maximalSpaces.add(initialMaximalSpace);
     }
 
+    public Coordinate[] findAllVertices(Coordinates minCoords, Coordinates maxCoords){
+        int minX = minCoords.getX();
+        int minY = minCoords.getY();
+        int minZ = minCoords.getZ();
+
+        int maxX = maxCoords.getX();
+        int maxY = maxCoords.getY();
+        int maxZ = minCoords.getZ();
+
+        Coordinates[] vertices =  new Coordinates[8];
+
+        Coordinates[0] = new Coordinates(minX, minY, minZ);
+        Coordinates[1] = new Coordinates(maxX, minY, minZ);
+        Coordinates[2] = new Coordinates(minX, maxY, minZ);
+        Coordinates[3] = new Coordinates(minX, minY, maxZ);
+        Coordinates[4] = new Coordinates(maxX, maxY, minZ);
+        Coordinates[5] = new Coordinates(maxX, minY, maxZ);
+        Coordinates[6] = new Coordinates(minX, maxY, maxZ);
+        Coordinates[7] = new Coordinates(maxX, maxY, maxZ);
+
+        return vertices;
+    }
+
     public double computeDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
         /*
         "For each
@@ -48,22 +71,10 @@ public class Grasp {
 
         //we save a MaximalSpace's min and max coords, and using these we can find the coordinates of all 8 vertices
 
-        int minX = space.getMinCoords().getX();
-        int minY = space.getMinCoords().getY();
-        int minZ = space.getMinCoords().getZ();
-        int maxX = space.getMaxCoords().getX();
-        int maxY = space.getMaxCoords().getY();
-        int maxZ = space.getMaxCoords().getZ();
+        Coordinates minCoords = new Coordinates(space.getMinCoords());
+        Coordinates maxCoords = new Coordinates(space.getMaxCoords());
 
-        Coordinates[] maximalSpaceVertices = new Coordinates[8];
-        Coordinates v1 = space.getMinCoords();
-        Coordinates v2 = new Coordinates(maxX, minY, minZ);
-        Coordinates v3 = new Coordinates(minX, maxY, minZ);
-        Coordinates v4 = new Coordinates(minX, minY, maxZ);
-        Coordinates v5 = new Coordinates(maxX, maxY, minZ);
-        Coordinates v6 = new Coordinates(maxX, minY, maxZ);
-        Coordinates v7 = new Coordinates(minX, maxY, maxZ);
-        Coordinates v8 = space.getMaxCoords();
+        Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
 
         //Coordinates closestCorner = v1;
         double[][] distance = new double[8][8]; //distance of each MaximalSpace vertex to each container corner
@@ -116,12 +127,45 @@ public class Grasp {
         //we place parcels in the chosen space to try to either completely fill the container or get the highest value
     }
 
-    //public MaximalSpace generateMaximalSpace(){
+    public MaximalSpace generateMaximalSpace(){
+
+        Coordinates[] blockVertices = new Coordinates[8];
+        //ArrayList<Coordinates> blockVertices = new ArrayList<>();
+        ArrayList<MaximalSpace> generatedSpaces = new ArrayList<>();
+
 
         /*
         After we place a block (a collection of parcels to best fill the last chosen maximal space),
-        we select a vertex of this block and check in all directions how much empty space is around it
+        we select a vertex of this block and check in all directions how much empty space is around it,
+        and save the dimensions.
 
+        for each vertex there are certain directions on which there can be empty space and certain directions
+        in which the block is.
+
+        for vertex 1,2,7,8 y can not increase
+        for vertex 1,3,5,7 x can not increase
+        etc
+
+        for(blockVertex : blockVertices){
+           for(int z = 0;
          */
-  //  }
+
+        Coordinates[] currentMaxSpaceVertices = new Coordinates[8];
+
+        for(int i = 0; i < blockVertices.length; i++){
+            for(int z = blockVertices[i].getZ(); z < ContainerModel.containerZ || containerMatrix[z][y][x] == 1; z++){
+                for(int y = blockVertices[i].getY(); y < ContainerModel.containerY || containerMatrix[z][y][x] == 1; y++){
+                    for(int x = blockVertices[i].getX(); x < ContainerModel.containerX || containerMatrix[z][y][x] == 1; x++){
+
+                        Coordinates minCoords = new Coordinates(blockVertices[i].getX(), y, blockVertices[i].getZ());
+                        Coordinates maxCoords = new Coordinates(x, blockVertices[i].getY(), z);
+                        currentMaxSpaceVertices = findAllVertices(minCoords, maxCoords);
+
+                    }
+                }
+
+            }
+        }
+
+      }
 }
