@@ -21,8 +21,6 @@ public class ContainerTest {
         maxValueContainer.setParcelList(givenParcels);
         container.solve(maxValueContainer);
         
-        for(int i = 0; i < maxValueContainer.getContainedParcels().size(); i++) {
-        	System.out.println(maxValueContainer.getContainedParcels().get(i).getShape()[0]);
-        }
+        System.out.println(maxValueContainer.getContainedParcels().size());
     }
 }
