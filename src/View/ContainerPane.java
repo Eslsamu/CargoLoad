@@ -83,7 +83,8 @@ public class ContainerPane extends Parent {
         container2.setParcelList(givenParcels);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        container2.solve(maxValueContainer);
+        int p = 0;
+        container2.solve(maxValueContainer, p);
         ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
         
         Color[][][] displayedMatrix = new Color[(int)(CONTAINER_DEPTH*2)][(int)(CONTAINER_HEIGHT*2)][(int)(CONTAINER_WIDTH*2)];
