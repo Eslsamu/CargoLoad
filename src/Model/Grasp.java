@@ -202,12 +202,8 @@ public class Grasp {
         for each vertex there are certain directions on which there can be empty space and certain directions
         in which the block is.
 
-        for vertex 1,2,7,8 y can not increase
-        for vertex 1,3,5,7 x can not increase
-        etc
+        When a new maximal space is created any old maximal space with which it overlaps should be removed from the list
 
-        for(blockVertex : blockVertices){
-           for(int z = 0;
          */
 
         //Coordinates[] currentMaxSpaceVertices = new Coordinates[8];
