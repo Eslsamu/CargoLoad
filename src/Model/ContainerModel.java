@@ -17,9 +17,9 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    static protected final int containerY = 8;
-    static protected final int containerX = 5;
-    static protected final int containerZ = 33;
+    static protected final int containerY = 20;
+    static protected final int containerX = 20;
+    static protected final int containerZ = 40;
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
@@ -41,6 +41,11 @@ public class ContainerModel {
         printContainer();
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
+        	if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+                //System.out.println("Total value container: "+computeTotalValue());
+                //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+                maxValueContainer = this;
+            }
             showResults(maxValueContainer);
             System.out.println("The cargo is full.");
             return true;
@@ -60,8 +65,7 @@ public class ContainerModel {
                             	currentParcel.setOrientation(o);
                                 //check if this parcel with this orientation can be placed onto these coordinates
                                 if (doesFit(z, y, x, currentParcel)) {
-                                	//place the parcel onto the container matrix
-                                	System.out.println("checkPlace");
+                                	//place the parcel onto the container matrix                               	
                                     placeParcel(z, y, x, currentParcel);
                                     //add the parcel object to the containedParcel list
                                     System.out.println("checkList");
@@ -83,9 +87,9 @@ public class ContainerModel {
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             //System.out.println("Total value container: "+computeTotalValue());
             //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
-            maxValueContainer = clone();
+            maxValueContainer = this;
         }
-        return true;
+        return false;
     }
 
 
@@ -162,6 +166,7 @@ public class ContainerModel {
      */
     // TODO
     public void placeParcel(int z, int y, int x, ParcelShape parcel){
+    	System.out.println("checkPlace");
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
         //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
         for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
@@ -179,7 +184,7 @@ public class ContainerModel {
      */
     // TODO
     public void removeParcel(ParcelShape parcel, Facing o){
-
+    	System.out.println("checkRemove");
         parcel.setOrientation(o);
         //parcel.setCurrentCoordinates(null); not sure if this is good
 
@@ -192,13 +197,6 @@ public class ContainerModel {
         }
     }
     
-    
-    public ContainerModel clone(){
-    	//TODO
-    	ContainerModel model = new ContainerModel();
-    	
-        return model;
-    }
 
     public void setContainerMatrix(int[][][] newValues){
         containerMatrix = newValues;
