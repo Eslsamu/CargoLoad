@@ -3,6 +3,8 @@ package Shapes;
 import java.util.ArrayList;
 
 import Util.Coordinates;
+import fko.tetris.tetriminos.T_Tetrimino;
+import fko.tetris.tetriminos.Tetrimino;
 
 /*
  * An abstraction of the Parcel classes
@@ -16,6 +18,7 @@ public abstract class ParcelShape {
 	private final int length;
 	private final int height;
 	
+	private final String name;
 	private final ShapeColor color;
 	private final int value;
 	
@@ -36,9 +39,10 @@ public abstract class ParcelShape {
 	protected Facing orientation;
 	
 	
-	public ParcelShape(ShapeColor color, int w, int h, int l, int value) {
+	public ParcelShape(ShapeColor color, int w, int h, int l, int value, String name) {
 		this.color = color;
 		this.value = value;
+		this.name = name;
 		
 		this.width = w;
 		this.length = l;
@@ -77,6 +81,11 @@ public abstract class ParcelShape {
 	public void setCurrentCoordinates(Coordinates coords) {
 		this.currentCoords = coords;
 	}
+	
+	/*
+	 * @see java.lang.Object#clone()
+	 */
+	public abstract ParcelShape clone();
 	
 	/*
 	 * @param o set the orientation of the parcel and changes it's shape accordingly
