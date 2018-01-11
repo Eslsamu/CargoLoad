@@ -83,77 +83,30 @@ public class ContainerPane extends Parent {
         container2.setParcelList(givenParcels);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        int p = 0;
-        container2.solve(maxValueContainer, p);
+        container2.solve(maxValueContainer);
         ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
+        
         System.out.println("Size: " + containedShapes.size());
         System.out.println("Z0: " + containedShapes.get(0).getCurrentCoordinates().getZ());
         System.out.println("Z63: " + containedShapes.get(63).getCurrentCoordinates().getZ());
-        Color[][][] displayedMatrix = new Color[(int)(CONTAINER_DEPTH*2)][(int)(CONTAINER_HEIGHT*2)][(int)(CONTAINER_WIDTH*2)];
+        
         for(int i = 0; i < containedShapes.size(); i++){
             Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+           
             ParcelShape parcel = containedShapes.get(i);
             int z = parcel.getCurrentCoordinates().getZ();
             int y = parcel.getCurrentCoordinates().getY();
             int x = parcel.getCurrentCoordinates().getX();
             
-            for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
-                for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
-                    for (int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++) {
-                        displayedMatrix[zCoord][yCoord][xCoord] = ranColor;
-                    }
-                }
-            }
+            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            box.setDrawMode(DrawMode.FILL);
+            box.setMaterial(new PhongMaterial(ranColor));
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
         }
-        /* for(int z = 0; z < CONTAINER_DEPTH*2; z++){
-            for(int y = 0; y < CONTAINER_HEIGHT*2; y++){
-                for(int x = 0; x < CONTAINER_WIDTH*2; x++){
-                    if(displayedMatrix[z][y][x] == null){
-                        displayedMatrix[z][y][x] = Color.TRANSPARENT;
-                    }
-                }
-            }
-        } */
         
-        for(int z = 0; z < CONTAINER_DEPTH*2; z++){
-            for(int y = 0; y < CONTAINER_HEIGHT*2; y++){
-                for(int x = 0; x < CONTAINER_WIDTH*2; x++){
-                    Box box = new Box(Box_Width, Box_Height, Box_Depth);
-                    box.setDrawMode(DrawMode.FILL);
-                    if(displayedMatrix[z][y][x] != null){
-                        box.setMaterial(new PhongMaterial(displayedMatrix[z][y][x]));
-                        box.setTranslateX(-CONTAINER_WIDTH/2 + Box_Width/2 + 0.5*x);
-                        box.setTranslateY(-CONTAINER_HEIGHT/2 + Box_Height/2 + 0.5*y);
-                        box.setTranslateZ(CONTAINER_DEPTH/2 - Box_Depth/2 - 0.5*z);
-                        root.getChildren().add(box);
-                    }    
-                }
-            }
-        }    
-        /* for(int i = 0; i < 2; i++){
-            Box typeA = new Box(TypeA_Width, TypeA_Height, TypeA_Depth);
-            typeA.setDrawMode(DrawMode.FILL);
-            /* PhongMaterial sth = new PhongMaterial();  
-            sth.setDiffuseColor(Color.BLANCHEDALMOND);
-            sth.setSpecularColor(Color.LIGHTBLUE);
-            typeA.setMaterial(sth);*/ /*
-            typeA.setMaterial(new PhongMaterial(Color.LIGHTBLUE));
-            //set positions
-            typeA.setTranslateX(-CONTAINER_WIDTH/2 + TypeA_Width*(1.5));
-            typeA.setTranslateY(CONTAINER_HEIGHT/2 - TypeA_Height/2 - TypeA_Height*i);
-            typeA.setTranslateZ(CONTAINER_DEPTH/2 - TypeA_Depth/2);
-            root.getChildren().add(typeA);
-        } */ /*
-        for(int i = 0; i < 3; i++){
-            Box typeA = new Box(TypeA_Width, TypeA_Height, TypeA_Depth);
-            typeA.setDrawMode(DrawMode.FILL);
-            typeA.setMaterial(new PhongMaterial(Color.LIGHTBLUE));
-            //set positions
-            typeA.setTranslateX(-CONTAINER_WIDTH/2 + TypeA_Width*i + 0.5);
-            typeA.setTranslateY(CONTAINER_HEIGHT/2 - TypeA_Height/2 - TypeA_Height*2);
-            typeA.setTranslateZ(CONTAINER_DEPTH/2 - TypeA_Depth/2);
-            root.getChildren().add(typeA);
-        } */
         //create a camera
         Camera camera = new PerspectiveCamera(true);
         //add possible rotations and position of camera

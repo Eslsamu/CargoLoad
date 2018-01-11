@@ -14,13 +14,15 @@ public class ContainerTest {
         givenParcels.add(new ParcelA());
         givenParcels.add(new ParcelB());
         givenParcels.add(new ParcelC());
-        int i=0;
-        // parameter i is used only for test, delete after solve() will start working properly
+       
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
-        ArrayList<ParcelShape> usedParcels = new ArrayList<>();
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        container.solve(maxValueContainer,i);
+        container.solve(maxValueContainer);
+        
+        for(int i = 0; i < maxValueContainer.getContainedParcels().size(); i++) {
+        	System.out.println(maxValueContainer.getContainedParcels().get(i).getShape()[0]);
+        }
     }
 }
