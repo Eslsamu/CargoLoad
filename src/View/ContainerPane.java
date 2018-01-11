@@ -5,12 +5,15 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -54,7 +57,7 @@ public class ContainerPane extends Parent {
     /**
      * Constructor creates a Scene with container, boxes and a camera is being set to it.
      */
-    public ContainerPane() {
+    public ContainerPane() throws FileNotFoundException {
         //add all containers, boxes and camera to a group
         Group root = new Group();
         
@@ -100,7 +103,12 @@ public class ContainerPane extends Parent {
             
             Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
             box.setDrawMode(DrawMode.FILL);
-            box.setMaterial(new PhongMaterial(ranColor));
+            PhongMaterial material = new PhongMaterial();
+            FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png"); 
+            Image image = new Image(inputstream);
+            material.setDiffuseMap(image);
+            //box.setMaterial(new PhongMaterial(ranColor));
+            box.setMaterial(material);
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
