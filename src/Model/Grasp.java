@@ -116,12 +116,12 @@ public class Grasp {
         //we place parcels in the chosen space to try to either completely fill the container or get the highest value
     }
 
-    public MaximalSpace generateMaximalSpace(){
+    //public MaximalSpace generateMaximalSpace(){
 
         /*
         After we place a block (a collection of parcels to best fill the last chosen maximal space),
         we select a vertex of this block and check in all directions how much empty space is around it
 
          */
-    }
+  //  }
 }
