@@ -83,8 +83,7 @@ public class ContainerPane extends Parent {
         container2.setParcelList(givenParcels);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        int p = 0;
-        container2.solve(maxValueContainer, p);
+        container2.solve(maxValueContainer);
         ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
         
         System.out.println("Size: " + containedShapes.size());
