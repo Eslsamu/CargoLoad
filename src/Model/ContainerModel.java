@@ -61,8 +61,10 @@ public class ContainerModel {
                                 //check if this parcel with this orientation can be placed onto these coordinates
                                 if (doesFit(z, y, x, currentParcel)) {
                                 	//place the parcel onto the container matrix
+                                	System.out.println("checkPlace");
                                     placeParcel(z, y, x, currentParcel);
                                     //add the parcel object to the containedParcel list
+                                    System.out.println("checkList");
                                     containedParcels.add(currentParcel);                         
                                     if (solve(maxValueContainer)) {
                                         return true;
@@ -79,8 +81,8 @@ public class ContainerModel {
             }
         }
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
-            System.out.println("Total value container: "+computeTotalValue());
-            System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+            //System.out.println("Total value container: "+computeTotalValue());
+            //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
             maxValueContainer = clone();
         }
         return true;
@@ -208,5 +210,9 @@ public class ContainerModel {
 
     public void setParcelList(ArrayList<ParcelShape> parcelList) {
         this.parcelList = parcelList;
+    }
+    
+    public ArrayList<ParcelShape> getContainedParcels() {
+        return containedParcels;
     }
 }
