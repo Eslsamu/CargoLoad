@@ -48,8 +48,9 @@ public class ContainerModel {
             System.out.println("The cargo is full.");
             return true;
         }
-        //for each voxel of the space
-        while(nonEmptyParcelType < 3 && remainingParcelsEachType[nonEmptyParcelType] == 0) nonEmptyParcelType++;
+        //check if the parcel type we're currently using has run out of parcels, if it has we move onto the next type while making sure we don't go out of array bounds
+        while(nonEmptyParcelType < parcelList.size() && remainingParcelsEachType[nonEmptyParcelType] == 0) nonEmptyParcelType++;
+            //for each voxel of the space
             for (int z = 0; z < containerZ; z++) {
                 for (int y = 0; y < containerY; y++) {
                     for (int x = 0; x < containerX; x++) {
