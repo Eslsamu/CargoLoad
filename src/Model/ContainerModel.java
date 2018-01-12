@@ -3,8 +3,8 @@ package Model;
 import Shapes.Facing;
 import Shapes.ParcelShape;
 import Util.Coordinates;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ContainerModel {
     /**
@@ -302,4 +302,45 @@ public class ContainerModel {
     public ArrayList<ParcelShape> getContainedParcels() {
         return containedParcels;
     }
+
+    public ArrayList<ParcelShape> orderParcelListByValue(ArrayList<ParcelShape> givenParcels) {
+        ArrayList<Integer> parcelValues = new ArrayList<>();
+        ArrayList<ParcelShape> orderedParcelListbyValue = new ArrayList<>();
+        for(int i = 0; i < givenParcels.size(); i++){
+            parcelValues.add(givenParcels.get(i).getValue());
+        }
+        Collections.sort(parcelValues, Collections.reverseOrder());
+        for(int j = 0, i = 0; i < givenParcels.size() && j < parcelValues.size(); i++){
+            if(givenParcels.get(i).getValue()  == parcelValues.get(j)){
+                j++;
+                orderedParcelListbyValue.add(givenParcels.get(i));
+                i = 0;
+            }
+        }
+        return orderedParcelListbyValue;
+    }
+
+    public ArrayList<ParcelShape> orderParcelListByRatio(ArrayList<ParcelShape> givenParcels) {
+        ArrayList<Double> parcelRatios = new ArrayList<>();
+        ArrayList<ParcelShape> orderedParcelListbyRatio = new ArrayList<>();
+        for(int i = 0; i < givenParcels.size(); i++) {
+            parcelRatios.add(givenParcels.get(i).getRatio());
+        }
+        Collections.sort(parcelRatios, Collections.reverseOrder());
+        for(int j = 0, i = 0; i < givenParcels.size() && j < parcelRatios.size(); i++){
+            if(givenParcels.get(i).getRatio()  == parcelRatios.get(j)){
+                j++;
+                orderedParcelListbyRatio.add(givenParcels.get(i));
+                i = 0;
+            }
+        }
+        return orderedParcelListbyRatio;
+
+    }
+
+    public ArrayList<ParcelShape> orderParcelListRandom(ArrayList<ParcelShape> givenParcels) {
+        Collections.shuffle(givenParcels);
+        return givenParcels;
+    }
+
 }
