@@ -55,6 +55,7 @@ public class ContainerPane extends Parent {
     private Rotate zAxis = new Rotate(0, Rotate.Z_AXIS);
     
     private Group root;
+    private ArrayList<ParcelShape> containedShapes;
     
     /**
      * Constructor creates a Scene with container, boxes and a camera is being set to it.
@@ -124,7 +125,7 @@ public class ContainerPane extends Parent {
         container2.setParcelList(givenParcels);
         container2.solveFirstPackedCargo();
         
-        ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
+        containedShapes = container2.getContainedParcels();
         
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
@@ -166,8 +167,11 @@ public class ContainerPane extends Parent {
         
         container2.solveFirstPackedCargoSetAmount();
         
-        ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
-        
+        containedShapes = container2.getContainedParcels();
+        drawFromFront();
+    }
+    public void drawFromFront(){
+        root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
             int z = parcel.getCurrentCoordinates().getZ();
@@ -193,5 +197,36 @@ public class ContainerPane extends Parent {
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
             root.getChildren().add(box);
         }
+    }
+    public void drawFromBack(){
+        root.getChildren().remove(2, root.getChildren().size());
+        for(int i = containedShapes.size() - 1; i > -1; i--){
+            ParcelShape parcel = containedShapes.get(i);
+            int z = parcel.getCurrentCoordinates().getZ();
+            int y = parcel.getCurrentCoordinates().getY();
+            int x = parcel.getCurrentCoordinates().getX();
+            
+            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            box.setDrawMode(DrawMode.FILL);
+            try{
+                PhongMaterial material = new PhongMaterial();
+                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
+                Image image = new Image(inputstream);
+                material.setDiffuseMap(image);
+                box.setMaterial(material);
+            }
+            catch(FileNotFoundException exception){
+                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+                box.setMaterial(new PhongMaterial(ranColor));
+            }
+            
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
+        }
+    }
+    public void drawUpsideDown(){
+    
     }
 }       
