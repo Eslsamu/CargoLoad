@@ -37,29 +37,31 @@ public class ContainerPane extends Parent {
     private double Box_Depth = 0.5;
     private double Box_Width = 0.5;
     private double Box_Height = 0.5;
-    //box typeA
+    //box typeA(currently not needed)
     private double TypeA_Depth = 1.0;
     private double TypeA_Width = 1.0;
     private double TypeA_Height = 1.0;
-    //box typeB
+    //box typeB(currently not needed)
     private double TypeB_Depth = 1.0;
     private double TypeB_Width = 1.5;
     private double TypeB_Height = 2.0;
-    //box typeC
+    //box typeC(currently not needed)
     private double TypeC_Depth = 1.5;
     private double TypeC_Width = 1.5;
     private double TypeC_Height = 1.5;
-    //set rotation points
+    //set rotation points of camera
     private Rotate xAxis = new Rotate(0, Rotate.X_AXIS);
     private Rotate yAxis = new Rotate(0, Rotate.Y_AXIS);
     private Rotate zAxis = new Rotate(0, Rotate.Z_AXIS);
     
+    private Group root;
+    
     /**
      * Constructor creates a Scene with container, boxes and a camera is being set to it.
      */
-    public ContainerPane() throws FileNotFoundException {
+    public ContainerPane(){
         //add all containers, boxes and camera to a group
-        Group root = new Group();
+        root = new Group();
         
     	//creating container
     	Box container = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
@@ -70,50 +72,6 @@ public class ContainerPane extends Parent {
         //setting the color of the container
         container.setMaterial(new PhongMaterial(Color.ORANGE));
     	root.getChildren().add(container);
-        //create box typeA
-        
-        
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
-
-
-            givenParcels.add(new ParcelA());
-            givenParcels.add(new ParcelB());
-            givenParcels.add(new ParcelC());
-
-
-
-        ContainerModel container2 = new ContainerModel();
-        container2.setParcelList(givenParcels);
-        ContainerModel maxValueContainer = new ContainerModel();
-        maxValueContainer.setParcelList(givenParcels);
-        container2.solveFirstPackedCargo();
-        ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
-        
-        System.out.println("Size: " + containedShapes.size());
-        System.out.println("Z0: " + containedShapes.get(0).getCurrentCoordinates().getZ());
-        System.out.println("Z63: " + containedShapes.get(63).getCurrentCoordinates().getZ());
-        
-        for(int i = 0; i < containedShapes.size(); i++){
-            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-           
-            ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
-            
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
-            box.setDrawMode(DrawMode.FILL);
-            PhongMaterial material = new PhongMaterial();
-            FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png"); 
-            Image image = new Image(inputstream);
-            material.setDiffuseMap(image);
-            //box.setMaterial(new PhongMaterial(ranColor));
-            box.setMaterial(material);
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            root.getChildren().add(box);
-        }
         
         //create a camera
         Camera camera = new PerspectiveCamera(true);
@@ -149,5 +107,50 @@ public class ContainerPane extends Parent {
     */
     public void rotateZ(double angle){
         zAxis.setAngle(angle);
+    }
+    /**
+     * Method will run ContainerModel and get coordinates of parcels in a possible solution. It will
+     * then draw boxes representing the given solution.
+     */
+    public void drawBoxes(){
+         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        
+            givenParcels.add(new ParcelA());
+            givenParcels.add(new ParcelB());
+            givenParcels.add(new ParcelC());
+
+        ContainerModel container2 = new ContainerModel();
+        container2.setParcelList(givenParcels);
+        ContainerModel maxValueContainer = new ContainerModel();
+        maxValueContainer.setParcelList(givenParcels);
+        container2.solveFirstPackedCargo();
+        
+        ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
+        
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i);
+            int z = parcel.getCurrentCoordinates().getZ();
+            int y = parcel.getCurrentCoordinates().getY();
+            int x = parcel.getCurrentCoordinates().getX();
+            
+            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            box.setDrawMode(DrawMode.FILL);
+            try{
+                PhongMaterial material = new PhongMaterial();
+                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
+                Image image = new Image(inputstream);
+                material.setDiffuseMap(image);
+                box.setMaterial(material);
+            }
+            catch(FileNotFoundException exception){
+                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+                box.setMaterial(new PhongMaterial(ranColor));
+            }
+            
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
+        }
     }
 }       

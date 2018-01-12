@@ -16,7 +16,7 @@ public class TestView extends Application{
     public ContainerPane pane;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
 
         BorderPane testPane = createTestPane();
         AppView app = new AppView();
@@ -34,7 +34,7 @@ public class TestView extends Application{
         primaryStage.show();
     }
 
-    public BorderPane createTestPane() throws FileNotFoundException {
+    public BorderPane createTestPane(){
         BorderPane testPane = new BorderPane();
         pane = new ContainerPane();
         testPane.setCenter(pane);
