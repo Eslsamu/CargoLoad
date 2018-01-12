@@ -21,10 +21,13 @@ import javafx.stage.Stage;
  * @version 1.3
  */
 public class ButtonPane extends VBox{
+    private Stage stage;
+    private ContainerPane pane;
     /**
      * Constructor will create all the buttons and options
      */
     public ButtonPane(ContainerPane pane){
+    this.pane = pane;
     setSpacing(15);
     //title label
     Label start = new Label("Choose packing:");
@@ -32,7 +35,7 @@ public class ButtonPane extends VBox{
     getChildren().add(start);
     //pack boxes button
     Button startBox = new Button("Pack boxes");
-    startBox.setFocusTraversable(false);
+    start.setFocusTraversable(false);
     startBox.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
     startBox.setMinSize(225, 50);
     
@@ -45,9 +48,9 @@ public class ButtonPane extends VBox{
         @Override
         public void handle(ActionEvent e){
             if(button2.isSelected() == true){
-                ParcelsSet set = new ParcelsSet();
+                ParcelsSet set = new ParcelsSet(getButtonPane());
                 Scene scene = new Scene(set);
-                Stage stage = new Stage();
+                stage = new Stage();
                 stage.setScene(scene);
                 stage.setWidth(250);
                 stage.setHeight(300);
@@ -107,5 +110,12 @@ public class ButtonPane extends VBox{
     getChildren().add(pane2);
     setHalignment(pane2, HPos.CENTER);
     setAlignment(Pos.CENTER);
+    }
+    public void solveSetAmountBoxes(int a, int b, int c){
+        stage.close();
+        pane.drawBoxes(a, b, c);
+    }
+    public ButtonPane getButtonPane(){
+        return this;
     }
 }

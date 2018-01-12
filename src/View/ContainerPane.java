@@ -113,6 +113,7 @@ public class ContainerPane extends Parent {
      * then draw boxes representing the given solution.
      */
     public void drawBoxes(){
+        root.getChildren().remove(2, root.getChildren().size());
          ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
@@ -120,6 +121,49 @@ public class ContainerPane extends Parent {
             givenParcels.add(new ParcelC());
 
         ContainerModel container2 = new ContainerModel();
+        container2.setParcelList(givenParcels);
+        ContainerModel maxValueContainer = new ContainerModel();
+        maxValueContainer.setParcelList(givenParcels);
+        container2.solveFirstPackedCargo();
+        
+        ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
+        
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i);
+            int z = parcel.getCurrentCoordinates().getZ();
+            int y = parcel.getCurrentCoordinates().getY();
+            int x = parcel.getCurrentCoordinates().getX();
+            
+            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            box.setDrawMode(DrawMode.FILL);
+            try{
+                PhongMaterial material = new PhongMaterial();
+                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
+                Image image = new Image(inputstream);
+                material.setDiffuseMap(image);
+                box.setMaterial(material);
+            }
+            catch(FileNotFoundException exception){
+                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+                box.setMaterial(new PhongMaterial(ranColor));
+            }
+            
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
+        }
+    }
+    public void drawBoxes(int a, int b, int c){
+        root.getChildren().remove(2, root.getChildren().size());
+         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        
+            givenParcels.add(new ParcelA());
+            givenParcels.add(new ParcelB());
+            givenParcels.add(new ParcelC());
+
+        ContainerModel container2 = new ContainerModel();
+        container2.setAmountOfParcels(a, b, c);
         container2.setParcelList(givenParcels);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
