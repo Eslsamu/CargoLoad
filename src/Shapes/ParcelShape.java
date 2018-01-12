@@ -61,7 +61,11 @@ public abstract class ParcelShape {
     public int getValue(){
 	    return value;
     }
-    
+
+    public double getRatio() {
+        return value / (shape[0] * shape[1] * shape[2]);
+    }
+
 	/**
 	 * @return the color
 	 */

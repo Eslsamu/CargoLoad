@@ -30,18 +30,66 @@ public class ViewController implements EventHandler<KeyEvent>{
     public void handle(KeyEvent event){
         if(event.getCode() == KeyCode.RIGHT){
             angleY+= 10;
+            if(angleY >= 360){
+                angleY-= 360;
+            }
+            else if(angleY < 0){
+                angleY+= 360;
+            }
+            if(angleY >= 90 && angleY <= 270){
+                pane.drawFromBack();
+            }
+            else{
+                pane.drawFromFront();
+            }
             pane.rotateY(angleY);
         }
         else if(event.getCode() == KeyCode.LEFT){
             angleY-= 10;
+            if(angleY >= 360){
+                angleY-= 360;
+            }
+            else if(angleY < 0){
+                angleY+= 360;
+            }
+            if(angleY >= 90 && angleY <= 270){
+                pane.drawFromBack();
+            }
+            else{
+                pane.drawFromFront();
+            }
             pane.rotateY(angleY);
         }
         else if(event.getCode() == KeyCode.UP){
             angleX+= 10;
+            if(angleX >= 360){
+                angleX-= 360;
+            }
+            else if(angleX < 0){
+                angleX+= 360;
+            }
+            /* if(angleX >= 90 && angleX <= 270){
+                pane.drawFromBack();
+            }
+            else{
+                pane.drawFromFront();
+            } */
             pane.rotateX(angleX);
         }
         else if(event.getCode() == KeyCode.DOWN){
             angleX-= 10;
+            if(angleX >= 360){
+                angleX-= 360;
+            }
+            else if(angleX < 0){
+                angleX+= 360;
+            }
+            /* if(angleX >= 90 && angleX <= 270){
+                pane.drawFromBack();
+            }
+            else{
+                pane.drawFromFront();
+            } */
             pane.rotateX(angleX);
         }
         else if(event.getCode() == KeyCode.Q){
@@ -51,6 +99,20 @@ public class ViewController implements EventHandler<KeyEvent>{
         else if(event.getCode() == KeyCode.W){
             angleZ-= 10;
             pane.rotateZ(angleZ);
+        }
+        else if(event.getCode() == KeyCode.P){
+            System.out.println("Z: " + angleZ);
+            System.out.println("Y: " + angleY);
+            System.out.println("X: " + angleX);
+        }
+        else if(event.getCode() == KeyCode.R){
+            angleZ = 0;
+            angleY = 0;
+            angleX = 0;
+            pane.rotateZ(angleZ);
+            pane.rotateY(angleY);
+            pane.rotateX(angleX);
+            pane.drawFromFront();
         }
     }
 }

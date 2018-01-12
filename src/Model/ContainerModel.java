@@ -3,8 +3,8 @@ package Model;
 import Shapes.Facing;
 import Shapes.ParcelShape;
 import Util.Coordinates;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ContainerModel {
     /**
@@ -38,8 +38,53 @@ public class ContainerModel {
      * @param maxValueContainer The container that has been already packed and reached the maximal value so far
      * @return
      */
-
     public boolean solveFirstPackedCargo(){
+        printContainer();
+
+        //The end condition of the recursive loop --> checks if the container is completely filled
+        if(checkIfFull()){
+        	showResults();
+            System.out.println("The cargo is full.");
+            return true;
+        }
+        for(int z=0;z<containerZ;z++){
+            for(int y=0;y<containerY;y++){
+                for(int x=0;x<containerX;x++){
+                    //check if it is empty
+                    if(containerMatrix[z][y][x]==0){
+                        //for each available parcel type in the parcel list
+                        for(int parcelType = 0; parcelType<parcelList.size();parcelType++){
+                            //create a clone of the current parcel in your list
+                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
+                            //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+                            for(Facing o: Facing.values()) {                                
+                                currentParcel.setOrientation(o);
+                                //check if this parcel with this orientation can be placed onto these coordinates
+                                if (doesFit(z, y, x, currentParcel)) {
+                                    //place the parcel onto the container matrix                                   
+                                    placeParcel(z, y, x, currentParcel);
+                                    //add the parcel object to the containedParcel list
+                                    containedParcels.add(currentParcel);
+                                    if (solveFirstPackedCargo()) {
+                                        return true;
+                                    }
+                                    else {
+                                        removeParcel(currentParcel);
+                                        containedParcels.remove(containedParcels.size() - 1);
+                                                                            }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        showResults();
+        return true;
+    }
+    public boolean solveFirstPackedCargoSetAmount(){
+        //System.out.println("test");
         printContainer();
 
         //The end condition of the recursive loop --> checks if the container is completely filled
@@ -71,7 +116,7 @@ public class ContainerModel {
                                         remainingParcelsEachType[parcelType]--;
                                         //add the parcel object to the containedParcel list
                                         containedParcels.add(currentParcel);
-                                        if (solveFirstPackedCargo()) {
+                                        if (solveFirstPackedCargoSetAmount()) {
                                             return true;
                                         } else {
                                             removeParcel(currentParcel);
@@ -213,10 +258,17 @@ public class ContainerModel {
                 (parcel.getShape()[2] + z > containerZ) ||
                 (z + parcel.getShape()[0]< 0) ||
                 (y + parcel.getShape()[1]< 0) ||
-                (x + parcel.getShape()[2]<0)  ||
-                containerMatrix[z][y][x] == 1)
+                (x + parcel.getShape()[2]<0))
             return false;
-        else
+        else{
+            for(int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++){
+                for(int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++){
+                    for(int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++){
+                        if(containerMatrix[zCoord][yCoord][xCoord] == 1) return false;
+                    }
+                }
+            }
+        }
             return true;
     }
     
@@ -295,4 +347,45 @@ public class ContainerModel {
     public ArrayList<ParcelShape> getContainedParcels() {
         return containedParcels;
     }
+
+    public ArrayList<ParcelShape> orderParcelListByValue(ArrayList<ParcelShape> givenParcels) {
+        ArrayList<Integer> parcelValues = new ArrayList<>();
+        ArrayList<ParcelShape> orderedParcelListbyValue = new ArrayList<>();
+        for(int i = 0; i < givenParcels.size(); i++){
+            parcelValues.add(givenParcels.get(i).getValue());
+        }
+        Collections.sort(parcelValues, Collections.reverseOrder());
+        for(int j = 0, i = 0; i < givenParcels.size() && j < parcelValues.size(); i++){
+            if(givenParcels.get(i).getValue()  == parcelValues.get(j)){
+                j++;
+                orderedParcelListbyValue.add(givenParcels.get(i));
+                i = 0;
+            }
+        }
+        return orderedParcelListbyValue;
+    }
+
+    public ArrayList<ParcelShape> orderParcelListByRatio(ArrayList<ParcelShape> givenParcels) {
+        ArrayList<Double> parcelRatios = new ArrayList<>();
+        ArrayList<ParcelShape> orderedParcelListbyRatio = new ArrayList<>();
+        for(int i = 0; i < givenParcels.size(); i++) {
+            parcelRatios.add(givenParcels.get(i).getRatio());
+        }
+        Collections.sort(parcelRatios, Collections.reverseOrder());
+        for(int j = 0, i = 0; i < givenParcels.size() && j < parcelRatios.size(); i++){
+            if(givenParcels.get(i).getRatio()  == parcelRatios.get(j)){
+                j++;
+                orderedParcelListbyRatio.add(givenParcels.get(i));
+                i = 0;
+            }
+        }
+        return orderedParcelListbyRatio;
+
+    }
+
+    public ArrayList<ParcelShape> orderParcelListRandom(ArrayList<ParcelShape> givenParcels) {
+        Collections.shuffle(givenParcels);
+        return givenParcels;
+    }
+
 }

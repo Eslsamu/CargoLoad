@@ -8,7 +8,7 @@ public class ParcelB extends ParcelShape{
 	protected static int length = 4;
 	
 	protected static String name = "B";
-	protected static int value = 3;
+	protected static int value = 4;
 	
 	public ParcelB() {
 		super(color, width, height, length, value, name);
