@@ -213,10 +213,17 @@ public class ContainerModel {
                 (parcel.getShape()[2] + z > containerZ) ||
                 (z + parcel.getShape()[0]< 0) ||
                 (y + parcel.getShape()[1]< 0) ||
-                (x + parcel.getShape()[2]<0)  ||
-                containerMatrix[z][y][x] == 1)
+                (x + parcel.getShape()[2]<0))
             return false;
-        else
+        else{
+            for(int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++){
+                for(int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++){
+                    for(int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++){
+                        if(containerMatrix[zCoord][yCoord][xCoord] == 1) return false;
+                    }
+                }
+            }
+        }
             return true;
     }
     
