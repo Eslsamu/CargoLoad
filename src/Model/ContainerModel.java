@@ -23,6 +23,7 @@ public class ContainerModel {
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
+    private int[] remainingParcelsEachType;
 
 /*
 
@@ -38,6 +39,7 @@ public class ContainerModel {
      */
 
     public boolean solve(ContainerModel maxValueContainer){
+        int parcelType = 0;
         printContainer();
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
@@ -52,39 +54,46 @@ public class ContainerModel {
             return true;
         }
         //for each voxel of the space
-        for(int z=0;z<containerZ;z++){
-            for(int y=0;y<containerY;y++){
-                for(int x=0;x<containerX;x++){   
-                	//check if it is empty
-                    if(containerMatrix[z][y][x]==0){
-                    	//for each available parcel type in the parcel list
-                        for(int parcelType = 0;parcelType<parcelList.size();parcelType++){
-                        	//create a clone of the current parcel in your list
-                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
-                        	//for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
-                            for(Facing o: Facing.values()) {                            	
-                            	currentParcel.setOrientation(o);
-                                //check if this parcel with this orientation can be placed onto these coordinates
-                                if (doesFit(z, y, x, currentParcel)) {
-                                	//place the parcel onto the container matrix                               	
-                                    placeParcel(z, y, x, currentParcel);
-                                    //add the parcel object to the containedParcel list
-                                    System.out.println("checkList");
-                                    containedParcels.add(currentParcel);
-                                    for(int i=0;i<containedParcels.size();i++){
-                                        System.out.println("1"+containedParcels.get(i));
-                                    }
-                                    if (solve(maxValueContainer)) {
-                                        return true;
-                                    }
-                                    else {
-                                        removeParcel(currentParcel);
-                                        containedParcels.remove(containedParcels.size() - 1);
+        while (parcelType < 3 && remainingParcelsEachType[parcelType] == 0) {
+            parcelType++;
+            for (int z = 0; z < containerZ; z++) {
+                for (int y = 0; y < containerY; y++) {
+                    for (int x = 0; x < containerX; x++) {
+                        //check if it is empty
+                        if (containerMatrix[z][y][x] == 0) {
+                            //for each available parcel type in the parcel list
+
+                            //if(parcelType > 2) return false;
+                            for (; parcelType < parcelList.size(); parcelType++) {
+                                //create a clone of the current parcel in your list
+                                ParcelShape currentParcel = parcelList.get(parcelType).clone();
+                                //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+                                for (Facing o : Facing.values()) {
+                                    currentParcel.setOrientation(o);
+                                    //check if this parcel with this orientation can be placed onto these coordinates
+                                    if (doesFit(z, y, x, currentParcel)) {
+                                        //place the parcel onto the container matrix
+                                        placeParcel(z, y, x, currentParcel);
+                                        remainingParcelsEachType[parcelType]--;
+                                        //if(remainingParcelsEachType[parcelType] == 0) parcelType++;
+                                        //add the parcel object to the containedParcel list
+                                        System.out.println("checkList");
+                                        containedParcels.add(currentParcel);
+                                        for (int i = 0; i < containedParcels.size(); i++) {
+                                            System.out.println("1" + containedParcels.get(i));
+                                        }
+                                        if (solve(maxValueContainer)) {
+                                            return true;
+                                        } else {
+                                            removeParcel(currentParcel);
+                                            containedParcels.remove(containedParcels.size() - 1);
+                                        }
                                     }
                                 }
                             }
-                        }
 
+
+                        }
                     }
                 }
             }
@@ -221,6 +230,10 @@ public class ContainerModel {
 
     public void setParcelList(ArrayList<ParcelShape> parcelList) {
         this.parcelList = parcelList;
+    }
+
+    public void setAmountOfParcels(int nrOfA, int nrOfB, int nrOfC) {
+        remainingParcelsEachType = new int[]{nrOfA, nrOfB, nrOfC};
     }
     
     public ArrayList<ParcelShape> getContainedParcels() {
