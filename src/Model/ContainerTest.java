@@ -10,7 +10,6 @@ public class ContainerTest {
     public static void main(String[] args) {
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
 
-
         givenParcels.add(new ParcelA());
         givenParcels.add(new ParcelB());
         givenParcels.add(new ParcelC());

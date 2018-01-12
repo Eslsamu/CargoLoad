@@ -286,6 +286,11 @@ public class ContainerModel {
     public void setAmountOfParcels(int nrOfA, int nrOfB, int nrOfC) {
         remainingParcelsEachType = new int[]{nrOfA, nrOfB, nrOfC};
     }
+
+    //when setAmountOfParcels is called without parameters we consider the amount of each parcel as "infinite"
+    public void setAmountOfParcels() {
+        remainingParcelsEachType = new int[]{1000,1000,1000};
+    }
     
     public ArrayList<ParcelShape> getContainedParcels() {
         return containedParcels;
