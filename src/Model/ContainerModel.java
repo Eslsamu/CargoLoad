@@ -37,24 +37,18 @@ public class ContainerModel {
      * @return
      */
 
-    public boolean solve(ContainerModel maxValueContainer){
+    public boolean solveFirstPackedCargo(){
         printContainer();
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
-        	if(computeTotalValue()>maxValueContainer.computeTotalValue()){
-                //System.out.println("Total value container: "+computeTotalValue());
-                //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
-                maxValueContainer = this;
-            }
-            showResults(maxValueContainer);
-            System.out.println("Size "+maxValueContainer.getContainedParcels().size());
+        	showResults();
             System.out.println("The cargo is full.");
             return true;
         }
         //for each voxel of the space
         for(int z=0;z<containerZ;z++){
             for(int y=0;y<containerY;y++){
-                for(int x=0;x<containerX;x++){   
+                for(int x=0;x<containerX;x++){
                 	//check if it is empty
                     if(containerMatrix[z][y][x]==0){
                     	//for each available parcel type in the parcel list
@@ -69,12 +63,8 @@ public class ContainerModel {
                                 	//place the parcel onto the container matrix                               	
                                     placeParcel(z, y, x, currentParcel);
                                     //add the parcel object to the containedParcel list
-                                    System.out.println("checkList");
                                     containedParcels.add(currentParcel);
-                                    for(int i=0;i<containedParcels.size();i++){
-                                        System.out.println("1"+containedParcels.get(i));
-                                    }
-                                    if (solve(maxValueContainer)) {
+                                    if (solveFirstPackedCargo()) {
                                         return true;
                                     }
                                     else {
@@ -89,16 +79,86 @@ public class ContainerModel {
                 }
             }
         }
-        if(computeTotalValue()>maxValueContainer.computeTotalValue()){
-            //System.out.println("Total value container: "+computeTotalValue());
-            //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
-            maxValueContainer = this;
-        }
-        showResults(maxValueContainer);
-        System.out.println("Size "+maxValueContainer.getContainedParcels().size());
-        for(ParcelShape parcel:maxValueContainer.getContainedParcels()){
-            System.out.println(parcel.getCurrentCoordinates().getZ()+" "+parcel.getCurrentCoordinates().getY()+" "+parcel.getCurrentCoordinates().getX());
-        }
+        showResults();
+        return true;
+    }
+
+    // TODO
+    // needs to be modified - this method goes through all possible configuration of packing the cargo, stores the best
+    // in the maxValueContainer and at the end shows the best result
+    // to use it clone the maxValueContainer and place it instead of "maxValueContainer = this"
+    // and and at the end of the method set container as a clone of the current maxValueContainer
+    public boolean solveWholeSearchTree(ContainerModel maxValueContainer){
+//        printContainer();
+//        //The end condition of the recursive loop --> checks if the container is completely filled
+//        if(checkIfFull()){
+//            if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+//                //System.out.println("Total value container: "+computeTotalValue());
+//                //System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+//                maxValueContainer = this;
+//            }
+//            if(computeTotalValue()==maxValueContainer.computeTotalValue()){
+//                System.out.println("the same");
+//            }
+//            showResults(maxValueContainer);
+//            System.out.println("Size "+maxValueContainer.getContainedParcels().size());
+//            System.out.println("The cargo is full.");
+//            if(computeTotalValue()==maxValueContainer.computeTotalValue()){
+//                System.out.println("the same");
+//            }
+//            return true;
+//        }
+//        //for each voxel of the space
+//        for(int z=0;z<containerZ;z++){
+//            for(int y=0;y<containerY;y++){
+//                for(int x=0;x<containerX;x++){
+//                    //check if it is empty
+//                    if(containerMatrix[z][y][x]==0){
+//                        //for each available parcel type in the parcel list
+//                        for(int parcelType = 0;parcelType<parcelList.size();parcelType++){
+//                            //create a clone of the current parcel in your list
+//                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
+//                            //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+//                            for(Facing o: Facing.values()) {
+//                                currentParcel.setOrientation(o);
+//                                //check if this parcel with this orientation can be placed onto these coordinates
+//                                if (doesFit(z, y, x, currentParcel)) {
+//                                    //place the parcel onto the container matrix
+//                                    placeParcel(z, y, x, currentParcel);
+//                                    //add the parcel object to the containedParcel list
+//                                    System.out.println("checkList");
+//                                    containedParcels.add(currentParcel);
+//                                    for(int i=0;i<containedParcels.size();i++){
+//                                        System.out.println("1"+containedParcels.get(i));
+//                                    }
+//                                    if (solve(maxValueContainer)) {
+//                                        return true;
+//                                    }
+//                                    else {
+//                                        removeParcel(currentParcel);
+//                                        containedParcels.remove(containedParcels.size() - 1);
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+//        if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+//            System.out.println("Total value container: "+computeTotalValue());
+//            System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+//            maxValueContainer = this;
+//        }
+//
+//        showResults(maxValueContainer);
+//        boolean methodFinished = true;
+//        if(methodFinished){
+//            setContainedParcels(maxValueContainer.containedParcels);
+//            setContainerMatrix(maxValueContainer.containerMatrix);
+//        }
+//
         return true;
     }
 
@@ -130,9 +190,9 @@ public class ContainerModel {
 
 
 
-    public void showResults(ContainerModel container){
-        container.printContainer();
-        System.out.println("The best value is :"+container.computeTotalValue());
+    public void showResults(){
+        printContainer();
+        System.out.println("The best value is :"+computeTotalValue());
     }
 
     /**
@@ -174,9 +234,7 @@ public class ContainerModel {
     /**
      * Places the parcel in a certain cell of the container with coordinates (z,y,x).
      */
-    // TODO
     public void placeParcel(int z, int y, int x, ParcelShape parcel){
-    	System.out.println("checkPlace");
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
         //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
         for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
@@ -194,16 +252,10 @@ public class ContainerModel {
      */
     // TODO
     public void removeParcel(ParcelShape parcel){
-        System.out.println(parcel.getShape()[2]);
-        System.out.println(parcel.getShape()[1]);
-        System.out.println(parcel.getShape()[0]);
-        System.out.println("checkRemove");
         //parcel.setCurrentCoordinates(null); not sure if this is good
-
         for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord <parcel.getCurrentCoordinates().getZ()  + parcel.getShape()[2]; zCoord++) {
             for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < parcel.getCurrentCoordinates().getY() + parcel.getShape()[1]; yCoord++) {
                 for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < parcel.getCurrentCoordinates().getX() + parcel.getShape()[0]; xCoord++) {
-                    System.out.println("z" +zCoord+"y "+yCoord+"x "+xCoord);
                     containerMatrix[zCoord][yCoord][xCoord] = 0;
                 }
             }
