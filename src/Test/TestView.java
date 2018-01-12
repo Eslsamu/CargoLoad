@@ -4,6 +4,7 @@ import View.AppView;
 import View.ContainerPane;
 import View.MouseController;
 import View.ViewController;
+import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -33,7 +34,7 @@ public class TestView extends Application{
         primaryStage.show();
     }
 
-    public BorderPane createTestPane() {
+    public BorderPane createTestPane() throws FileNotFoundException {
         BorderPane testPane = new BorderPane();
         pane = new ContainerPane();
         testPane.setCenter(pane);
