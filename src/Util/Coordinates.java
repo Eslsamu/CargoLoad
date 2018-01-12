@@ -64,4 +64,16 @@ public class Coordinates {
 	public String toString() {
 		return "("+x+","+y+","+z+")";
 	}
+	
+	/*
+	 * returns an integer 2D array that stores the (x,y,z) values
+	 */
+	public int[][] toVector() {
+		int[][] array = {{x},
+						{y},
+						{z}};
+		return array;
+	}
+	
+	
 }

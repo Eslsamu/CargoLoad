@@ -1,10 +1,11 @@
 package Test;
 
+import java.io.FileNotFoundException;
+
 import View.AppView;
 import View.ContainerPane;
 import View.MouseController;
 import View.ViewController;
-import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -16,7 +17,7 @@ public class TestView extends Application{
     public ContainerPane pane;
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) throws Exception {
 
         BorderPane testPane = createTestPane();
         AppView app = new AppView();
@@ -34,7 +35,7 @@ public class TestView extends Application{
         primaryStage.show();
     }
 
-    public BorderPane createTestPane(){
+    public BorderPane createTestPane() throws FileNotFoundException {
         BorderPane testPane = new BorderPane();
         pane = new ContainerPane();
         testPane.setCenter(pane);
