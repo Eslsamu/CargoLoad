@@ -17,7 +17,7 @@ public class ContainerTest {
        
         ContainerModel container = new ContainerModel();
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(0,0,0);
+        container.setAmountOfParcels(10,0,0);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
         //container.solve(maxValueContainer);

@@ -23,6 +23,8 @@ public class ContainerModel {
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
+    private int[] remainingParcelsEachType;
+    private int nonEmptyParcelType = 0;
 
 /*
 
@@ -39,6 +41,7 @@ public class ContainerModel {
 
     public boolean solveFirstPackedCargo(){
         printContainer();
+
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
         	showResults();
@@ -46,39 +49,43 @@ public class ContainerModel {
             return true;
         }
         //for each voxel of the space
-        for(int z=0;z<containerZ;z++){
-            for(int y=0;y<containerY;y++){
-                for(int x=0;x<containerX;x++){
-                	//check if it is empty
-                    if(containerMatrix[z][y][x]==0){
-                    	//for each available parcel type in the parcel list
-                        for(int parcelType = 0;parcelType<parcelList.size();parcelType++){
-                        	//create a clone of the current parcel in your list
-                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
-                        	//for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
-                            for(Facing o: Facing.values()) {                            	
-                            	currentParcel.setOrientation(o);
-                                //check if this parcel with this orientation can be placed onto these coordinates
-                                if (doesFit(z, y, x, currentParcel)) {
-                                	//place the parcel onto the container matrix                               	
-                                    placeParcel(z, y, x, currentParcel);
-                                    //add the parcel object to the containedParcel list
-                                    containedParcels.add(currentParcel);
-                                    if (solveFirstPackedCargo()) {
-                                        return true;
-                                    }
-                                    else {
-                                        removeParcel(currentParcel);
-                                        containedParcels.remove(containedParcels.size() - 1);
+        while(nonEmptyParcelType < 3 && remainingParcelsEachType[nonEmptyParcelType] == 0) nonEmptyParcelType++;
+            for (int z = 0; z < containerZ; z++) {
+                for (int y = 0; y < containerY; y++) {
+                    for (int x = 0; x < containerX; x++) {
+                        //check if it is empty
+                        if (containerMatrix[z][y][x] == 0) {
+                            //for each available parcel type in the parcel list
+                            //while (parcelType < parcelList.size()) {
+                                for (int parcelType = nonEmptyParcelType; parcelType < parcelList.size(); parcelType++) {
+                                //create a clone of the current parcel in your list
+                                ParcelShape currentParcel = parcelList.get(parcelType).clone();
+                                //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+                                for (Facing o : Facing.values()) {
+                                    currentParcel.setOrientation(o);
+                                    //check if this parcel with this orientation can be placed onto these coordinates
+                                    if (doesFit(z, y, x, currentParcel)) {
+                                        //place the parcel onto the container matrix
+                                        placeParcel(z, y, x, currentParcel);
+                                        remainingParcelsEachType[parcelType]--;
+                                        //add the parcel object to the containedParcel list
+                                        containedParcels.add(currentParcel);
+                                        if (solveFirstPackedCargo()) {
+                                            return true;
+                                        } else {
+                                            removeParcel(currentParcel);
+                                            containedParcels.remove(containedParcels.size() - 1);
+                                        }
                                     }
                                 }
-                            }
-                        }
 
+                            }
+
+                        }
                     }
                 }
             }
-        }
+
         showResults();
         return true;
     }
@@ -273,6 +280,10 @@ public class ContainerModel {
 
     public void setParcelList(ArrayList<ParcelShape> parcelList) {
         this.parcelList = parcelList;
+    }
+
+    public void setAmountOfParcels(int nrOfA, int nrOfB, int nrOfC) {
+        remainingParcelsEachType = new int[]{nrOfA, nrOfB, nrOfC};
     }
     
     public ArrayList<ParcelShape> getContainedParcels() {
