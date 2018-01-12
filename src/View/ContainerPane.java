@@ -163,9 +163,8 @@ public class ContainerPane extends Parent {
         ContainerModel container2 = new ContainerModel();
         container2.setAmountOfParcels(a, b, c);
         container2.setParcelList(givenParcels);
-        ContainerModel maxValueContainer = new ContainerModel();
-        maxValueContainer.setParcelList(givenParcels);
-        container2.solveFirstPackedCargo();
+        
+        container2.solveFirstPackedCargoSetAmount();
         
         ArrayList<ParcelShape> containedShapes = container2.getContainedParcels();
         
