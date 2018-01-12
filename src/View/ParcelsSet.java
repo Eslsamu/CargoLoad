@@ -5,6 +5,8 @@
  */
 package View;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +19,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 /**
  *
@@ -24,7 +27,7 @@ import javafx.scene.text.Font;
  */
 public class ParcelsSet extends GridPane{
     
-    public ParcelsSet(){
+    public ParcelsSet(ButtonPane buttonPane){
     Label typeA = new Label("Type A -> 1X1X2");
     Label typeB = new Label("Type B -> 1X1.5X2");
     Label typeC = new Label("Type C -> 1.5X1.5X1.5");
@@ -40,7 +43,11 @@ public class ParcelsSet extends GridPane{
     
     Button submit = new Button("Submit");
     submit.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
-    
+    submit.setOnAction(new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent e){
+            buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()));
+    }});
     setAlignment(Pos.CENTER);
     setHalignment(amount, HPos.CENTER);
     setHalignment(typeA, HPos.CENTER);
