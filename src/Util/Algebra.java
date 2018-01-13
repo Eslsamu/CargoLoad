@@ -25,12 +25,7 @@ public class Algebra {
 					{axisY*axisX*(1-cosA)+axisZ*sinA,cosA+axisY*axisY*(1-cosA),axisY*axisZ*(1-cosA)-axisX*sinA},
 					{axisZ*axisY*(1-cosA)-axisY*sinA,axisZ*axisY*(1-cosA)+axisX*sinA,cosA+axisZ*axisZ*(1-cosA)}
 					};
-		for(int x = 0; x < rotationMatrix.length; x++) {
-			for(int y = 0; y < rotationMatrix[x].length; y++) {
-				System.out.print(rotationMatrix[x][y]+" ");
-			}
-			System.out.println();
-		}
+	
 		int[][] rotatedVector = multiplyMatrix(rotationMatrix, point.toVector());
 		
 		Coordinates rotatedPoint = new Coordinates(rotatedVector[0][0],rotatedVector[1][0],rotatedVector[2][0]);
