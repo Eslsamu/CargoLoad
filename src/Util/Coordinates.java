@@ -66,7 +66,7 @@ public class Coordinates {
 	}
 	
 	/*
-	 * returns an integer 2D array that stores the (x,y,z) values
+	 * returns an integer 2D array that stores the (x,y,z) values in form of a vector
 	 */
 	public int[][] toVector() {
 		int[][] array = {{x},

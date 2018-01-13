@@ -1,16 +1,21 @@
 package Util;
 
-public class HelperMethods {
+public class Algebra {
 	
 	public static void main(String[]args) {
-	
+		Coordinates test = new Coordinates(2,2,4);
+		test = rotateUV(270,new Coordinates(0,1,0),test);
+		
+		System.out.println(test.toString());
 	}
+	
 	/*
-	 * 
+	 * This method rotates an point in a coordinate system around a unit vector (UV/xyz-axis) and returns a rotated version of this point
 	 */
-	public static Coordinates rotate(double angle, Coordinates axisVector, Coordinates point) {
-		int cosA = (int) Math.cos(angle);
-		int sinA = (int) Math.sin(angle);
+	public static Coordinates rotateUV(double angle, Coordinates axisVector, Coordinates point) {
+		
+		int cosA = (int) Math.cos(Math.toRadians(angle));
+		int sinA = (int) Math.sin(Math.toRadians(angle));
 		int axisX = axisVector.getX();
 		int axisY = axisVector.getY();
 		int axisZ = axisVector.getZ();
@@ -20,12 +25,18 @@ public class HelperMethods {
 					{axisY*axisX*(1-cosA)+axisZ*sinA,cosA+axisY*axisY*(1-cosA),axisY*axisZ*(1-cosA)-axisX*sinA},
 					{axisZ*axisY*(1-cosA)-axisY*sinA,axisZ*axisY*(1-cosA)+axisX*sinA,cosA+axisZ*axisZ*(1-cosA)}
 					};
+		for(int x = 0; x < rotationMatrix.length; x++) {
+			for(int y = 0; y < rotationMatrix[x].length; y++) {
+				System.out.print(rotationMatrix[x][y]+" ");
+			}
+			System.out.println();
+		}
+		int[][] rotatedVector = multiplyMatrix(rotationMatrix, point.toVector());
 		
-		int[][] rotatedVector = multiplyMatrix(point.toVector(), rotationMatrix);
-		Coordinates rotatedPoint = new Coordinates(rotatedVector[0][0],rotatedVector[0][1],rotatedVector[0][2]);
+		Coordinates rotatedPoint = new Coordinates(rotatedVector[0][0],rotatedVector[1][0],rotatedVector[2][0]);
 		
 		return rotatedPoint;
-		
+	
 	}
 	
 	public static int[][] multiplyMatrix(int[][] matrix1, int[][] matrix2){
