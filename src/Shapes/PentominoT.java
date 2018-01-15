@@ -19,4 +19,9 @@ public class PentominoT extends PentominoShape{
 		super.children.add(new Monimo(new Coordinates(0,2,1), color));
 		super.children.add(new Monimo(new Coordinates(0,2,-1), color));
 	}
+
+	@Override
+	public PentominoShape clone() {
+		return new PentominoT();
+	}
 }

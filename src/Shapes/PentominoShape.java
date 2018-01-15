@@ -46,7 +46,21 @@ public abstract class PentominoShape {
 	
 	public void reflect(Axis ax) {
 		for(Monimo m: children ) {
-			m.positionParentshape = 
+			m.positionParentshape = Algebra.reflect(ax, m.positionParentshape);
+		}
+	}
+	/*
+	 * this method finds the monomio O which has the lowest x, y and z coordinate of the shape and translates 
+	 * every monimo so that O is at 0,0,0. 
+	 * this is used after each time the pentomino is rotated, to shift it again properly into it's shape coordinate system(not container).
+	 */
+	public void moveToOrigin() {
+		
+	}
+	
+	public void setOrientation(Facing o) {
+		switch(o) {
+		
 		}
 	}
 	
@@ -59,6 +73,12 @@ public abstract class PentominoShape {
 		}
 		return s;
 	}
+	
+	/*
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public abstract PentominoShape clone();
 	
 	public abstract void addChildren();
 }

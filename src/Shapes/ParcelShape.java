@@ -107,31 +107,37 @@ public abstract class ParcelShape {
 	        	shapeVector.x = height;
 	        	shapeVector.y = width;
 	        	shapeVector.z = length;
+	        	break;
 	        	}
 	        case UpB: {
 	        	shapeVector.x = width;
 	        	shapeVector.y = height;
 	        	shapeVector.z = length;
+	        	break;
 	        	}
 	        case RightA: {
 	        	shapeVector.x = height;
 	        	shapeVector.y = length;
 	        	shapeVector.z = width;
+	        	break;
 	        	}
 	        case RightB: {
 	        	shapeVector.x = width;
 	        	shapeVector.y = length;
 	        	shapeVector.z = height;
+	        	break;
 	        	}
 	        case FrontA: {
 	        	shapeVector.x = length;
 	        	shapeVector.y = height;
 	        	shapeVector.z = width;
+	        	break;
 	        	}
 	        case FrontB: {
 	        	shapeVector.x = length;
 	        	shapeVector.y = width;
 	        	shapeVector.z = height;
+	        	break;
 	        	}
 		}
 	}

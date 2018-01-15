@@ -2,7 +2,10 @@ package Model;
 
 import java.util.ArrayList;
 
+import Shapes.PentominoL;
+import Shapes.PentominoP;
 import Shapes.PentominoShape;
+import Shapes.PentominoT;
 
 public class PentoContainer {
 	
@@ -30,12 +33,37 @@ public class PentoContainer {
 	 */
 	private ArrayList<PentominoShape> loadedPentominoes = new ArrayList<PentominoShape>();
 	
+	/*
+	 * a list of pentominoes shapes which are given to be placed
+	 */
+	private ArrayList<PentominoShape> givenPentominoes = new ArrayList<PentominoShape>() {{
+		add(new PentominoP());
+		add(new PentominoL());
+		add(new PentominoT());
+	}};
+	
 	public static void main(String[]args) {
 		PentoContainer testContainer = new PentoContainer();
 		testContainer.loadContainer();
 	}
 	
 	public void loadContainer() {
-		
+		//for each index in the space
+		for(int z = 0; z < containerLength; z++) {
+			for(int y = 0; y < containerWidth; y++) {
+				for(int x = 0; x < containerHeight; x++) {
+					//if nothing is placed here
+					if(!containerMatrix[x][y][z]) {
+						//for each pentomino in our list of given shapes
+						for(PentominoShape p : givenPentominoes) {
+							//get an instance of this shape by cloning it
+							PentominoShape current = p.clone();
+							//rotates around the 
+							
+						}
+					}
+				}
+			}
+		}
 	}
 }
