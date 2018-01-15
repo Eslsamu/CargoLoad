@@ -2,36 +2,56 @@ package Util;
 
 public class Algebra {
 	
+	/*
+	 * test main
+	 */
 	public static void main(String[]args) {
-		Coordinates test = new Coordinates(2,2,4);
-		test = rotateUV(270,new Coordinates(0,1,0),test);
+		Coordinates test = new Coordinates(2,3,4);
+		test = rotateUV(90, Axis.X,test);
+		System.out.println(test.toString());
+		test=reflect(Axis.Y,test);
 		
 		System.out.println(test.toString());
 	}
 	
 	/*
-	 * This method rotates an point in a coordinate system around a unit vector (UV/xyz-axis) and returns a rotated version of this point
+	 * rotates an point in a coordinate system around a unit vector (UV/xyz-axis) and returns a rotated version of this point
+	 * @param 
 	 */
-	public static Coordinates rotateUV(double angle, Coordinates axisVector, Coordinates point) {
+	public static Coordinates rotateUV(double angle, Axis a, Coordinates point) {
+		
+		Coordinates axis = a.toUnitVector();
 		
 		int cosA = (int) Math.cos(Math.toRadians(angle));
 		int sinA = (int) Math.sin(Math.toRadians(angle));
-		int axisX = axisVector.getX();
-		int axisY = axisVector.getY();
-		int axisZ = axisVector.getZ();
 		
 		int[][] rotationMatrix = {
-					{cosA+axisX*axisX*(1-cosA),axisX*axisY*(1-cosA)-axisZ*sinA,axisZ*axisX*(1-cosA)+axisY*sinA},
-					{axisY*axisX*(1-cosA)+axisZ*sinA,cosA+axisY*axisY*(1-cosA),axisY*axisZ*(1-cosA)-axisX*sinA},
-					{axisZ*axisY*(1-cosA)-axisY*sinA,axisZ*axisY*(1-cosA)+axisX*sinA,cosA+axisZ*axisZ*(1-cosA)}
+					{cosA+axis.x*axis.x*(1-cosA),axis.x*axis.y*(1-cosA)-axis.z*sinA,axis.z*axis.x*(1-cosA)+axis.y*sinA},
+					{axis.y*axis.x*(1-cosA)+axis.z*sinA,cosA+axis.y*axis.y*(1-cosA),axis.y*axis.z*(1-cosA)-axis.x*sinA},
+					{axis.z*axis.y*(1-cosA)-axis.y*sinA,axis.z*axis.y*(1-cosA)+axis.x*sinA,cosA+axis.z*axis.z*(1-cosA)}
 					};
-	
+		
 		int[][] rotatedVector = multiplyMatrix(rotationMatrix, point.toVector());
 		
-		Coordinates rotatedPoint = new Coordinates(rotatedVector[0][0],rotatedVector[1][0],rotatedVector[2][0]);
-		
-		return rotatedPoint;
+		return new Coordinates(rotatedVector[0][0],rotatedVector[1][0],rotatedVector[2][0]);
+	}
 	
+	/*
+	 * reflects a vector on a plane of two coordinate axis
+	 * @param a the axis that is left out XY Plane --> a=z
+	 */
+	public static Coordinates reflect(Axis a, Coordinates point) {
+		int temp = 0;
+		switch(a) {
+		case X: temp = 0; break;
+		case Y: temp = 1; break;
+		case Z: temp = 2; break;
+		}
+		int[][] reflectionMatrix = {{1,0,0},{0,1,0},{0,0,1}};
+		reflectionMatrix[temp][temp]=-1;
+		int[][] reflectedVector = multiplyMatrix(reflectionMatrix, point.toVector());
+	
+		return new Coordinates(reflectedVector[0][0],reflectedVector[1][0],reflectedVector[2][0]);
 	}
 	
 	public static int[][] multiplyMatrix(int[][] matrix1, int[][] matrix2){

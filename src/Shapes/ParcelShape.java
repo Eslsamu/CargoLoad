@@ -1,6 +1,5 @@
 package Shapes;
 
-import java.util.ArrayList;
 
 import Util.Coordinates;
 
@@ -23,12 +22,12 @@ public abstract class ParcelShape {
 	/*
 	 * represents the way the parcel is positioned(orientation and rotation) in space with 3 vectors 
 	 */
-	private int[] shape = new int[3];
+	private Coordinates shapeVector;
 	
 	/*
 	 * The coordinates onto which the of the parcel is placed from it's current shape
 	 */
-	protected Coordinates currentCoords;
+	protected Coordinates positionContainer;
 	
 	/*
 	 * A Parcel can face towards 3 different directions --> up/down(Z), left/right(Y), front/back(X),
@@ -46,16 +45,15 @@ public abstract class ParcelShape {
 		this.length = l;
 		this.height = h;
 		
-		shape[0] = w;
-		shape[1] = h;
-		shape[2] = l;
+		shapeVector = new Coordinates(w,l,h);
 		
 		orientation = Facing.UpA;
-		Coordinates coords = new Coordinates(0,0,0);	
+		positionContainer = new Coordinates(0,0,0);	
 	}
-
-	public int[] getShape(){
-	    return shape;
+	
+	
+	public Coordinates getShapeVector(){
+	    return shapeVector;
     }
 
     public int getValue(){
@@ -63,7 +61,7 @@ public abstract class ParcelShape {
     }
 
     public double getRatio() {
-        return value / (shape[0] * shape[1] * shape[2]);
+        return value / (shapeVector.x * shapeVector.y * shapeVector.z);
     }
 
 	/**
@@ -74,22 +72,23 @@ public abstract class ParcelShape {
 	}
 	
 	/**
-	 * @return the current Coordinates
+	 * @return the position in the container
 	 */
-	public Coordinates getCurrentCoordinates() {
-		return this.currentCoords;
+	public Coordinates getPosition() {
+		return this.positionContainer;
 	}
 	
 	/**
-	 * @param currentCoords the current position to set
+	 * @param set the positionContainer
 	 */
 	public void setCurrentCoordinates(Coordinates coords) {
-		this.currentCoords = coords;
+		this.positionContainer = coords;
 	}
 	
 	/*
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public abstract ParcelShape clone();
 	
 	/*
@@ -100,40 +99,41 @@ public abstract class ParcelShape {
 		RightB, //Length is Y Axis, Width is X
 		FrontA, //Length is X Axis, Width is Z
 		FrontB; //Length is X Axis, Width is Y
-	 */
+	*/
 	public void setOrientation(Facing o) {
 		this.orientation = o; 
 		switch(o) {
 	        case UpA: {
-	        	shape[0] = height;
-	        	shape[1] = width;
-	        	shape[2] = length;
+	        	shapeVector.x = height;
+	        	shapeVector.y = width;
+	        	shapeVector.z = length;
 	        	}
 	        case UpB: {
-	        	shape[0] = width;
-	        	shape[1] = height;
-	        	shape[2] = length;
+	        	shapeVector.x = width;
+	        	shapeVector.y = height;
+	        	shapeVector.z = length;
 	        	}
 	        case RightA: {
-	        	shape[0] = height;
-	        	shape[1] = length;
-	        	shape[2] = width;
+	        	shapeVector.x = height;
+	        	shapeVector.y = length;
+	        	shapeVector.z = width;
 	        	}
 	        case RightB: {
-	        	shape[0] = width;
-	        	shape[1] = length;
-	        	shape[2] = height;
+	        	shapeVector.x = width;
+	        	shapeVector.y = length;
+	        	shapeVector.z = height;
 	        	}
 	        case FrontA: {
-	        	shape[0] = length;
-	        	shape[1] = height;
-	        	shape[2] = width;
+	        	shapeVector.x = length;
+	        	shapeVector.y = height;
+	        	shapeVector.z = width;
 	        	}
 	        case FrontB: {
-	        	shape[0] = length;
-	        	shape[1] = width;
-	        	shape[2] = height;
+	        	shapeVector.x = length;
+	        	shapeVector.y = width;
+	        	shapeVector.z = height;
 	        	}
 		}
 	}
+	
 }

@@ -253,17 +253,17 @@ public class ContainerModel {
      */
     // TODO
     public boolean doesFit(int z, int y, int x, ParcelShape parcel) {
-        if (	(parcel.getShape()[0] + x > containerX) ||
-                (parcel.getShape()[1] + y > containerY) ||
-                (parcel.getShape()[2] + z > containerZ) ||
-                (z + parcel.getShape()[0]< 0) ||
-                (y + parcel.getShape()[1]< 0) ||
-                (x + parcel.getShape()[2]<0))
+        if (	(parcel.getShapeVector().x + x > containerX) ||
+                (parcel.getShapeVector().y + y > containerY) ||
+                (parcel.getShapeVector().z + z > containerZ) ||
+                (z + parcel.getShapeVector().x< 0) ||
+                (y + parcel.getShapeVector().y< 0) ||
+                (x + parcel.getShapeVector().z<0))
             return false;
         else{
-            for(int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++){
-                for(int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++){
-                    for(int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++){
+            for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
+                for(int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++){
+                    for(int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++){
                         if(containerMatrix[zCoord][yCoord][xCoord] == 1) return false;
                     }
                 }
@@ -297,9 +297,9 @@ public class ContainerModel {
     public void placeParcel(int z, int y, int x, ParcelShape parcel){
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
         //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
-        for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
-            for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
-                for (int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++) {                 
+        for (int zCoord = z; zCoord < z + parcel.getShapeVector().x; zCoord++) {
+            for (int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++) {
+                for (int xCoord = x; xCoord < x + parcel.getShapeVector().z; xCoord++) {                 
                     containerMatrix[zCoord][yCoord][xCoord] = 1;               
                 }
             }
@@ -313,9 +313,9 @@ public class ContainerModel {
     // TODO
     public void removeParcel(ParcelShape parcel){
         //parcel.setCurrentCoordinates(null); not sure if this is good
-        for (int zCoord = parcel.getCurrentCoordinates().getZ(); zCoord <parcel.getCurrentCoordinates().getZ()  + parcel.getShape()[2]; zCoord++) {
-            for (int yCoord = parcel.getCurrentCoordinates().getY(); yCoord < parcel.getCurrentCoordinates().getY() + parcel.getShape()[1]; yCoord++) {
-                for (int xCoord = parcel.getCurrentCoordinates().getX(); xCoord < parcel.getCurrentCoordinates().getX() + parcel.getShape()[0]; xCoord++) {
+        for (int zCoord = parcel.getPosition().getZ(); zCoord <parcel.getPosition().getZ()  + parcel.getShapeVector().z; zCoord++) {
+            for (int yCoord = parcel.getPosition().getY(); yCoord < parcel.getPosition().getY() + parcel.getShapeVector().y; yCoord++) {
+                for (int xCoord = parcel.getPosition().getX(); xCoord < parcel.getPosition().getX() + parcel.getShapeVector().x; xCoord++) {
                     containerMatrix[zCoord][yCoord][xCoord] = 0;
                 }
             }
