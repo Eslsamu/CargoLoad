@@ -297,9 +297,9 @@ public class ContainerModel {
     public void placeParcel(int z, int y, int x, ParcelShape parcel){
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
         //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
-        for (int zCoord = z; zCoord < z + parcel.getShapeVector().x; zCoord++) {
+        for (int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++) {
             for (int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++) {
-                for (int xCoord = x; xCoord < x + parcel.getShapeVector().z; xCoord++) {                 
+                for (int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++) {                 
                     containerMatrix[zCoord][yCoord][xCoord] = 1;               
                 }
             }
