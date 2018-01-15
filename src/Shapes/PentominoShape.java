@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import Util.Algebra;
 import Util.Axis;
 
+/*
+ * PentominoShape is an abstract class for pentominoes. A pentomino has five children which are monimoes.
+ * When the orientation in the container of the pentominoe has to be changed, then
+ * the change occurs in each of its children.
+ * Once it is placed in the container, it's coordinates and shape shouldn't be changed anymore. 
+ */
 public abstract class PentominoShape {
 	
 	final ArrayList<Monimo> children = new ArrayList<Monimo>();
@@ -35,6 +41,12 @@ public abstract class PentominoShape {
 	public void rotate(double angle, Axis ax) {
 		for(Monimo m : children) {
 			m.positionParentshape = Algebra.rotateUV(angle,ax,m.positionParentshape);
+		}
+	}
+	
+	public void reflect(Axis ax) {
+		for(Monimo m: children ) {
+			m.positionParentshape = 
 		}
 	}
 	
