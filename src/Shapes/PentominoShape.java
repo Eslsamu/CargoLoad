@@ -28,6 +28,9 @@ public abstract class PentominoShape {
 		System.out.println(testP.toString());
 		testP.rotate(270, Axis.Z);
 		System.out.println(testP.toString());
+		
+		testP.moveToOrigin();
+		System.out.println(testP.toString());
 	}
 	
 	public PentominoShape(String n, int v, ShapeMaterial m) {
@@ -49,12 +52,32 @@ public abstract class PentominoShape {
 		}
 	}
 	/*
-	 * this method finds the monomio O which has the lowest x, y and z coordinate of the shape and translates 
+	 * this method finds the monomio O which has the lowest z, y and x coordinate of the shape and translates 
 	 * every monimo so that O is at 0,0,0. 
 	 * this is used after each time the pentomino is rotated, to shift it again properly into it's shape coordinate system(not container).
 	 */
 	public void moveToOrigin() {
-		
+		Monimo o = children.get(0);
+		for(Monimo m: children ) {
+			if(m.positionParentshape.z < o.positionParentshape.z){
+				o = m;
+			}
+			else if(m.positionParentshape.z == o.positionParentshape.z && m.positionParentshape.y < o.positionParentshape.y) {
+				o = m;
+			}
+			else if(m.positionParentshape.z == o.positionParentshape.z && m.positionParentshape.y == o.positionParentshape.y &&
+					m.positionParentshape.x < o.positionParentshape.x) {
+				o = m;
+			}
+		}
+		int xDiff = o.positionParentshape.x;
+		int yDiff = o.positionParentshape.y;
+		int zDiff = o.positionParentshape.z;
+		for(Monimo m: children) {
+			m.positionParentshape.x -= xDiff;
+			m.positionParentshape.y -= yDiff;
+			m.positionParentshape.z -= zDiff;
+		}
 	}
 	
 	@Override

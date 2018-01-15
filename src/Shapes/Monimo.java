@@ -30,4 +30,5 @@ public class Monimo {
 	private void setContainerPosition(Coordinates p) {
 		positionContainer = p;
 	}
+	
 }
