@@ -39,7 +39,7 @@ public class ContainerModel {
      * @return
      */
     public boolean solveFirstPackedCargo(){
-        printContainer();
+        //printContainer();
 
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
@@ -85,7 +85,7 @@ public class ContainerModel {
     }
     public boolean solveFirstPackedCargoSetAmount(){
         //System.out.println("test");
-        printContainer();
+        //printContainer();
 
         //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
@@ -225,7 +225,7 @@ public class ContainerModel {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerY;y++){
                 for (int x=0;x<containerX;x++){
-                    System.out.print(containerMatrix[z][containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(containerMatrix[z][y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
                 }
                 System.out.println();
             }
@@ -256,9 +256,9 @@ public class ContainerModel {
         if (	(parcel.getShapeVector().x + x > containerX) ||
                 (parcel.getShapeVector().y + y > containerY) ||
                 (parcel.getShapeVector().z + z > containerZ) ||
-                (z + parcel.getShapeVector().x< 0) ||
-                (y + parcel.getShapeVector().y< 0) ||
-                (x + parcel.getShapeVector().z<0))
+                (z + parcel.getShapeVector().x < 0) ||
+                (y + parcel.getShapeVector().y < 0) ||
+                (x + parcel.getShapeVector().z < 0))
             return false;
         else{
             for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
