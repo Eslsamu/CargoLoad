@@ -2,7 +2,7 @@ package Shapes;
 
 public class ParcelC extends ParcelShape{
 	
-	protected static ShapeColor color = ShapeColor.RED;
+	protected static ShapeMaterial material = ShapeMaterial.RED;
 	protected static int width = 3;
 	protected static int height = 3;
 	protected static int length = 3;
@@ -11,7 +11,7 @@ public class ParcelC extends ParcelShape{
 	protected static int value = 5;
 	
 	public ParcelC() {
-		super(color, width, height, length, value, name);
+		super(material, width, height, length, value, name);
 	}
 	
 	/*
