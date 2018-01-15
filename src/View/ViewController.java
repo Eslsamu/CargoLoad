@@ -30,75 +30,33 @@ public class ViewController implements EventHandler<KeyEvent>{
     public void handle(KeyEvent event){
         if(event.getCode() == KeyCode.RIGHT){
             angleY+= 10;
-            if(angleY >= 360){
-                angleY-= 360;
-            }
-            else if(angleY < 0){
-                angleY+= 360;
-            }
-            if(angleY > 90 && angleY < 270){
-                pane.drawFromBack();
-            }
-            else{
-                pane.drawFromFront();
-            }
             pane.rotateY(angleY);
+            checkState();
         }
         else if(event.getCode() == KeyCode.LEFT){
             angleY-= 10;
-            if(angleY >= 360){
-                angleY-= 360;
-            }
-            else if(angleY < 0){
-                angleY+= 360;
-            }
-            if(angleY > 90 && angleY < 270){
-                pane.drawFromBack();
-            }
-            else{
-                pane.drawFromFront();
-            }
             pane.rotateY(angleY);
+            checkState();
         }
         else if(event.getCode() == KeyCode.UP){
             angleX+= 10;
-            if(angleX >= 360){
-                angleX-= 360;
-            }
-            else if(angleX < 0){
-                angleX+= 360;
-            }
-            if(angleX >= 90 && angleX <= 180){
-                pane.drawUpsideDown();
-            }
-            else{
-                pane.drawFromFront();
-            }
             pane.rotateX(angleX);
+            checkState();
         }
         else if(event.getCode() == KeyCode.DOWN){
             angleX-= 10;
-            if(angleX >= 360){
-                angleX-= 360;
-            }
-            else if(angleX < 0){
-                angleX+= 360;
-            }
-            if(angleX >= 90 && angleX <= 180){
-                pane.drawUpsideDown();
-            }
-            else{
-                pane.drawFromFront();
-            }
             pane.rotateX(angleX);
+            checkState();
         }
         else if(event.getCode() == KeyCode.Q){
             angleZ+= 10;
             pane.rotateZ(angleZ);
+            checkState();
         }
         else if(event.getCode() == KeyCode.W){
             angleZ-= 10;
             pane.rotateZ(angleZ);
+            checkState();
         }
         else if(event.getCode() == KeyCode.P){
             System.out.println("Z: " + angleZ);
@@ -112,6 +70,56 @@ public class ViewController implements EventHandler<KeyEvent>{
             pane.rotateZ(angleZ);
             pane.rotateY(angleY);
             pane.rotateX(angleX);
+            pane.drawFromFront();
+        }
+        else if(event.getCode() == KeyCode.C){
+            pane.drawFromFront();
+        }
+        else if(event.getCode() == KeyCode.V){
+            pane.drawFromBack();
+        }
+        else if(event.getCode() == KeyCode.B){
+            pane.drawUpsideDownFromFront();
+        }
+        else if(event.getCode() == KeyCode.N){
+            pane.drawUpsideDownFromBehind();
+        }
+        /* else if(event.getCode() == KeyCode.M){
+            pane.centerLeft();
+        } */ 
+    }
+    public void checkState(){
+        
+        if(angleX >= 360){
+            angleX-= 360;
+        }
+        else if(angleX < 0){
+            angleX+= 360;
+        }
+
+        if(angleX > 90 && angleX <= 180){
+            pane.drawUpsideDownFromBehind();
+        }
+        else if(angleX <= 360 && angleX > 270){
+            pane.drawUpsideDownFromFront();
+        }
+        else if(angleX <= 270 && angleX > 180){
+            pane.drawFromBack();
+        }
+        else{
+            pane.drawFromFront();
+        }
+        
+        if(angleY >= 360){
+            angleY-= 360;
+        }
+        else if(angleY < 0){
+            angleY+= 360;
+        }
+        if(angleY > 90 && angleY < 270 && (angleX == 0 || angleX == 360)){
+            pane.drawFromBack();
+        }
+        else if(angleX == 0 || angleX == 360){
             pane.drawFromFront();
         }
     }
