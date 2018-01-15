@@ -129,11 +129,11 @@ public class ContainerPane extends Parent {
         
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
             try{
                 PhongMaterial material = new PhongMaterial();
@@ -174,11 +174,11 @@ public class ContainerPane extends Parent {
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
             try{
                 PhongMaterial material = new PhongMaterial();
@@ -202,11 +202,11 @@ public class ContainerPane extends Parent {
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = containedShapes.size() - 1; i > -1; i--){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
             try{
                 PhongMaterial material = new PhongMaterial();

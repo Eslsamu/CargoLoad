@@ -149,9 +149,9 @@ public class Grasp {
     public void testPlaceParcel(int z, int y, int x, ParcelShape parcel){
         parcel.setCurrentCoordinates(new Coordinates(x,y,z));
         //sets a 1 in the containerMatrix for each coordinate with the vectors of the parcel shape
-        for (int zCoord = z; zCoord < z + parcel.getShape()[2]; zCoord++) {
-            for (int yCoord = y; yCoord < y + parcel.getShape()[1]; yCoord++) {
-                for (int xCoord = x; xCoord < x + parcel.getShape()[0]; xCoord++) {
+        for (int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++) {
+            for (int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++) {
+                for (int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++) {
                     containerMatrix[zCoord][yCoord][xCoord] = 1;
                 }
             }
@@ -179,12 +179,12 @@ public class Grasp {
 
     public void generateMaximalSpaces(ParcelShape lastPlacedParcel){ //should later use blocks (groups of parcels put into a layer) instead of single parcels
 
-        Coordinates coords = lastPlacedParcel.getCurrentCoordinates();
+        Coordinates coords = lastPlacedParcel.getPosition();
         Coordinates minCoordsParcel = coords;
         Coordinates maxCoordsParcel = new Coordinates
-        (coords.getX() + lastPlacedParcel.getShape()[0],
-        coords.getY() + lastPlacedParcel.getShape()[1],
-        coords.getZ() + lastPlacedParcel.getShape()[2]);
+        (coords.getX() + lastPlacedParcel.getShapeVector().x,
+        coords.getY() + lastPlacedParcel.getShapeVector().y,
+        coords.getZ() + lastPlacedParcel.getShapeVector().z);
         System.out.println("X-coord: " + coords.getX() + " Y-coord:  " + coords.getY() + " Z-coord: " + coords.getZ());
 
         //Coordinates[] blockVertices = new Coordinates[8];
