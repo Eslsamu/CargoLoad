@@ -5,15 +5,12 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -194,6 +191,53 @@ public class ContainerPane extends Parent {
         }
     }
     public void drawUpsideDown(){
-    
+        root.getChildren().remove(2, root.getChildren().size());
+        int check = 0;
+        ArrayList<ParcelShape> someParcels = new ArrayList();
+        for(int i = containedShapes.size() - 1; i > -1; i--){
+            ParcelShape parcelCheck = containedShapes.get(i);
+            check+= parcelCheck.getShapeVector().y;
+            if(check == 8){
+                someParcels.add(parcelCheck);
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+            }
+            else if(check > 8){
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+                someParcels.add(parcelCheck);
+            }
+            else{
+                someParcels.add(parcelCheck);   
+            }
+        }
     }
 }       

@@ -36,7 +36,7 @@ public class ViewController implements EventHandler<KeyEvent>{
             else if(angleY < 0){
                 angleY+= 360;
             }
-            if(angleY >= 90 && angleY <= 270){
+            if(angleY > 90 && angleY < 270){
                 pane.drawFromBack();
             }
             else{
@@ -52,7 +52,7 @@ public class ViewController implements EventHandler<KeyEvent>{
             else if(angleY < 0){
                 angleY+= 360;
             }
-            if(angleY >= 90 && angleY <= 270){
+            if(angleY > 90 && angleY < 270){
                 pane.drawFromBack();
             }
             else{
@@ -68,12 +68,12 @@ public class ViewController implements EventHandler<KeyEvent>{
             else if(angleX < 0){
                 angleX+= 360;
             }
-            /* if(angleX >= 90 && angleX <= 270){
-                pane.drawFromBack();
+            if(angleX >= 90 && angleX <= 180){
+                pane.drawUpsideDown();
             }
             else{
                 pane.drawFromFront();
-            } */
+            }
             pane.rotateX(angleX);
         }
         else if(event.getCode() == KeyCode.DOWN){
@@ -84,12 +84,12 @@ public class ViewController implements EventHandler<KeyEvent>{
             else if(angleX < 0){
                 angleX+= 360;
             }
-            /* if(angleX >= 90 && angleX <= 270){
-                pane.drawFromBack();
+            if(angleX >= 90 && angleX <= 180){
+                pane.drawUpsideDown();
             }
             else{
                 pane.drawFromFront();
-            } */
+            }
             pane.rotateX(angleX);
         }
         else if(event.getCode() == KeyCode.Q){
