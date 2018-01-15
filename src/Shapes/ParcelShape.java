@@ -16,7 +16,7 @@ public abstract class ParcelShape {
 	private final int height;
 	
 	private final String name;
-	private final ShapeColor color;
+	private final ShapeMaterial material;
 	private final int value;
 	
 	/*
@@ -36,8 +36,8 @@ public abstract class ParcelShape {
 	protected Facing orientation;
 	
 	
-	public ParcelShape(ShapeColor color, int w, int h, int l, int value, String name) {
-		this.color = color;
+	public ParcelShape(ShapeMaterial material, int w, int h, int l, int value, String name) {
+		this.material = material;
 		this.value = value;
 		this.name = name;
 		
@@ -67,8 +67,8 @@ public abstract class ParcelShape {
 	/**
 	 * @return the color
 	 */
-	public ShapeColor getColor() {
-		return color;
+	public ShapeMaterial getMaterial() {
+		return material;
 	}
 	
 	/**

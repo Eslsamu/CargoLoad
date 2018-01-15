@@ -135,18 +135,7 @@ public class ContainerPane extends Parent {
             
             Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
@@ -180,18 +169,7 @@ public class ContainerPane extends Parent {
             
             Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
@@ -208,18 +186,7 @@ public class ContainerPane extends Parent {
             
             Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);

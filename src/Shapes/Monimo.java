@@ -15,12 +15,12 @@ public class Monimo {
 	 */
 	protected Coordinates positionParentshape;
 	
-	private ShapeColor color;
+	private ShapeMaterial material;
 	
 	
-	public Monimo(Coordinates p, ShapeColor cr) {
+	public Monimo(Coordinates p, ShapeMaterial m) {
 		this.positionParentshape = p;
-		this.color = cr;
+		this.material = m;
 	}
 	
 	private Coordinates getContainerPosition() {

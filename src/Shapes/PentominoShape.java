@@ -16,7 +16,7 @@ public abstract class PentominoShape {
 	final ArrayList<Monimo> children = new ArrayList<Monimo>();
 	final String name;
 	final int value;
-	final ShapeColor color;
+	final ShapeMaterial material;
 	
 	public static void main(String[]args) {
 		PentominoP testP = new PentominoP();
@@ -30,10 +30,10 @@ public abstract class PentominoShape {
 		System.out.println(testP.toString());
 	}
 	
-	public PentominoShape(String n, int v, ShapeColor c) {
+	public PentominoShape(String n, int v, ShapeMaterial m) {
 		this.name = n;
 		this.value = v;
-		this.color = c;
+		this.material = m;
 		
 		addChildren();
 	}
@@ -46,7 +46,7 @@ public abstract class PentominoShape {
 	
 	public void reflect(Axis ax) {
 		for(Monimo m: children ) {
-			m.positionParentshape = 
+			//m.positionParentshape = 
 		}
 	}
 	
