@@ -23,7 +23,7 @@ public class AppView extends BorderPane{
      */
     public AppView(){
             container = new ContainerPane();
-            ButtonPane bp = new ButtonPane();
+            ButtonPane bp = new ButtonPane(container);
             
             Label title = new Label("Cargo Loader");
             title.setFont(new Font("Arial", 30));

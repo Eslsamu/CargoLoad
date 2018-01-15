@@ -16,17 +16,18 @@ public class ContainerTest {
        
         ContainerModel container = new ContainerModel();
 
-        givenParcels = container.orderParcelListByValue(givenParcels);
+        //givenParcels = container.orderParcelListByValue(givenParcels);
         //givenParcels = container.orderParcelListByRatio(givenParcels);
 
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(10,30,20);
+        container.setAmountOfParcels(5,5,5);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
         //container.solve(maxValueContainer);/
         
         System.out.println(maxValueContainer.getContainedParcels().size());
-        container.solveFirstPackedCargo();
+        //container.solveFirstPackedCargoSetAmount();
+        container.solveFirstPackedCargoRandomOrder(true);
 
     }
 }
