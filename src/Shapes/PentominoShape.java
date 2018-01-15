@@ -22,7 +22,6 @@ public abstract class PentominoShape {
 		System.out.println(testP.toString());
 		testP.rotate(270, Axis.Z);
 		System.out.println(testP.toString());
-		
 	}
 	
 	public PentominoShape(String n, int v, ShapeColor c) {

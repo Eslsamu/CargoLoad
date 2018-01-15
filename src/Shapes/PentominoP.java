@@ -14,10 +14,10 @@ public class PentominoP extends PentominoShape{
 	
 	@Override
 	public void addChildren() {
-		super.children.add(new Monimo(new Coordinates(1,1,1), color));
-		super.children.add(new Monimo(new Coordinates(1,2,1), color));
-		super.children.add(new Monimo(new Coordinates(1,3,1), color));
-		super.children.add(new Monimo(new Coordinates(1,3,2), color));
-		super.children.add(new Monimo(new Coordinates(1,2,2), color));
+		super.children.add(new Monimo(new Coordinates(0,0,0), color));
+		super.children.add(new Monimo(new Coordinates(0,1,0), color));
+		super.children.add(new Monimo(new Coordinates(0,2,0), color));
+		super.children.add(new Monimo(new Coordinates(0,1,1), color));
+		super.children.add(new Monimo(new Coordinates(0,2,1), color));
 	}
 }
