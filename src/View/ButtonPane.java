@@ -39,12 +39,11 @@ public class ButtonPane extends VBox{
     /**
      * Constructor will create all the buttons and options
      */
-    public ButtonPane(ContainerPane pane){
+    public ButtonPane(ContainerPane pane, Controls controls){
     this.pane = pane;
     setSpacing(15);
     //title label
     Label start = new Label("Choose packing:");
-    start.setFont(new Font("Arial", 20));
     start.setFont(new Font("Arial", 20));
     getChildren().add(start);
     //pack boxes button
@@ -52,6 +51,14 @@ public class ButtonPane extends VBox{
     start.setFocusTraversable(false);
     startBox.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
     startBox.setMinSize(225, 50);
+    Button back = new Button("Back");
+    back.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+    back.setMinSize(150, 50);
+    back.setOnAction(new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent e){
+            controls.goBack();
+        }});
     
     ToggleGroup group1 = new ToggleGroup();
     RadioButton button1 = new RadioButton("Infinite amount");
@@ -78,6 +85,7 @@ public class ButtonPane extends VBox{
             }
         }});
     getChildren().add(startBox);
+    
     
     button1.setToggleGroup(group1);
     button1.setSelected(true);
@@ -123,6 +131,7 @@ public class ButtonPane extends VBox{
     pane2.add(button4, 0, 1);
     pane2.setAlignment(Pos.CENTER);
     getChildren().add(pane2);
+    getChildren().add(back);
     setHalignment(pane2, HPos.CENTER);
     setAlignment(Pos.CENTER);
     }
