@@ -11,6 +11,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -41,11 +43,14 @@ public class ContainerPane extends Parent {
     
     private Group root;
     private ArrayList<ParcelShape> containedShapes;
+    private ContainerModel container2;
+    private TitlePane title;
     
     /**
      * Constructor creates a Scene with container, boxes and a camera is being set to it.
      */
-    public ContainerPane(){
+    public ContainerPane(int Scene_Width, int Scene_Length, TitlePane title){
+        this.title = title;
         //add all containers, boxes and camera to a group
         root = new Group();
         
@@ -68,7 +73,7 @@ public class ContainerPane extends Parent {
         root.getChildren().add(camera);
         
         //create a Scene from the group
-        SubScene subScene = new SubScene(root, 750, 750);
+        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length);
         //set a camera for the scene
         subScene.setCamera(camera);
         getChildren().add(subScene);
@@ -106,7 +111,7 @@ public class ContainerPane extends Parent {
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
 
-        ContainerModel container2 = new ContainerModel();
+        container2 = new ContainerModel();
         container2.setParcelList(givenParcels);
         container2.solveFirstPackedCargo();
         
@@ -135,7 +140,7 @@ public class ContainerPane extends Parent {
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
 
-        ContainerModel container2 = new ContainerModel();
+        container2 = new ContainerModel();
         container2.setAmountOfParcels(a, b, c);
         container2.setParcelList(givenParcels);
         
@@ -145,6 +150,7 @@ public class ContainerPane extends Parent {
         drawFromFront();
     }
     public void drawFromFront(){
+        title.setDisplayedValue(container2.computeTotalValue());
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
