@@ -62,17 +62,21 @@ public class ParcelsSet extends GridPane{
     
     Button submit = new Button("Submit");
     submit.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+    
+    Label delay = new Label("Set delay for backtracking:");
+    delay.setFont(new Font("Arial", 15));
+    TextField Delay = new TextField();
     submit.setOnAction(new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent e){
             if(button1.isSelected()){
-                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.VALUE);
+                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.VALUE, Integer.parseInt(Delay.getText()));
             }
             else if(button2.isSelected()){
-               buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RANDOM);
+               buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RANDOM, Integer.parseInt(Delay.getText()));
             }
             else{
-                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RATIO);
+                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RATIO, Integer.parseInt(Delay.getText()));
             }
         }});
     setAlignment(Pos.CENTER);
@@ -87,7 +91,6 @@ public class ParcelsSet extends GridPane{
     setHalignment(button3, HPos.CENTER);
     setVgap(7.5);
     
-    
     add(amount, 0, 0);
     add(typeA, 0, 2);
     add(typea, 0, 3);
@@ -99,7 +102,9 @@ public class ParcelsSet extends GridPane{
     add(button1, 0, 9);
     add(button2, 0, 10);
     add(button3, 0, 11);
-    add(submit, 0, 12);
+    add(submit, 0, 14);
+    add(delay, 0, 12);
+    add(Delay, 0, 13);
     setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     

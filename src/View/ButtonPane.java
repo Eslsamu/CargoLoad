@@ -27,6 +27,7 @@ import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
 import java.util.ArrayList;
+import javafx.scene.control.TextField;
 
 /**
  * Class ButtonPane will create a Pane that displays the buttons
@@ -139,9 +140,9 @@ public class ButtonPane extends VBox{
     setHalignment(pane2, HPos.CENTER);
     setAlignment(Pos.CENTER);
     }
-    public void solveSetAmountBoxes(int a, int b, int c, ORDER order){
+    public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int delay){
         stage.close();
-        generateSolution(a, b, c, order);
+        generateSolution(a, b, c, order, delay);
         pane.drawBoxes(containedShapes, container2);
     }
     public ButtonPane getButtonPane(){
@@ -169,12 +170,18 @@ public class ButtonPane extends VBox{
         Button button = new Button("Pack");
         button.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
         button.setMinSize(150, 50);
+        
+        Label delay = new Label("Set delay for backtracking:");
+        delay.setFont(new Font("Arial", 15));
+        TextField Delay = new TextField();
         GridPane pane = new GridPane();
         pane.add(label, 0, 0);
         pane.add(button1, 0, 1);
         pane.add(button2, 0, 2);
         pane.add(button3, 0, 3);
-        pane.add(button, 0, 4);
+        pane.add(delay, 0, 4);
+        pane.add(Delay, 0, 5);
+        pane.add(button, 0, 6);
         
         pane.setAlignment(Pos.CENTER);
         pane.setHalignment(button, HPos.CENTER);
@@ -191,7 +198,7 @@ public class ButtonPane extends VBox{
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setWidth(300);
-        stage.setHeight(225);
+        stage.setHeight(300);
         stage.initModality(Modality.APPLICATION_MODAL); 
         stage.show();
         
@@ -200,20 +207,20 @@ public class ButtonPane extends VBox{
             public void handle(ActionEvent e){
                 stage.close();
                 if(button2.isSelected()){
-                    generateSolution(ORDER.RANDOM);
+                    generateSolution(ORDER.RANDOM, Integer.parseInt(Delay.getText()));
                     container.drawBoxes(containedShapes, container2);
                 }
                 else if(button3.isSelected()){
-                    generateSolution(ORDER.RATIO);
+                    generateSolution(ORDER.RATIO, Integer.parseInt(Delay.getText()));
                     container.drawBoxes(containedShapes, container2);
                 }
                 else{
-                    generateSolution(ORDER.VALUE);
+                    generateSolution(ORDER.VALUE, Integer.parseInt(Delay.getText()));
                     container.drawBoxes(containedShapes, container2);
                 }
         }});
     }
-    public void generateSolution(ORDER order){
+    public void generateSolution(ORDER order, int delay){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
@@ -221,6 +228,7 @@ public class ButtonPane extends VBox{
             givenParcels.add(new ParcelC());
 
         container2 = new ContainerModel();
+        container2.setDelay(delay*1000);
         switch(order){
             case RANDOM : container2.setParcelList(givenParcels); 
                          container2.solveFirstPackedCargoRandomOrder();
@@ -228,17 +236,17 @@ public class ButtonPane extends VBox{
                          break;
             case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); 
                          container2.setParcelList(givenParcels);
-                         container2.solveFirstPackedCargoSetAmount();
+                         container2.solveBacktracking(container2, true);
                          containedShapes = container2.getContainedParcels();
                          break;
             case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); 
                          container2.setParcelList(givenParcels);
-                         container2.solveFirstPackedCargoSetAmount();
+                         container2.solveBacktracking(container2, true);
                          containedShapes = container2.getContainedParcels();
                          break;
         }
     }
-    public void generateSolution(int a, int b, int c, ORDER order){
+    public void generateSolution(int a, int b, int c, ORDER order, int delay){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
@@ -246,6 +254,7 @@ public class ButtonPane extends VBox{
             givenParcels.add(new ParcelC());
 
         container2 = new ContainerModel();
+        container2.setDelay(delay*1000);
         container2.setAmountOfParcels(a, b, c);
         switch(order){
             case RANDOM : container2.setParcelList(givenParcels); 
@@ -254,12 +263,12 @@ public class ButtonPane extends VBox{
                          break;
             case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); 
                          container2.setParcelList(givenParcels);
-                         container2.solveFirstPackedCargoSetAmount();
+                         container2.solveBacktracking(container2, true);
                          containedShapes = container2.getContainedParcels();
                          break;
             case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); 
                          container2.setParcelList(givenParcels);
-                         container2.solveFirstPackedCargoSetAmount();
+                         container2.solveBacktracking(container2, true);
                          containedShapes = container2.getContainedParcels();
                          break;
         }
