@@ -307,13 +307,14 @@ public class ContainerPane extends Parent {
     public void drawPentominoes(PentoContainer container3){
         ArrayList<PentominoShape> list = container3.getLoadedPentominoes();
         for(int i = 0; i < list.size(); i++){
+            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             ArrayList<Monimo> list2 = list.get(i).getChildren();
             for(int m = 0; m < list2.size(); m++){
                 Coordinates coordinates = list2.get(m).getContainerPosition();
                 Box box = new Box(Box_Width, Box_Height, Box_Depth);
                 //box.setCullFace(CullFace.NONE);
                 box.setDrawMode(DrawMode.FILL);
-                box.setMaterial(new PhongMaterial(Color.ORANGE));
+                box.setMaterial(new PhongMaterial(ranColor));
                 box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*coordinates.getY());
                 box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*coordinates.getX());
                 box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*coordinates.getZ());
