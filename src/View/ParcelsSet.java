@@ -21,14 +21,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 /**
  *
  * @author basia
  */
 public class ParcelsSet extends GridPane{
-    
     public ParcelsSet(ButtonPane buttonPane){
     Label typeA = new Label("Type A -> 1X1X2");
     Label typeB = new Label("Type B -> 1X1.5X2");
@@ -67,8 +65,16 @@ public class ParcelsSet extends GridPane{
     submit.setOnAction(new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent e){
-            buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()));
-    }});
+            if(button1.isSelected()){
+                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.VALUE);
+            }
+            else if(button2.isSelected()){
+               buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RANDOM);
+            }
+            else{
+                buttonPane.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RATIO);
+            }
+        }});
     setAlignment(Pos.CENTER);
     setHalignment(amount, HPos.CENTER);
     setHalignment(typeA, HPos.CENTER);

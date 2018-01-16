@@ -35,7 +35,8 @@ import java.util.ArrayList;
 public class ButtonPane extends VBox{
     private Stage stage;
     private ContainerPane pane;
-    private enum order { VALUE, RANDOM, RATIO};
+    private ArrayList<ParcelShape> containedShapes;
+    private ContainerModel container2;
     /**
      * Constructor will create all the buttons and options
      */
@@ -126,9 +127,10 @@ public class ButtonPane extends VBox{
     setHalignment(pane2, HPos.CENTER);
     setAlignment(Pos.CENTER);
     }
-    public void solveSetAmountBoxes(int a, int b, int c){
+    public void solveSetAmountBoxes(int a, int b, int c, ORDER order){
         stage.close();
-        pane.drawBoxes(a, b, c);
+        generateSolution(a, b, c, order);
+        pane.drawBoxes(containedShapes, container2);
     }
     public ButtonPane getButtonPane(){
         return this;
@@ -185,21 +187,53 @@ public class ButtonPane extends VBox{
             @Override
             public void handle(ActionEvent e){
                 stage.close();
-                container.drawBoxes();
+                if(button2.isSelected()){
+                    generateSolution(ORDER.RANDOM);
+                    container.drawBoxes(containedShapes, container2);
+                }
+                else if(button3.isSelected()){
+                    generateSolution(ORDER.RATIO);
+                    container.drawBoxes(containedShapes, container2);
+                }
+                else{
+                    generateSolution(ORDER.VALUE);
+                    container.drawBoxes(containedShapes, container2);
+                }
         }});
     }
-    public ArrayList<ParcelShape> generateSolution(){
+    public void generateSolution(ORDER order){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
 
-        ContainerModel container = new ContainerModel();
-        container.setParcelList(givenParcels);
-        container.solveFirstPackedCargo();
-        ArrayList<ParcelShape> containedShapes = container.getContainedParcels();
+        container2 = new ContainerModel();
+        switch(order){
+            case RANDOM : givenParcels = container2.orderParcelListRandom(givenParcels); break;
+            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); break;
+            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); break;
+        }
+        container2.setParcelList(givenParcels);
+        container2.solveFirstPackedCargo();
+        containedShapes = container2.getContainedParcels();
+    }
+    public void generateSolution(int a, int b, int c, ORDER order){
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
-        return containedShapes;
+            givenParcels.add(new ParcelA());
+            givenParcels.add(new ParcelB());
+            givenParcels.add(new ParcelC());
+
+        container2 = new ContainerModel();
+        container2.setAmountOfParcels(a, b, c);
+        switch(order){
+            case RANDOM : givenParcels = container2.orderParcelListRandom(givenParcels); break;
+            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); break;
+            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); break;
+        }
+        container2.setParcelList(givenParcels);
+        container2.solveFirstPackedCargoSetAmount();
+        containedShapes = container2.getContainedParcels();
     }
 }
