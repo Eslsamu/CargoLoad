@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Util.Algebra;
 import Util.Axis;
+import Util.Coordinates;
 
 /*
  * PentominoShape is an abstract class for pentominoes. A pentomino has five children which are monimoes.
@@ -13,10 +14,10 @@ import Util.Axis;
  */
 public abstract class PentominoShape {
 	
-	final ArrayList<Monimo> children = new ArrayList<Monimo>();
-	final String name;
-	final int value;
-	final ShapeMaterial material;
+	protected final ArrayList<Monimo> children = new ArrayList<Monimo>();
+	protected final String name;
+	protected final int value;
+	protected final ShapeMaterial material;
 	
 	public static void main(String[]args) {
 		PentominoP testP = new PentominoP();
@@ -26,9 +27,7 @@ public abstract class PentominoShape {
 		System.out.println(testP.toString());
 		testP.rotate(180, Axis.Y);
 		System.out.println(testP.toString());
-		testP.rotate(270, Axis.Z);
-		System.out.println(testP.toString());
-		
+
 		testP.moveToOrigin();
 		System.out.println(testP.toString());
 	}
@@ -97,4 +96,23 @@ public abstract class PentominoShape {
 	public abstract PentominoShape clone();
 	
 	public abstract void addChildren();
+	
+	public String getName() {
+		return name;
+	}
+	
+	/*
+	 * @return children returns the list of monimoes
+	 */
+	public ArrayList<Monimo> getChildren(){
+		return children;
+	}
+	/*
+	 * @param c the coordinates onto which the monimo with (0,0,0) shape coordinates is to be placed
+	 */
+	public void setContainerPosition(Coordinates c) {
+		for(Monimo m : children) {
+			m.setContainerPosition(new Coordinates(m.getPositionShape().x + c.x, m.getPositionShape().y + c.y, m.getPositionShape().z + c.z));
+		}
+	}
 }

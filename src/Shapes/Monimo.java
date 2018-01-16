@@ -23,12 +23,15 @@ public class Monimo {
 		this.material = m;
 	}
 	
-	private Coordinates getContainerPosition() {
+	public Coordinates getContainerPosition() {
 		return positionContainer;
 	}
 	
-	private void setContainerPosition(Coordinates p) {
+	public void setContainerPosition(Coordinates p) {
 		positionContainer = p;
 	}
 	
+	public Coordinates getPositionShape() {
+		return positionParentshape;
+	}
 }

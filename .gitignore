@@ -3,6 +3,10 @@
 /CargoLoad/nbproject/private/
 /Project3/nbproject/private/
 /nbproject/private/
+/nbproject/
+/build.xml/
+/dist/
+/manifest/
 =======
 
 .idea
@@ -10,3 +14,8 @@
 *.md
 >>>>>>> 889ccf65718df07f673e013e2f5e69e1e4bbc6d7
 /build/
+build.xml
+manifest.mf
+src/Model/Position.java
+src/Model/SomeApproach.java
+src/Test/Test.java
