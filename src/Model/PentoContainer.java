@@ -137,16 +137,22 @@ public class PentoContainer {
 	}
 	
 	public void printContainer(){
+		int holes = 0;
         for(int z=0;z<containerHeight;z++){
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerWidth;y++){
                 for (int x=0;x<containerLength;x++){
                     if(containerMatrix[x][y][z]) System.out.print("X ");
-                    else System.out.print("O ");
+                    else {
+                    	System.out.print("O ");
+                    	holes++;
+                    	}
                 }
                 System.out.println();
             }
             System.out.println();
         }
+        System.out.println("holes: "+ holes);
+        System.out.println("loaded shapes: "+ loadedPentominoes.size());
     }
 }
