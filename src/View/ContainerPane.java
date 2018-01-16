@@ -105,7 +105,7 @@ public class ContainerPane extends Parent {
      */
     public void drawBoxes(){
         root.getChildren().remove(2, root.getChildren().size());
-         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -133,6 +133,11 @@ public class ContainerPane extends Parent {
         container2.solveFirstPackedCargoSetAmount();
         
         containedShapes = container2.getContainedParcels();
+        drawFromFront();
+    }
+    public void drawBoxes(ArrayList<ParcelShape> containedShapes, ContainerModel container){
+        this.container2 = container;
+        this.containedShapes = containedShapes;
         drawFromFront();
     }
     public void drawFromFront(){
