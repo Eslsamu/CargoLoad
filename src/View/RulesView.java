@@ -9,31 +9,26 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 /**
- *
- * @author basia
+ * Class explaining how the user can manipulate the container on the screen.
+ * @author Basia
+ * @version 1.1
  */
 public class RulesView extends VBox{
     
     public RulesView(){
         Text controls = new Text("Camera manipulation controls: ");
-        Text text1 = new Text("-> user can rotate camera by dragging the mouse \n and rotating the zoom wheel");
-        Text text2 = new Text("-> using keys:");
-        Text text3 = new Text("Top and down arrow -> Rotation around X-axis");
-        Text text4 = new Text("Left and right arrow -> Rotation around Y-axis");
-        Text text5 = new Text("Q and W -> Rotation Around Z-axis");  
-        Text text6 = new Text("C, V, B, N -> manipulating the drawing sequence");
-        Text text7 = new Text("R -> returns to starting camera position \n and redraws the container");
-        
-        setSpacing(10);
         getChildren().add(controls);
+        Text text1 = new Text("-> user can rotate camera by dragging the mouse \n and rotating the zoom wheel");
         getChildren().add(text1);
+        Text text2 = new Text("-> using keys:");
         getChildren().add(text2);
+        Text text3 = new Text("Top and down arrow -> Rotation around X-axis");
         getChildren().add(text3);
+        Text text4 = new Text("Left and right arrow -> Rotation around Y-axis");
         getChildren().add(text4);
+        Text text5 = new Text("Q and W -> Rotation Around Z-axis");
         getChildren().add(text5);
-        getChildren().add(text6);
-        getChildren().add(text7);
-        setHalignment(controls, HPos.CENTER);
+        /* setHalignment(controls, HPos.CENTER);
         setHalignment(text1, HPos.CENTER);
         setHalignment(text2, HPos.CENTER);
         setHalignment(text3, HPos.CENTER);
@@ -42,8 +37,9 @@ public class RulesView extends VBox{
         setHalignment(text6, HPos.CENTER);
         setHalignment(text7, HPos.CENTER);
         text1.setTextAlignment(TextAlignment.CENTER);
-        text7.setTextAlignment(TextAlignment.CENTER);
+        text7.setTextAlignment(TextAlignment.CENTER); */
+        
+        setSpacing(10);
         setAlignment(Pos.CENTER);
-}
-    
+    }
 }

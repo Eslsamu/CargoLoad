@@ -45,14 +45,13 @@ public class ContainerPane extends Parent {
     private Rotate zAxis = new Rotate(0, Rotate.Z_AXIS);
     
     private Group root;
-    private ArrayList<ParcelShape> containedShapes;
-    private ContainerModel container2;
     private TitlePane title;
     
     /**
-     * Constructor creates a Scene with container, boxes and a camera is being set to it.
+     * Constructor creates a Scene with container and a camera is being set to it.
      */
     public ContainerPane(int Scene_Width, int Scene_Length, TitlePane title){
+        //an instance of TitlePane, to redraw container value, when it changes
         this.title = title;
         //add all containers, boxes and camera to a group
         root = new Group();
@@ -76,13 +75,61 @@ public class ContainerPane extends Parent {
         root.getChildren().add(camera);
         
         //create a Scene from the group
-        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length, 
-                true,
-                SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length, true, SceneAntialiasing.BALANCED);
         //set a camera for the scene
         subScene.setCamera(camera);
         getChildren().add(subScene);
     }
+    /**
+     * This method will draw boxes with given containedShapes and ContainerModel
+     * @param containedShapes an array list with all boxes in the container
+     * @param solver an instance of the ContainerModel that found the solution
+     */
+    public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+        //setDisplayedValue
+        title.setDisplayedValue(totalValue);
+        //clean container if there is anything in it
+        root.getChildren().remove(2, root.getChildren().size());
+        
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i);
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
+            
+            //create a box as big as it has small boxes in it
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            box.setDrawMode(DrawMode.FILL);
+            box.setMaterial(parcel.getMaterial().toMaterial());
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
+        }
+    }
+    /**
+     * This method will draw pentominoes in the container after a solution has been found.
+     * @param loadedPentominoes array list with loaded pentominoes
+     */
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes){
+        for(int i = 0; i < loadedPentominoes.size(); i++){
+            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            ArrayList<Monimo> PentominoBoxCoordinates = loadedPentominoes.get(i).getChildren();
+            
+            for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
+                Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
+                
+                Box box = new Box(Box_Width, Box_Height, Box_Depth);
+                box.setDrawMode(DrawMode.FILL);
+                box.setMaterial(new PhongMaterial(ranColor));
+                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*coordinates.getY());
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*coordinates.getX());
+                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*coordinates.getZ());
+                root.getChildren().add(box);
+            }
+        }
+    }
+    
     /**
     * Method rotateX sets the angle of the camera around the X_Axis
     * @param angle double angle that is the new angle of the camera
@@ -108,218 +155,4 @@ public class ContainerPane extends Parent {
      * Method will run ContainerModel and get coordinates of parcels in a possible solution. It will
      * then draw boxes representing the given solution.
      */
-    public void drawBoxes(){
-        root.getChildren().remove(2, root.getChildren().size());
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
-        
-            givenParcels.add(new ParcelA());
-            givenParcels.add(new ParcelB());
-            givenParcels.add(new ParcelC());
-
-        container2 = new ContainerModel();
-        container2.setParcelList(givenParcels);
-        container2.solveFirstPackedCargo();
-        
-        containedShapes = container2.getContainedParcels();
-        drawFromFront();
-    }
-    public void drawBoxes(int a, int b, int c){
-        root.getChildren().remove(2, root.getChildren().size());
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
-        
-            givenParcels.add(new ParcelA());
-            givenParcels.add(new ParcelB());
-            givenParcels.add(new ParcelC());
-
-        container2 = new ContainerModel();
-        container2.setAmountOfParcels(a, b, c);
-        container2.setParcelList(givenParcels);
-        
-        container2.solveFirstPackedCargoSetAmount();
-        
-        containedShapes = container2.getContainedParcels();
-        drawFromFront();
-    }
-    public void drawBoxes(ArrayList<ParcelShape> containedShapes, ContainerModel container){
-        this.container2 = container;
-        this.containedShapes = containedShapes;
-        drawFromFront();
-    }
-    public void drawFromFront(){
-        title.setDisplayedValue(container2.computeTotalValue());
-        root.getChildren().remove(2, root.getChildren().size());
-        for(int i = 0; i < containedShapes.size(); i++){
-            ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getPosition().getZ();
-            int y = parcel.getPosition().getY();
-            int x = parcel.getPosition().getX();
-            
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-            box.setDrawMode(DrawMode.FILL);
-            box.setMaterial(parcel.getMaterial().toMaterial());
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            root.getChildren().add(box);
-        }
-    }
-    public void drawFromBack(){
-        root.getChildren().remove(2, root.getChildren().size());
-        for(int i = containedShapes.size() - 1; i > -1; i--){
-            ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getPosition().getZ();
-            int y = parcel.getPosition().getY();
-            int x = parcel.getPosition().getX();
-            
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-            box.setDrawMode(DrawMode.FILL);
-            box.setMaterial(parcel.getMaterial().toMaterial());
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            root.getChildren().add(box);
-        }
-    }
-    public void drawUpsideDownFromBehind(){
-        root.getChildren().remove(2, root.getChildren().size());
-        int check = 0;
-        ArrayList<ParcelShape> someParcels = new ArrayList();
-        for(int i = containedShapes.size() - 1; i > -1; i--){
-            ParcelShape parcelCheck = containedShapes.get(i);
-            check+= parcelCheck.getShapeVector().y;
-            if(check == 8){
-                someParcels.add(parcelCheck);
-                for(int p = someParcels.size() - 1; p > -1; p--){
-                    ParcelShape parcel = someParcels.get(p);
-                    int z = parcel.getPosition().getZ();
-                    int y = parcel.getPosition().getY();
-                    int x = parcel.getPosition().getX();
-
-                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-                    box.setDrawMode(DrawMode.FILL);
-                    box.setMaterial(parcel.getMaterial().toMaterial());
-                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-                    root.getChildren().add(box);
-                }
-                someParcels.clear();
-                check = 0;
-            }
-            else if(check > 8){
-                for(int p = someParcels.size() - 1; p > -1; p--){
-                    ParcelShape parcel = someParcels.get(p);
-                    int z = parcel.getPosition().getZ();
-                    int y = parcel.getPosition().getY();
-                    int x = parcel.getPosition().getX();
-
-                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-                    box.setDrawMode(DrawMode.FILL);
-                    box.setMaterial(parcel.getMaterial().toMaterial());
-                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-                    root.getChildren().add(box);
-                }
-                someParcels.clear();
-                check = 0;
-                someParcels.add(parcelCheck);
-            }
-            else{
-                someParcels.add(parcelCheck);   
-            }
-        }
-    }
-    public void drawUpsideDownFromFront(){
-        root.getChildren().remove(2, root.getChildren().size());
-        int check = 0;
-        ArrayList<ParcelShape> someParcels = new ArrayList();
-        for(int i = 0; i < containedShapes.size(); i++){
-            ParcelShape parcelCheck = containedShapes.get(i);
-            check+= parcelCheck.getShapeVector().y;
-            if(check == 8){
-                someParcels.add(parcelCheck);
-                for(int p = someParcels.size() - 1; p > -1; p--){
-                    ParcelShape parcel = someParcels.get(p);
-                    int z = parcel.getPosition().getZ();
-                    int y = parcel.getPosition().getY();
-                    int x = parcel.getPosition().getX();
-
-                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-                    box.setDrawMode(DrawMode.FILL);
-                    box.setMaterial(parcel.getMaterial().toMaterial());
-                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-                    root.getChildren().add(box);
-                }
-                someParcels.clear();
-                check = 0;
-            }
-            else if(check > 8){
-                for(int p = someParcels.size() - 1; p > -1; p--){
-                    ParcelShape parcel = someParcels.get(p);
-                    int z = parcel.getPosition().getZ();
-                    int y = parcel.getPosition().getY();
-                    int x = parcel.getPosition().getX();
-
-                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-                    box.setDrawMode(DrawMode.FILL);
-                    box.setMaterial(parcel.getMaterial().toMaterial());
-                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-                    root.getChildren().add(box);
-                }
-                someParcels.clear();
-                check = 0;
-                someParcels.add(parcelCheck);
-            }
-            else{
-                someParcels.add(parcelCheck);   
-            }
-        }
-    }
-    /* public void centerLeft(){
-        root.getChildren().remove(2, root.getChildren().size());
-        int i = 0;
-        while(containedShapes.size()/2 - i < 0 || containedShapes.size()/2 + i >= containedShapes.size()){
-            for(int m = 0; m < 2; m++){
-                ParcelShape parcel = containedShapes.get(containedShapes.size()/2 - (i*((-1)^m)));
-                int z = parcel.getPosition().getZ();
-                int y = parcel.getPosition().getY();
-                int x = parcel.getPosition().getX();
-
-                Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-                box.setDrawMode(DrawMode.FILL);
-                box.setMaterial(parcel.getMaterial().toMaterial());
-                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-                root.getChildren().add(box);
-                i++;
-            }
-        }
-    }
-    public void centerRight(){
-        
-    } */
-    public void drawPentominoes(PentoContainer container3){
-        ArrayList<PentominoShape> list = container3.getLoadedPentominoes();
-        for(int i = 0; i < list.size(); i++){
-            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-            ArrayList<Monimo> list2 = list.get(i).getChildren();
-            for(int m = 0; m < list2.size(); m++){
-                Coordinates coordinates = list2.get(m).getContainerPosition();
-                Box box = new Box(Box_Width, Box_Height, Box_Depth);
-                //box.setCullFace(CullFace.NONE);
-                box.setDrawMode(DrawMode.FILL);
-                box.setMaterial(new PhongMaterial(ranColor));
-                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*coordinates.getY());
-                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*coordinates.getX());
-                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*coordinates.getZ());
-                root.getChildren().add(box);
-            }
-        }
-    }
 }       
