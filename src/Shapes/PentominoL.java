@@ -4,7 +4,7 @@ import Util.Coordinates;
 
 public class PentominoL extends PentominoShape{
 	private static int value = 5;
-	private static String name = "P";
+	private static String name = "L";
 	private static ShapeMaterial material = ShapeMaterial.BLUE;
 	
 	public PentominoL() {
@@ -16,8 +16,8 @@ public class PentominoL extends PentominoShape{
 		super.children.add(new Monimo(new Coordinates(0,0,0), material));
 		super.children.add(new Monimo(new Coordinates(0,1,0), material));
 		super.children.add(new Monimo(new Coordinates(0,2,0), material));
-		super.children.add(new Monimo(new Coordinates(0,0,1), material));
-		super.children.add(new Monimo(new Coordinates(0,0,2), material));
+		super.children.add(new Monimo(new Coordinates(0,3,0), material));
+		super.children.add(new Monimo(new Coordinates(0,3,1), material));
 	}
 
 	@Override
