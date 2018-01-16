@@ -1,18 +1,21 @@
 package View;
 
 import Model.ContainerModel;
+import Model.PentoContainer;
+import Shapes.Monimo;
 import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
+import Shapes.PentominoShape;
+import Util.Coordinates;
 import java.util.ArrayList;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -73,7 +76,9 @@ public class ContainerPane extends Parent {
         root.getChildren().add(camera);
         
         //create a Scene from the group
-        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length);
+        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length, 
+                true,
+                SceneAntialiasing.BALANCED);
         //set a camera for the scene
         subScene.setCamera(camera);
         getChildren().add(subScene);
@@ -105,7 +110,7 @@ public class ContainerPane extends Parent {
      */
     public void drawBoxes(){
         root.getChildren().remove(2, root.getChildren().size());
-         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -133,6 +138,11 @@ public class ContainerPane extends Parent {
         container2.solveFirstPackedCargoSetAmount();
         
         containedShapes = container2.getContainedParcels();
+        drawFromFront();
+    }
+    public void drawBoxes(ArrayList<ParcelShape> containedShapes, ContainerModel container){
+        this.container2 = container;
+        this.containedShapes = containedShapes;
         drawFromFront();
     }
     public void drawFromFront(){
@@ -294,4 +304,21 @@ public class ContainerPane extends Parent {
     public void centerRight(){
         
     } */
+    public void drawPentominoes(PentoContainer container3){
+        ArrayList<PentominoShape> list = container3.getLoadedPentominoes();
+        for(int i = 0; i < list.size(); i++){
+            ArrayList<Monimo> list2 = list.get(i).getChildren();
+            for(int m = 0; m < list2.size(); m++){
+                Coordinates coordinates = list2.get(m).getContainerPosition();
+                Box box = new Box(Box_Width, Box_Height, Box_Depth);
+                //box.setCullFace(CullFace.NONE);
+                box.setDrawMode(DrawMode.FILL);
+                box.setMaterial(new PhongMaterial(Color.ORANGE));
+                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*coordinates.getY());
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*coordinates.getX());
+                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*coordinates.getZ());
+                root.getChildren().add(box);
+            }
+        }
+    }
 }       

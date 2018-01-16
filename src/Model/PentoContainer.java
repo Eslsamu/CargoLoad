@@ -11,7 +11,6 @@ import Util.Axis;
 import Util.Coordinates;
 
 public class PentoContainer {
-	
 	/*
 	 * the dimensions of the container. can be defined by the user
 	 */
@@ -156,7 +155,7 @@ public class PentoContainer {
         System.out.println("holes: "+ holes);
         System.out.println("loaded shapes: "+ loadedPentominoes.size());
     }
-	
+
 	public boolean loadContainerRandom(int iteration) {
 		//to find a perfect solution, there have to be 264 pentominoes in the loaded list. 1320(containervolume)/5(pento volume)
 		//the other stopping condition is the given amount of time or iterations
@@ -205,4 +204,7 @@ public class PentoContainer {
 		}
 		return false;
 	}
+    public ArrayList<PentominoShape> getLoadedPentominoes(){
+        return loadedPentominoes;
+    }
 }
