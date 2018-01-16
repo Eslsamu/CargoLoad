@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import Model.ContainerModel;
+import Model.PentoContainer;
 import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
@@ -108,7 +109,9 @@ public class ButtonPane extends VBox{
     startPentominoes.setOnAction(new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent e){
-            System.out.println("Currently doesn't do anythig.");
+            PentoContainer testContainer = new PentoContainer();
+            testContainer.loadContainer(300);
+            pane.drawPentominoes(testContainer);
         }});
     getChildren().add(startPentominoes);
     
@@ -219,13 +222,21 @@ public class ButtonPane extends VBox{
 
         container2 = new ContainerModel();
         switch(order){
-            case RANDOM : givenParcels = container2.orderParcelListRandom(givenParcels); break;
-            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); break;
-            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); break;
+            case RANDOM : container2.setParcelList(givenParcels); 
+                         container2.solveFirstPackedCargoRandomOrder();
+                         containedShapes = container2.getContainedParcels();
+                         break;
+            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); 
+                         container2.setParcelList(givenParcels);
+                         container2.solveFirstPackedCargoSetAmount();
+                         containedShapes = container2.getContainedParcels();
+                         break;
+            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); 
+                         container2.setParcelList(givenParcels);
+                         container2.solveFirstPackedCargoSetAmount();
+                         containedShapes = container2.getContainedParcels();
+                         break;
         }
-        container2.setParcelList(givenParcels);
-        container2.solveFirstPackedCargo();
-        containedShapes = container2.getContainedParcels();
     }
     public void generateSolution(int a, int b, int c, ORDER order){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
@@ -237,12 +248,20 @@ public class ButtonPane extends VBox{
         container2 = new ContainerModel();
         container2.setAmountOfParcels(a, b, c);
         switch(order){
-            case RANDOM : givenParcels = container2.orderParcelListRandom(givenParcels); break;
-            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); break;
-            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); break;
+            case RANDOM : container2.setParcelList(givenParcels); 
+                         container2.solveFirstPackedCargoRandomOrder();
+                         containedShapes = container2.getContainedParcels();
+                         break;
+            case VALUE : givenParcels = container2.orderParcelListByValue(givenParcels); 
+                         container2.setParcelList(givenParcels);
+                         container2.solveFirstPackedCargoSetAmount();
+                         containedShapes = container2.getContainedParcels();
+                         break;
+            case RATIO : givenParcels = container2.orderParcelListByRatio(givenParcels); 
+                         container2.setParcelList(givenParcels);
+                         container2.solveFirstPackedCargoSetAmount();
+                         containedShapes = container2.getContainedParcels();
+                         break;
         }
-        container2.setParcelList(givenParcels);
-        container2.solveFirstPackedCargoSetAmount();
-        containedShapes = container2.getContainedParcels();
     }
 }

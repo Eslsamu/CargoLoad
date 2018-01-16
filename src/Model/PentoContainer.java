@@ -11,7 +11,6 @@ import Util.Axis;
 import Util.Coordinates;
 
 public class PentoContainer {
-	
 	/*
 	 * the dimensions of the container. can be defined by the user
 	 */
@@ -154,5 +153,8 @@ public class PentoContainer {
         }
         System.out.println("holes: "+ holes);
         System.out.println("loaded shapes: "+ loadedPentominoes.size());
+    }
+    public ArrayList<PentominoShape> getLoadedPentominoes(){
+        return loadedPentominoes;
     }
 }

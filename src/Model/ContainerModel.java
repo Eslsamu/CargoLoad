@@ -25,7 +25,7 @@ public class ContainerModel {
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
-    private int[] remainingParcelsEachType;
+    private int[] remainingParcelsEachType={100,100,100};
     private int nonEmptyParcelType = 0;
     private boolean[] triedParcel = new boolean[3];
     private boolean finish = false;
