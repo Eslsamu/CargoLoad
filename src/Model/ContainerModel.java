@@ -345,7 +345,7 @@ public class ContainerModel {
                 possibleParcelTypes.add(i);
             }
         }
-        int randomIndex = (int) Math.random()*possibleParcelTypes.size();
+        int randomIndex = (int) (Math.random()*possibleParcelTypes.size());
         int randomParcelType = possibleParcelTypes.get(randomIndex);
 
         return randomParcelType;
