@@ -5,15 +5,12 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -37,18 +34,6 @@ public class ContainerPane extends Parent {
     private double Box_Depth = 0.5;
     private double Box_Width = 0.5;
     private double Box_Height = 0.5;
-    //box typeA(currently not needed)
-    private double TypeA_Depth = 1.0;
-    private double TypeA_Width = 1.0;
-    private double TypeA_Height = 1.0;
-    //box typeB(currently not needed)
-    private double TypeB_Depth = 1.0;
-    private double TypeB_Width = 1.5;
-    private double TypeB_Height = 2.0;
-    //box typeC(currently not needed)
-    private double TypeC_Depth = 1.5;
-    private double TypeC_Width = 1.5;
-    private double TypeC_Height = 1.5;
     //set rotation points of camera
     private Rotate xAxis = new Rotate(0, Rotate.X_AXIS);
     private Rotate yAxis = new Rotate(0, Rotate.Y_AXIS);
@@ -129,24 +114,13 @@ public class ContainerPane extends Parent {
         
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
@@ -174,24 +148,13 @@ public class ContainerPane extends Parent {
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < containedShapes.size(); i++){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
@@ -202,31 +165,141 @@ public class ContainerPane extends Parent {
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = containedShapes.size() - 1; i > -1; i--){
             ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getCurrentCoordinates().getZ();
-            int y = parcel.getCurrentCoordinates().getY();
-            int x = parcel.getCurrentCoordinates().getX();
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
             
-            Box box = new Box(Box_Width*parcel.getShape()[0], Box_Height*parcel.getShape()[1], Box_Depth*parcel.getShape()[2]);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
-            try{
-                PhongMaterial material = new PhongMaterial();
-                FileInputStream inputstream = new FileInputStream("C:\\Users\\danyp\\Desktop\\CS\\Project3\\BoxA.png");
-                Image image = new Image(inputstream);
-                material.setDiffuseMap(image);
-                box.setMaterial(material);
-            }
-            catch(FileNotFoundException exception){
-                Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-                box.setMaterial(new PhongMaterial(ranColor));
-            }
-            
+            box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
             root.getChildren().add(box);
         }
     }
-    public void drawUpsideDown(){
-    
+    public void drawUpsideDownFromBehind(){
+        root.getChildren().remove(2, root.getChildren().size());
+        int check = 0;
+        ArrayList<ParcelShape> someParcels = new ArrayList();
+        for(int i = containedShapes.size() - 1; i > -1; i--){
+            ParcelShape parcelCheck = containedShapes.get(i);
+            check+= parcelCheck.getShapeVector().y;
+            if(check == 8){
+                someParcels.add(parcelCheck);
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+            }
+            else if(check > 8){
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+                someParcels.add(parcelCheck);
+            }
+            else{
+                someParcels.add(parcelCheck);   
+            }
+        }
     }
+    public void drawUpsideDownFromFront(){
+        root.getChildren().remove(2, root.getChildren().size());
+        int check = 0;
+        ArrayList<ParcelShape> someParcels = new ArrayList();
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcelCheck = containedShapes.get(i);
+            check+= parcelCheck.getShapeVector().y;
+            if(check == 8){
+                someParcels.add(parcelCheck);
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+            }
+            else if(check > 8){
+                for(int p = someParcels.size() - 1; p > -1; p--){
+                    ParcelShape parcel = someParcels.get(p);
+                    int z = parcel.getPosition().getZ();
+                    int y = parcel.getPosition().getY();
+                    int x = parcel.getPosition().getX();
+
+                    Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                    box.setDrawMode(DrawMode.FILL);
+                    box.setMaterial(parcel.getMaterial().toMaterial());
+                    box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                    box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                    box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                    root.getChildren().add(box);
+                }
+                someParcels.clear();
+                check = 0;
+                someParcels.add(parcelCheck);
+            }
+            else{
+                someParcels.add(parcelCheck);   
+            }
+        }
+    }
+    /* public void centerLeft(){
+        root.getChildren().remove(2, root.getChildren().size());
+        int i = 0;
+        while(containedShapes.size()/2 - i < 0 || containedShapes.size()/2 + i >= containedShapes.size()){
+            for(int m = 0; m < 2; m++){
+                ParcelShape parcel = containedShapes.get(containedShapes.size()/2 - (i*((-1)^m)));
+                int z = parcel.getPosition().getZ();
+                int y = parcel.getPosition().getY();
+                int x = parcel.getPosition().getX();
+
+                Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+                box.setDrawMode(DrawMode.FILL);
+                box.setMaterial(parcel.getMaterial().toMaterial());
+                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+                root.getChildren().add(box);
+                i++;
+            }
+        }
+    }
+    public void centerRight(){
+        
+    } */
 }       
