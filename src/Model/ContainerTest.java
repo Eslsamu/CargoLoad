@@ -20,14 +20,12 @@ public class ContainerTest {
         //givenParcels = container.orderParcelListByRatio(givenParcels);
 
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(5,5,5);
+        container.setAmountOfParcels(20,40,20);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        //container.solve(maxValueContainer);/
-        
-        System.out.println(maxValueContainer.getContainedParcels().size());
-        //container.solveFirstPackedCargoSetAmount();
-        container.solveFirstPackedCargoRandomOrder(true);
-
+        int delay = 10000; // in milliseconds
+        container.setDelay(delay);
+        //container.solveBacktracking(maxValueContainer, true);
+        container.solveFirstPackedCargoRandomOrder();
     }
 }
