@@ -22,7 +22,7 @@ public class Controls extends VBox{
         getChildren().add(bp);     
         setHalignment(bp, HPos.CENTER);
         setHalignment(rv, HPos.CENTER);
-        setAlignment(Pos.CENTER);
+        setAlignment(Pos.TOP_CENTER);
         
     }
     

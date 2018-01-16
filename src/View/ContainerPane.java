@@ -116,25 +116,11 @@ public class ContainerPane extends Parent {
         container2.solveFirstPackedCargo();
         
         containedShapes = container2.getContainedParcels();
-        
-        for(int i = 0; i < containedShapes.size(); i++){
-            ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getPosition().getZ();
-            int y = parcel.getPosition().getY();
-            int x = parcel.getPosition().getX();
-            
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-            box.setDrawMode(DrawMode.FILL);
-            box.setMaterial(parcel.getMaterial().toMaterial());
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            root.getChildren().add(box);
-        }
+        drawFromFront();
     }
     public void drawBoxes(int a, int b, int c){
         root.getChildren().remove(2, root.getChildren().size());
-         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
