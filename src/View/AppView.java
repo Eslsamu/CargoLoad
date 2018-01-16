@@ -23,13 +23,13 @@ public class AppView extends BorderPane{
      */
     public AppView(){
             TitlePane title = new TitlePane();
-            container = new ContainerPane(500, 500, title);
+            container = new ContainerPane(750, 750, title);
             Controls controls = new Controls(container);
             
             setCenter(container);
             setTop(title);   
             setRight(controls);
-            setAlignment(title, Pos.CENTER);
+            //setAlignment(title, Pos.CENTER);
             setPrefSize(700,450);
             setPadding(new Insets(15, 15, 15, 15));
             setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, Insets.EMPTY)));

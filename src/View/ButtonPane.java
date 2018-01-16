@@ -21,6 +21,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import Model.ContainerModel;
+import Shapes.ParcelA;
+import Shapes.ParcelB;
+import Shapes.ParcelC;
+import Shapes.ParcelShape;
+import java.util.ArrayList;
 
 /**
  * Class ButtonPane will create a Pane that displays the buttons
@@ -30,6 +35,7 @@ import Model.ContainerModel;
 public class ButtonPane extends VBox{
     private Stage stage;
     private ContainerPane pane;
+    private enum order { VALUE, RANDOM, RATIO};
     /**
      * Constructor will create all the buttons and options
      */
@@ -181,5 +187,19 @@ public class ButtonPane extends VBox{
                 stage.close();
                 container.drawBoxes();
         }});
-    } 
+    }
+    public ArrayList<ParcelShape> generateSolution(){
+        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        
+            givenParcels.add(new ParcelA());
+            givenParcels.add(new ParcelB());
+            givenParcels.add(new ParcelC());
+
+        ContainerModel container = new ContainerModel();
+        container.setParcelList(givenParcels);
+        container.solveFirstPackedCargo();
+        ArrayList<ParcelShape> containedShapes = container.getContainedParcels();
+        
+        return containedShapes;
+    }
 }
