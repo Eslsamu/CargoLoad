@@ -141,10 +141,10 @@ public class ContainerModel {
         showResults();
         return true;
     }
-    public boolean solveBacktracking(ContainerModel maxValueContainer, boolean startTimer){
+    public boolean solveBacktracking(ContainerModel maxValueContainer, boolean startTimer) {
 
 
-        if(startTimer){
+        if (startTimer) {
             java.util.Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -157,7 +157,7 @@ public class ContainerModel {
         }
 
         //The end condition of the recursive loop --> checks if the container is completely filled
-        if(checkIfFull()){
+        if (checkIfFull()) {
             cloneFinish(maxValueContainer);
             showResults();
             System.out.println("The cargo is full.");
@@ -165,28 +165,31 @@ public class ContainerModel {
             return true;
         }
         //for each voxel of the space
-        for(int z=0;z<containerZ;z++){
-            for(int y=0;y<containerY;y++){
-                for(int x=0;x<containerX;x++){
+        while (nonEmptyParcelType < parcelList.size() && remainingParcelsEachType[nonEmptyParcelType] == 0)
+            nonEmptyParcelType++;
+
+        for (int z = 0; z < containerZ; z++) {
+            for (int y = 0; y < containerY; y++) {
+                for (int x = 0; x < containerX; x++) {
                     //check if it is empty
-                    if(containerMatrix[z][y][x]==0){
+                    if (containerMatrix[z][y][x] == 0) {
                         //for each available parcel type in the parcel list
-                        for(int parcelType = 0;parcelType<parcelList.size();parcelType++){
+                        for (int parcelType = nonEmptyParcelType; parcelType < parcelList.size(); parcelType++) {
                             //create a clone of the current parcel in your list
                             ParcelShape currentParcel = parcelList.get(parcelType).clone();
                             //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
-                            for(Facing o: Facing.values()) {
+                            for (Facing o : Facing.values()) {
                                 currentParcel.setOrientation(o);
                                 //check if this parcel with this orientation can be placed onto these coordinates
                                 if (doesFit(z, y, x, currentParcel)) {
                                     //place the parcel onto the container matrix
                                     placeParcel(z, y, x, currentParcel);
+                                    remainingParcelsEachType[parcelType]--;
                                     //add the parcel object to the containedParcel list
                                     containedParcels.add(currentParcel);
                                     if (solveBacktracking(maxValueContainer, startTimer)) {
                                         return true;
-                                    }
-                                    else {
+                                    } else {
                                         removeParcel(currentParcel);
                                         containedParcels.remove(containedParcels.size() - 1);
                                     }
@@ -204,7 +207,6 @@ public class ContainerModel {
             System.out.println();
             clone(maxValueContainer);
         }
-
 
         if(finish){
             cloneFinish(maxValueContainer);
@@ -489,11 +491,21 @@ public class ContainerModel {
             parcelValues.add(givenParcels.get(i).getValue());
         }
         Collections.sort(parcelValues, Collections.reverseOrder());
-        for(int j = 0, i = 0; i < givenParcels.size() && j < parcelValues.size(); i++){
-            if(givenParcels.get(i).getValue()  == parcelValues.get(j)){
+        int j=0;
+        int i=0;
+        while(i<givenParcels.size()&&j<parcelValues.size()){
+            boolean find = false;
+            if(givenParcels.get(i).getValue()==parcelValues.get(j)){
+
                 j++;
                 orderedParcelListbyValue.add(givenParcels.get(i));
-                i = 0;
+                find=true;
+            }
+            if(find){
+                i=0;
+            }
+            else{
+                i++;
             }
         }
         return orderedParcelListbyValue;
