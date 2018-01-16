@@ -97,6 +97,10 @@ public abstract class PentominoShape {
 	
 	public abstract void addChildren();
 	
+	public String getName() {
+		return name;
+	}
+	
 	/*
 	 * @return children returns the list of monimoes
 	 */

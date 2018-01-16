@@ -29,7 +29,7 @@ public class PentoContainer {
 	/*
 	 * each index of this matrix represents a 0,5 x 0,5 x 0,5 space where a monimo is either placed or not
 	 */
-	protected final boolean[][][] containerMatrix = new boolean[containerLength][containerWidth][containerHeight];
+	protected final String[][][] containerMatrix = new String[containerLength][containerWidth][containerHeight];
 	
 	/*
 	 * a list of pentominoes which were loaded into the container
@@ -63,7 +63,7 @@ public class PentoContainer {
 			for(int y = 0; y < containerWidth; y++) {
 				for(int x = 0; x < containerLength; x++) {
 					//if nothing is placed here
-					if(!containerMatrix[x][y][z]) {
+					if(containerMatrix[x][y][z]==null) {
 						//for each pentomino in our list of given shapes
 						for(PentominoShape p : givenPentominoes) {
 							//get an instance of this shape by cloning it
@@ -109,7 +109,7 @@ public class PentoContainer {
 			int zfit = c.z+m.getPositionShape().z;
 			if(xfit > containerLength - 1 || yfit > containerWidth- 1|| zfit > containerHeight - 1
 					 || xfit < 0  || yfit < 0  || zfit < 0  ||
-					containerMatrix[xfit][yfit][zfit]) {
+					containerMatrix[xfit][yfit][zfit]!=null) {
 				return false;
 			}
 		}
@@ -122,7 +122,7 @@ public class PentoContainer {
 		loadedPentominoes.add(p);
 		p.setContainerPosition(c);
 		for(Monimo m : p.getChildren()) {
-			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = true;
+			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = p.getName();
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class PentoContainer {
 	 */
 	public void removeLast(PentominoShape p) {
 		for(Monimo m : p.getChildren()) {
-			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = false;
+			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = null;
 		}
 		loadedPentominoes.remove(loadedPentominoes.size() -1);
 	}
@@ -142,7 +142,7 @@ public class PentoContainer {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<containerWidth;y++){
                 for (int x=0;x<containerLength;x++){
-                    if(containerMatrix[x][y][z]) System.out.print("X ");
+                    if(containerMatrix[x][y][z]!=null) System.out.print(containerMatrix[x][y][z]+" ");
                     else {
                     	System.out.print("O ");
                     	holes++;
