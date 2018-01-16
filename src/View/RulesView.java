@@ -14,10 +14,7 @@ import javafx.stage.Stage;
  */
 public class RulesView extends VBox{
     
-    private ContainerPane pane;
-    
-    public RulesView(ContainerPane pane){
-        this.pane = pane;
+    public RulesView(){
         Text controls = new Text("Camera manipulation controls: ");
         Text text1 = new Text("-> user can rotate camera by dragging the mouse \n and rotating the zoom wheel");
         Text text2 = new Text("-> using keys:");

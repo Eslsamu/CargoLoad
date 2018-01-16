@@ -22,20 +22,12 @@ public class AppView extends BorderPane{
      * Constructor will create a BorderPane with title, ContainerPane and ButtonPane
      */
     public AppView(){
-            container = new ContainerPane();
-            //ButtonPane bp = new ButtonPane(container);
-            //RulesView rv = new RulesView(container);
-            Controls controls = new Controls();
-            
-            Label title = new Label("Cargo Loader");
-            title.setFont(new Font("Arial", 30));
-            
-            
+            TitlePane title = new TitlePane();
+            container = new ContainerPane(500, 500, title);
+            Controls controls = new Controls(container);
             
             setCenter(container);
-            setTop(title);
-            //setRight(rv);
-            //setRight(bp);     
+            setTop(title);   
             setRight(controls);
             setAlignment(title, Pos.CENTER);
             setPrefSize(700,450);

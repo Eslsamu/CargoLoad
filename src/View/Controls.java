@@ -12,14 +12,9 @@ import javafx.stage.Stage;
  */
 public class Controls extends VBox{
     
-    private ContainerPane pane;
-    private ContainerPane container;
-    
-    public Controls(){
-        this.pane = pane;
-        container = new ContainerPane();
+    public Controls(ContainerPane container){
         ButtonPane bp = new ButtonPane(container);
-        RulesView rv = new RulesView(container);
+        RulesView rv = new RulesView();
         
         setSpacing(50);
         
