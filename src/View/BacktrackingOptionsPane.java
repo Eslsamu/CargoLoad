@@ -171,6 +171,19 @@ public class BacktrackingOptionsPane extends VBox{
         Button pack = new Button("Pack");
         pack.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
         pack.setMinSize(150, 50);
+        
+        pane.getChildren().add(pack);
+        pane.setSpacing(5);
+        pane.setAlignment(Pos.CENTER);
+        
+        Scene scene = new Scene(pane);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setWidth(300);
+        stage.setHeight(300);
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL); 
+        stage.show();
         pack.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -186,18 +199,6 @@ public class BacktrackingOptionsPane extends VBox{
                 }
                 container.drawBoxes(containedShapes, solver.computeTotalValue());
         }});
-        pane.getChildren().add(pack);
-        pane.setSpacing(5);
-        pane.setAlignment(Pos.CENTER);
-        
-        Scene scene = new Scene(pane);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setWidth(300);
-        stage.setHeight(300);
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL); 
-        stage.show();
     }
     /**
      * If the user chooses option set amount of boxes and submits them this method will be called.
@@ -254,7 +255,7 @@ public class BacktrackingOptionsPane extends VBox{
      * @param order order type, used by backtracking
      * @param timer representing the timer of backtracking
      */
-    public void generateSolution(int a, int b, int c, ORDER order, int delay){
+    public void generateSolution(int a, int b, int c, ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
@@ -262,7 +263,7 @@ public class BacktrackingOptionsPane extends VBox{
             givenParcels.add(new ParcelC());
 
         solver = new ContainerModel();
-        solver.setDelay(delay*1000);
+        //solver.setDelay(timer*1000);
         solver.setAmountOfParcels(a, b, c);
         switch(order){
             case RANDOM :   solver.setParcelList(givenParcels); 
