@@ -20,10 +20,10 @@ public class ContainerTest {
         givenParcels = container.orderParcelListByRatio(givenParcels);
 
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(20,40,20);
+        container.setAmountOfParcels(200,400,200);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        int delay = 10000; // in milliseconds
+        int delay = 20000; // in milliseconds
         container.setDelay(delay);
         container.solveBacktracking(maxValueContainer, true);
         //container.solveFirstPackedCargoRandomOrder();
