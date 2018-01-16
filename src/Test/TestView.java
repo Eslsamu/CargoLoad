@@ -18,8 +18,6 @@ public class TestView extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        BorderPane testPane = createTestPane();
         AppView app = new AppView();
         Scene scene = new Scene(app);
         ViewController controlls = new ViewController(app.getContainer());
@@ -33,15 +31,6 @@ public class TestView extends Application{
         primaryStage.sizeToScene();
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public BorderPane createTestPane() throws FileNotFoundException {
-        BorderPane testPane = new BorderPane();
-        pane = new ContainerPane();
-        testPane.setCenter(pane);
-
-        return testPane;
-
     }
     public static void main(String[] args) {
         launch(args);
