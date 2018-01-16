@@ -25,7 +25,7 @@ public class OptionsPane extends VBox{
         drawAlgorithmOptions();
         
         setSpacing(50);
-        setAlignment(Pos.TOP_CENTER);
+        setAlignment(Pos.CENTER);
     }
     /**
      * Remove algorithm options and open backtracking options.

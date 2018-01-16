@@ -1,10 +1,12 @@
 package View;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 /**
@@ -21,11 +23,16 @@ public class AppView extends BorderPane{
         TitlePane title = new TitlePane();
         container = new ContainerPane(750, 750, title);
         OptionsPane options = new OptionsPane(container);
-
+        
+        VBox pane = new VBox();
+        pane.getChildren().add(title);
+        pane.getChildren().add(options);
+        pane.setAlignment(Pos.CENTER);
+        pane.setSpacing(15);
+        
         setCenter(container);
-        setTop(title);   
-        setRight(options);
-
+        setRight(pane);
+        
         setPrefSize(700,450);
         setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
     }
