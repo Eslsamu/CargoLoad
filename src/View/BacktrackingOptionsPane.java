@@ -23,8 +23,15 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 
 /**
  * Class ButtonPane will create a Pane that displays Backtracking options
@@ -49,7 +56,8 @@ public class BacktrackingOptionsPane extends VBox{
         getChildren().add(title);
         
         Button packBox = new Button("Pack boxes");
-        packBox.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        packBox.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        packBox.setFocusTraversable(false);
         packBox.setMinSize(225, 50);
         RadioButton infiniteAmount = new RadioButton("Infinite amount of boxes");
         RadioButton setAmount = new RadioButton("Custom amount of boxes");
@@ -90,7 +98,8 @@ public class BacktrackingOptionsPane extends VBox{
         
         Button packPentominoes = new Button("Pack pentominoes");
         packPentominoes.setFocusTraversable(false);
-        packPentominoes.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        packPentominoes.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        packPentominoes.setFocusTraversable(false);
         packPentominoes.setMinSize(225, 50);
         //RadioButton fill = new RadioButton("Fill cargo-space");
         //RadioButton maximum = new RadioButton("Maximum value");
@@ -115,11 +124,13 @@ public class BacktrackingOptionsPane extends VBox{
         maximum.setFocusTraversable(false); */
         
         Button back = new Button("Back");
-        back.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        back.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         back.setMinSize(150, 50);
+        back.setFocusTraversable(false);
         back.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
+                container.redrawContainer();
                 options.drawAlgorithmOptions();
             }});
         getChildren().add(back);
@@ -166,10 +177,16 @@ public class BacktrackingOptionsPane extends VBox{
         Timer.setMaxWidth(175);
         pane.getChildren().add(Timer);
         
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
-             
+        try {
+            FileInputStream input = new FileInputStream("background.jpeg");
+            pane.setBackground(new Background(new BackgroundImage(new Image(input,1000,1000,false,true),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+            BackgroundSize.DEFAULT)));
+        } catch (FileNotFoundException ex) {
+            pane.setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
+        }     
         Button pack = new Button("Pack");
-        pack.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        pack.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         pack.setMinSize(150, 50);
         
         pane.getChildren().add(pack);

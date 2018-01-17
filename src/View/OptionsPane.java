@@ -10,18 +10,15 @@ import javafx.scene.layout.VBox;
  */
 public class OptionsPane extends VBox{
     private BacktrackingOptionsPane options;
-    private RulesView rules;
     private AlgorithmsPane algorithms;
     /**
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
      */
     public OptionsPane(ContainerPane container){
-        rules = new RulesView();
         options = new BacktrackingOptionsPane(container, this);
         algorithms = new AlgorithmsPane(this);
-        
-        getChildren().add(rules);  
+         
         drawAlgorithmOptions();
         
         setSpacing(50);

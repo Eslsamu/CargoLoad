@@ -1,11 +1,19 @@
 package View;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -27,14 +35,21 @@ public class AppView extends BorderPane{
         VBox pane = new VBox();
         pane.getChildren().add(title);
         pane.getChildren().add(options);
-        pane.setAlignment(Pos.CENTER);
+        pane.setAlignment(Pos.TOP_CENTER);
         pane.setSpacing(15);
         
         setCenter(container);
         setRight(pane);
         
-        setPrefSize(700,450);
-        setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
+        BorderPane.setMargin(pane, new Insets(15));
+        try {
+            FileInputStream input = new FileInputStream("background.jpeg");
+            setBackground(new Background(new BackgroundImage(new Image(input,1000,1000,false,true),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+            BackgroundSize.DEFAULT)));
+        } catch (FileNotFoundException ex) {
+            setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
+        }
     }
     /**
      * Get method that will return the current instance of ContainerPane

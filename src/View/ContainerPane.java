@@ -9,6 +9,8 @@ import Shapes.ParcelC;
 import Shapes.ParcelShape;
 import Shapes.PentominoShape;
 import Util.Coordinates;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.scene.Camera;
 import javafx.scene.Group;
@@ -16,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -40,12 +43,13 @@ public class ContainerPane extends Parent {
     private double Box_Width = 0.5;
     private double Box_Height = 0.5;
     //set rotation points of camera
-    private Rotate xAxis = new Rotate(0, Rotate.X_AXIS);
-    private Rotate yAxis = new Rotate(0, Rotate.Y_AXIS);
+    private Rotate xAxis = new Rotate(350, Rotate.X_AXIS);
+    private Rotate yAxis = new Rotate(340, Rotate.Y_AXIS);
     private Rotate zAxis = new Rotate(0, Rotate.Z_AXIS);
     
     private Group root;
     private TitlePane title;
+    private Box container;
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
@@ -57,13 +61,23 @@ public class ContainerPane extends Parent {
         root = new Group();
         
     	//creating container
-    	Box container = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
+    	container = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
         //making the front of the container transparent
-        container.setCullFace(CullFace.FRONT);
+        container.setCullFace(CullFace.BACK);
         //drawing the container with only lines
-        container.setDrawMode(DrawMode.LINE);
+        container.setDrawMode(DrawMode.FILL);
         //setting the color of the container
-        container.setMaterial(new PhongMaterial(Color.ORANGE));
+        PhongMaterial material;
+        try{
+           material = new PhongMaterial();
+           FileInputStream inputstream = new FileInputStream("container.jpeg");
+           Image image = new Image(inputstream);
+           material.setDiffuseMap(image);
+        }
+        catch(FileNotFoundException exception){
+            material = new PhongMaterial(Color.ORANGE);
+        };
+        container.setMaterial(material);        
     	root.getChildren().add(container);
         
         //create a camera
@@ -86,6 +100,8 @@ public class ContainerPane extends Parent {
      * @param solver an instance of the ContainerModel that found the solution
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
         //setDisplayedValue
         title.setDisplayedValue(totalValue);
         //clean container if there is anything in it
@@ -112,6 +128,9 @@ public class ContainerPane extends Parent {
      * @param loadedPentominoes array list with loaded pentominoes
      */
     public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes){
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
+        root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < loadedPentominoes.size(); i++){
             Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
             ArrayList<Monimo> PentominoBoxCoordinates = loadedPentominoes.get(i).getChildren();
@@ -152,7 +171,22 @@ public class ContainerPane extends Parent {
         zAxis.setAngle(angle);
     }
     /**
-     * Method will run ContainerModel and get coordinates of parcels in a possible solution. It will
-     * then draw boxes representing the given solution.
+     * Method will make container again to appear like a real container.
      */
+    public void redrawContainer(){
+        root.getChildren().remove(2, root.getChildren().size());
+        container.setCullFace(CullFace.BACK);
+        container.setDrawMode(DrawMode.FILL);
+        PhongMaterial material;
+        try{
+           material = new PhongMaterial();
+           FileInputStream inputstream = new FileInputStream("container.jpeg");
+           Image image = new Image(inputstream);
+           material.setDiffuseMap(image);
+        }
+        catch(FileNotFoundException exception){
+            material = new PhongMaterial(Color.ORANGE);
+        };
+        container.setMaterial(material);    
+    }
 }       

@@ -23,7 +23,7 @@ public class AlgorithmsPane extends VBox{
         getChildren().add(chooseAlgorithm);
         
         Button backtracking = new Button("Backtracking");
-        backtracking.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        backtracking.setStyle("-fx-font: 22 arial; -fx-base: #6495ED");
         backtracking.setMinSize(225, 50);
         backtracking.setFocusTraversable(false);
         backtracking.setOnAction(new EventHandler<ActionEvent>(){
@@ -34,13 +34,13 @@ public class AlgorithmsPane extends VBox{
         getChildren().add(backtracking);
         
         Button grasp = new Button("GRASP");
-        grasp.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        grasp.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         grasp.setMinSize(225, 50);
         grasp.setFocusTraversable(false);
         getChildren().add(grasp);
         
         Button divide = new Button("Divide & Conquer");
-        divide.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
+        divide.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         divide.setMinSize(225, 50);
         divide.setFocusTraversable(false);
         getChildren().add(divide);

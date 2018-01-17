@@ -22,22 +22,19 @@ public class ContainerModel {
     static protected final int containerY = 8;
     static protected final int containerX = 5;
     static protected final int containerZ = 33;
+    
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
+    
     private int[] remainingParcelsEachType={100,100,100};
+    private int AmountTypeA = 100;
+    private int AmountTypeB = 100;
+    private int AmountTypeC = 100;
     private int nonEmptyParcelType = 0;
     private boolean[] triedParcel = new boolean[3];
     private boolean finish = false;
     private int delay;
-
-
-/*
-
-    public void setParcelList(ArrayList<ParcelShape> newParcelList){
-        parcelList = newParcelList;
-    }
-
 
     /**
      * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
@@ -192,6 +189,7 @@ public class ContainerModel {
                                     } else {
                                         removeParcel(currentParcel);
                                         containedParcels.remove(containedParcels.size() - 1);
+                                        remainingParcelsEachType[parcelType]++;
                                     }
                                 }
                             }
@@ -201,6 +199,7 @@ public class ContainerModel {
                 }
             }
         }
+        remainingParcelsEachType = new int[]{AmountTypeA, AmountTypeB, AmountTypeC};
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             System.out.println("Total value container: "+computeTotalValue());
             System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
@@ -472,6 +471,10 @@ public class ContainerModel {
     }
 
     public void setAmountOfParcels(int nrOfA, int nrOfB, int nrOfC) {
+        AmountTypeA = nrOfA;
+        AmountTypeB = nrOfB;
+        AmountTypeC = nrOfC;
+        
         remainingParcelsEachType = new int[]{nrOfA, nrOfB, nrOfC};
     }
 
