@@ -60,6 +60,6 @@ public class AlgorithmsPane extends VBox{
         getChildren().add(button3);
         setAlignment(Pos.CENTER);
     
-}
+    }
     
 }
