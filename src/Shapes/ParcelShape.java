@@ -18,6 +18,7 @@ public abstract class ParcelShape {
 	private final String name;
 	private final ShapeMaterial material;
 	private final int value;
+
 	
 	/*
 	 * represents the way the parcel is positioned(orientation and rotation) in space with 3 vectors 
@@ -61,7 +62,8 @@ public abstract class ParcelShape {
     }
 
     public double getRatio() {
-        return value / (shapeVector.x * shapeVector.y * shapeVector.z);
+    	double doubleValue = value;
+        return  doubleValue/ (shapeVector.x * shapeVector.y * shapeVector.z);
     }
 
 	/**

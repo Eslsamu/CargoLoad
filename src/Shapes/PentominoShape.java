@@ -19,6 +19,9 @@ public abstract class PentominoShape {
 	protected final int value;
 	protected final ShapeMaterial material;
 	
+	//for debug
+	private String label = ".";
+	
 	public static void main(String[]args) {
 		PentominoP testP = new PentominoP();
 		System.out.println(testP.toString());
@@ -114,5 +117,12 @@ public abstract class PentominoShape {
 		for(Monimo m : children) {
 			m.setContainerPosition(new Coordinates(m.getPositionShape().x + c.x, m.getPositionShape().y + c.y, m.getPositionShape().z + c.z));
 		}
+	}
+	
+	public void setLabel(String l) {
+		label = l;
+	}
+	public String getLabel() {
+		return label;
 	}
 }

@@ -11,7 +11,6 @@ import Util.Axis;
 import Util.Coordinates;
 
 public class PentoContainer {
-	
 	/*
 	 * the dimensions of the container. can be defined by the user
 	 */
@@ -47,13 +46,13 @@ public class PentoContainer {
 	
 	public static void main(String[]args) {
 		PentoContainer testContainer = new PentoContainer();
-		testContainer.loadContainer(300);
+		testContainer.loadContainer(5);
 	}
 	
 	public boolean loadContainer(int iteration) {
 		//to find a perfect solution, there have to be 264 pentominoes in the loaded list. 1320(containervolume)/5(pento volume)
 		//the other stopping condition is the given amount of time or iterations
-		if(loadedPentominoes.size() >= containerLength*containerWidth*containerHeight/5 || iteration <= 0) {
+		if(loadedPentominoes.size() >= (containerLength*containerWidth*containerHeight/5) -1|| iteration <= 0) {
 			printContainer();
 			return true;
 		}
@@ -124,6 +123,7 @@ public class PentoContainer {
 		for(Monimo m : p.getChildren()) {
 			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = p.getName();
 		}
+		
 	}
 	
 	/*
@@ -154,5 +154,57 @@ public class PentoContainer {
         }
         System.out.println("holes: "+ holes);
         System.out.println("loaded shapes: "+ loadedPentominoes.size());
+    }
+
+	public boolean loadContainerRandom(int iteration) {
+		//to find a perfect solution, there have to be 264 pentominoes in the loaded list. 1320(containervolume)/5(pento volume)
+		//the other stopping condition is the given amount of time or iterations
+		if(loadedPentominoes.size() >= containerLength*containerWidth*containerHeight/5 || iteration <= 0) {
+			printContainer();
+			return true;
+		}
+		
+		//for each index in the space
+		for(int z = 0; z < containerHeight; z++) {
+			for(int y = 0; y < containerWidth; y++) {
+				for(int x = 0; x < containerLength; x++) {
+					//if nothing is placed here
+					if(containerMatrix[x][y][z]==null) {
+						//for each pentomino in our list of given shapes
+						for(int i = 0; i < givenPentominoes.size(); i++) {
+							// take a random shape and clone it
+							PentominoShape current = givenPentominoes.get((int)(Math.random()*3)).clone();
+							//rotates around the each of it's axis with moving the down-left-back most monimo to the origin
+							// so that it doesnt try orientations which are blocked anyway and also to 'flip' it this way around its own body
+							for(int xAxis = 0; xAxis < 4; xAxis++) {
+								current.rotate(90, Axis.X);
+								for(int yAxis = 0; yAxis < 4; yAxis++) {
+									current.rotate(90, Axis.Y);
+									for(int zAxis = 0; zAxis < 4; zAxis++) {
+										current.rotate(90, Axis.Z);
+										current.moveToOrigin();
+										//check if all of the current pentominos monimoes do fit onto these coordinates in the container
+										if(doesFit(current, new Coordinates(x,y,z))){
+											place(current, new Coordinates(x,y,z));
+											iteration--;
+											if(loadContainer(iteration)) {
+												return true;
+											}
+											else {
+												removeLast(current);
+											}													
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+    public ArrayList<PentominoShape> getLoadedPentominoes(){
+        return loadedPentominoes;
     }
 }
