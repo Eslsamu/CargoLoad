@@ -38,7 +38,6 @@ public class ContainerModel {
 
     /**
      * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
-     * @param maxValueContainer The container that has been already packed and reached the maximal value so far
      * @return
      */
     public boolean solveFirstPackedCargo(){
@@ -208,6 +207,7 @@ public class ContainerModel {
         }
 
         if(finish){
+            System.out.println("Finish");
             cloneFinish(maxValueContainer);
             showResults();
             return true;
@@ -525,9 +525,11 @@ public class ContainerModel {
             if(givenParcels.get(i).getRatio()  == parcelRatios.get(j)){
                 j++;
                 orderedParcelListbyRatio.add(givenParcels.get(i));
+                System.out.println(givenParcels.get(i).getRatio());
                 i = 0;
             }
         }
+
         return orderedParcelListbyRatio;
 
     }
