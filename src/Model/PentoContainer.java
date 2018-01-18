@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 import Shapes.Monimo;
+import Shapes.ParcelShape;
 import Shapes.PentominoL;
 import Shapes.PentominoP;
 import Shapes.PentominoShape;
@@ -26,7 +27,15 @@ public class PentoContainer {
 	public final int amountT = 100;
 	
 	/*
-	 * each index of this matrix represents a 0,5 x 0,5 x 0,5 space where a monimo is either placed or not
+	 * amount of parcels which are given of each type
+	 */
+	public final int amountA = 100;
+	public final int amountB = 100;
+	public final int amountC = 100;
+	
+	/*
+	 * each index of this matrix represents a 0,5 x 0,5 x 0,5 space 
+	 * 
 	 */
 	protected final String[][][] containerMatrix = new String[containerLength][containerWidth][containerHeight];
 	
@@ -34,6 +43,11 @@ public class PentoContainer {
 	 * a list of pentominoes which were loaded into the container
 	 */
 	private ArrayList<PentominoShape> loadedPentominoes = new ArrayList<PentominoShape>();
+	
+	/*
+	 * a list of parcels which were loaded into the container
+	 */
+	private ArrayList<ParcelShape> loadedParcels = new ArrayList<ParcelShape>();
 	
 	/*
 	 * a list of pentominoes shapes which are given to be placed
@@ -47,7 +61,7 @@ public class PentoContainer {
 	
 	public static void main(String[]args) {
 		PentoContainer testContainer = new PentoContainer();
-		testContainer.loadContainer(5);
+		testContainer.loadContainer(500);
 	}
 	
 	public boolean loadContainer(int iteration) {
@@ -115,6 +129,33 @@ public class PentoContainer {
 		}
 		return true;
 	}
+	
+	/*
+	 * Iterates through all the monimoes of the pentomino and checks if all of them can be placed in the container matrix
+	 */
+	public boolean doesFit(ParcelShape p, Coordinates c) {
+		int xfit = p.getShapeVector().x + c.x;
+		int yfit = p.getShapeVector().x + c.y;
+		int zfit = p.getShapeVector().x + c.z;
+		if (	(xfit > containerLength) ||
+                (yfit > containerWidth) ||
+                (zfit > containerHeight) ||
+                (xfit < 0) ||
+                (yfit < 0) ||
+                (zfit < 0))
+            return false;
+        else{
+            for(int z = c.z; z < xfit; z++){
+                for(int y = c.y; y < yfit; y++){
+                    for(int x = c.x; x < xfit; x++){
+                        if(containerMatrix[x][y][z] != null) return false;
+                    }
+                }
+            }
+        }
+            return true;
+	}
+	
 	/*
 	 * First the position variable of the instance is set, then the coordinates in the container matrix are set to true
 	 */
@@ -205,6 +246,13 @@ public class PentoContainer {
 		}
 		return false;
 	}
+	
+	public ArrayList<String[][][]> findMaximalSpaces() {
+		
+		return null;
+		
+	}
+	
     public ArrayList<PentominoShape> getLoadedPentominoes(){
         return loadedPentominoes;
     }
