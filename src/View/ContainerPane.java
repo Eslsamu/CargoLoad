@@ -50,7 +50,7 @@ public class ContainerPane extends Parent {
     private Group root;
     private TitlePane title;
     private Box container;
-    private ArrayList<ParcelShape> containedShapes;
+    private ArrayList<ParcelShape> containedShapes = new ArrayList();
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
@@ -101,7 +101,17 @@ public class ContainerPane extends Parent {
      * @param solver an instance of the ContainerModel that found the solution
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
-        this.containedShapes = containedShapes;
+        try{ 
+        this.containedShapes.clear();
+        }
+        catch(Exception e){
+
+        }
+        for(ParcelShape parcel: containedShapes){
+            ParcelShape someParcel = parcel.clone();
+            someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+            this.containedShapes.add(someParcel);
+        }
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
         //setDisplayedValue

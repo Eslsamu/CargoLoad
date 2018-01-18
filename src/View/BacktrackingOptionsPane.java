@@ -41,7 +41,7 @@ import javafx.scene.layout.BackgroundSize;
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes;
+    private ArrayList<ParcelShape> containedShapes = new ArrayList();
     private ContainerModel solver;
     
     /**
@@ -229,7 +229,6 @@ public class BacktrackingOptionsPane extends VBox{
     public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int timer){
         stage.close();
         generateSolution(a, b, c, order, timer);
-        container.drawBoxes(containedShapes, solver.computeTotalValue());
     }
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
@@ -243,12 +242,6 @@ public class BacktrackingOptionsPane extends VBox{
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
             givenParcels.add(new ParcelC());
-            
-            ArrayList<ParcelShape> givenParcels1 = new ArrayList<>();
-        
-            givenParcels1.add(new ParcelA());
-            givenParcels1.add(new ParcelB());
-            givenParcels1.add(new ParcelC());
 
         solver = new ContainerModel();
         //to turn it into milliseconds
@@ -257,21 +250,58 @@ public class BacktrackingOptionsPane extends VBox{
         switch(order){
             case RANDOM :   solver.setParcelList(givenParcels); 
                             solver.solveFirstPackedCargoRandomOrder();
+                            ArrayList<ParcelShape> list2 = solver.getContainedParcels();
+                            for(ParcelShape parcel: list2){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
+                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
+                            
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
                             maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
-                            containedShapes = solver.getContainedParcels();
+                        
+                            ArrayList<ParcelShape> list1 = solver.getContainedParcels();
+                            for(ParcelShape parcel: list1){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
                             container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
                             break;
-            case RATIO :    givenParcels1 = solver.orderParcelListByRatio(givenParcels1);
-                            solver.setParcelList(givenParcels1);
-                            maxValueContainer.setParcelList(givenParcels1);
+            case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
+                            solver.setParcelList(givenParcels);
+                            maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
-                            containedShapes = solver.getContainedParcels();
+                            
+                            ArrayList<ParcelShape> list = solver.getContainedParcels();
+                            for(ParcelShape parcel: list){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
                             container.drawBoxes(containedShapes, solver.computeTotalValue());
-                            solver.solveBacktracking(maxValueContainer, true, false);
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
                             break;
         }
     }
@@ -294,21 +324,64 @@ public class BacktrackingOptionsPane extends VBox{
         solver = new ContainerModel();
         solver.setDelay(timer*1000);
         solver.setAmountOfParcels(a, b, c);
+        ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
             case RANDOM :   solver.setParcelList(givenParcels); 
                             solver.solveFirstPackedCargoRandomOrder();
+                            ArrayList<ParcelShape> list2 = solver.getContainedParcels();
+                            for(ParcelShape parcel: list2){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
+                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
+                            
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true, false);
+                            maxValueContainer.setParcelList(givenParcels);
+                            solver.solveBacktracking(maxValueContainer, true, true);
+                        
+                            ArrayList<ParcelShape> list1 = solver.getContainedParcels();
+                            for(ParcelShape parcel: list1){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
+                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
                             break;
-            case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels); 
+            case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true, false);
-                            break;
+                            maxValueContainer.setParcelList(givenParcels);
+                            solver.solveBacktracking(maxValueContainer, true, true);
                             
+                            ArrayList<ParcelShape> list = solver.getContainedParcels();
+                            for(ParcelShape parcel: list){
+                                ParcelShape someParcel = parcel.clone();
+                                someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+                                containedShapes.add(someParcel);
+                            }
+                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            try{ 
+                                containedShapes.clear();
+                            }
+                            catch(Exception e){
+                                
+                            }
+                            break;
         }
-        containedShapes = solver.getContainedParcels();
     }
     /**
      * A method that returns an instance of this class
