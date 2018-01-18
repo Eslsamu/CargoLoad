@@ -305,7 +305,7 @@ public class ContainerModel {
         clone(subspaceContainer);
         int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
 
-        //i = the nrOfPlacedSubspaces
+        //i = nrOfPlacedSubspaces
 
         for(int z = i * subspaceContainer.getContainerZ(); z < (i+1) * subspaceContainer.getContainerZ(); z++){
             for(int y = i * subspaceContainer.getContainerY(); y < (i+1) * subspaceContainer.getContainerY(); y++){
