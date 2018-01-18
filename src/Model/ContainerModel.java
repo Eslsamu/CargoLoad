@@ -252,9 +252,9 @@ public class ContainerModel {
 
             subspaceContainer.solveBacktracking(maxValueSubspace,true,false);
 
-             for (int z = 0; z < containerZ; z++) {
-               for (int y = 0; y < containerY; y++) {
-                    for (int x = 0; x < containerX; x++) {
+             for (int z = 0; z < initialContainerZ; z++) {
+               for (int y = 0; y < initialContainerY; y++) {
+                    for (int x = 0; x < initialContainerX; x++) {
 
                         if(enoughBlocksForSubspace()){
 
@@ -347,6 +347,7 @@ public class ContainerModel {
         if(nrOfB_needed > remainingParcelsEachType[1]) enoughLeft = false;
         if(nrOfC_needed > remainingParcelsEachType[2]) enoughLeft = false;
 
+        System.out.println("enougLeft = " + enoughLeft);
         return enoughLeft;
     }
 
@@ -356,9 +357,10 @@ public class ContainerModel {
 
     public void clone(ContainerModel model){
         int[][][] newContainerMatrix = new int[containerZ][containerY][containerX];
-        for(int i=0;i<containerMatrix.length;i++){
-            for(int j=0;j<containerMatrix[0].length;j++){
-                for(int k=0;k<containerMatrix[0][0].length;k++){
+        System.out.println(containerZ + " " + containerY + " " + containerX);
+        for(int i=0;i<newContainerMatrix.length;i++){
+            for(int j=0;j<newContainerMatrix[0].length;j++){
+                for(int k=0;k<newContainerMatrix[0][0].length;k++){
                     newContainerMatrix[i][j][k] = containerMatrix[i][j][k];
                 }
             }
@@ -374,9 +376,9 @@ public class ContainerModel {
 
     public void cloneFinish(ContainerModel model){
         int[][][] newContainerMatrix = new int[containerZ][containerY][containerX];
-        for(int i=0;i<containerMatrix.length;i++){
-            for(int j=0;j<containerMatrix[0].length;j++){
-                for(int k=0;k<containerMatrix[0][0].length;k++){
+        for(int i=0;i<newContainerMatrix.length;i++){
+            for(int j=0;j<newContainerMatrix[0].length;j++){
+                for(int k=0;k<newContainerMatrix[0][0].length;k++){
                     newContainerMatrix[i][j][k] = model.getContainerMatrix()[i][j][k];
                 }
             }
