@@ -108,10 +108,9 @@ public class ContainerPane extends Parent {
         title.setDisplayedValue(totalValue);
         //clean container if there is anything in it
         root.getChildren().remove(2, root.getChildren().size());
-        //for(int i = 0; i < containedShapes.size(); i++){
-            try{
-            ParcelShape parcel = containedShapes.get(62).clone();
-            parcel.setCurrentCoordinates(containedShapes.get(62).getPosition().clone());
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i).clone();
+            parcel.setCurrentCoordinates(containedShapes.get(i).getPosition().clone());
             int z = parcel.getPosition().getZ();
             int y = parcel.getPosition().getY();
             int x = parcel.getPosition().getX();
@@ -125,9 +124,6 @@ public class ContainerPane extends Parent {
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
             root.getChildren().add(box);
-            }
-            catch(Exception e){
-                System.out.println("exception");
             }
             
     }
