@@ -1,6 +1,5 @@
 package Test;
 
-import java.io.FileNotFoundException;
 
 import View.AppView;
 import View.ContainerPane;
@@ -10,7 +9,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class TestView extends Application{

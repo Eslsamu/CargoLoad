@@ -9,57 +9,49 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 /**
- *
- * @author basia
+ * This class will create a Pane that contains options for using different algorithms.
+ * @author Basia
  */
 public class AlgorithmsPane extends VBox{
-    
-    private ContainerPane pane;
-    
-    public AlgorithmsPane(ContainerPane pane, Controls controls){
-        this.pane = pane;
+    /**
+     * Constructor will create a VBox with 3 buttons.
+     * @param controls an instance of class controls that is used to redraw the options pane
+     */
+    public AlgorithmsPane(OptionsPane options){
+        Label chooseAlgorithm = new Label("Choose algorithm:");
+        chooseAlgorithm.setFont(new Font("Arial", 25));
+        getChildren().add(chooseAlgorithm);
+        
+        Button backtracking = new Button("Backtracking");
+        backtracking.setStyle("-fx-font: 22 arial; -fx-base: #6495ED");
+        backtracking.setMinSize(225, 50);
+        backtracking.setFocusTraversable(false);
+        backtracking.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                options.drawBacktrackingOptions();   
+        }});
+        getChildren().add(backtracking);
+        
+        Button grasp = new Button("GRASP");
+        grasp.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        grasp.setMinSize(225, 50);
+        grasp.setFocusTraversable(false);
+        getChildren().add(grasp);
+        
+        Button divide = new Button("Divide & Conquer");
+        divide.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        divide.setMinSize(225, 50);
+        divide.setFocusTraversable(false);
+        getChildren().add(divide);
+        
         setSpacing(20);
-        
-        Label label = new Label("Choose algorithm:");
-        label.setFont(new Font("Arial", 25));
-        Button button1 = new Button("Backtracking");
-        Button button2 = new Button("GRASP");
-        Button button3 = new Button("Devide & Conquer");
-        
-        button1.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
-        button1.setMinSize(225, 50);
-        button1.setFocusTraversable(false);
-        button2.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
-        button2.setMinSize(225, 50);
-        button2.setFocusTraversable(false);
-        button3.setStyle("-fx-font: 22 arial; -fx-base: #8FBC8F;");
-        button3.setMinSize(225, 50);
-        button3.setFocusTraversable(false);
-        
-        button1.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent e){
-                controls.redrawPane();   
-        }});
-        
-        button2.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent e){
-                controls.redrawPane();  
-        }});
-        
-        button3.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent e){
-                controls.redrawPane();     
-        }});
-        
-        getChildren().add(label);
-        getChildren().add(button1);
-        getChildren().add(button2);
-        getChildren().add(button3);
         setAlignment(Pos.CENTER);
+<<<<<<< HEAD
     
     }
     
+=======
+    }  
+>>>>>>> 12353d5c2079f2641bf0806dfdb13436c183479a
 }

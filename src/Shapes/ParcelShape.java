@@ -62,7 +62,8 @@ public abstract class ParcelShape {
     }
 
     public double getRatio() {
-        return value / (shapeVector.x * shapeVector.y * shapeVector.z);
+    	double doubleValue = value;
+        return  doubleValue/ (shapeVector.x * shapeVector.y * shapeVector.z);
     }
 
 	/**
