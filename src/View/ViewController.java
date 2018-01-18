@@ -52,5 +52,11 @@ public class ViewController implements EventHandler<KeyEvent>{
             angleZ-= 10;
             pane.rotateZ(angleZ);
         }
+        else if(event.getCode() == KeyCode.X){
+            pane.drawOneByOne(pane.getSize());
+        }
+        else if(event.getCode() == KeyCode.C){
+            pane.remove();
+        }
     }    
 }

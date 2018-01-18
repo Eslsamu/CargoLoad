@@ -138,9 +138,7 @@ public class ContainerModel {
         return true;
     }
     public boolean solveBacktracking(ContainerModel maxValueContainer, boolean startTimer) {
-
-
-        if (startTimer) {
+         if (startTimer) {
             java.util.Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -174,8 +172,9 @@ public class ContainerModel {
                             //create a clone of the current parcel in your list
                             ParcelShape currentParcel = parcelList.get(parcelType).clone();
                             //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+                            
                             for (Facing o : Facing.values()) {
-                                currentParcel.setOrientation(o);
+                                 currentParcel.setOrientation(o);
                                 //check if this parcel with this orientation can be placed onto these coordinates
                                 if (doesFit(z, y, x, currentParcel)) {
                                     //place the parcel onto the container matrix
@@ -187,7 +186,7 @@ public class ContainerModel {
                                         return true;
                                     } else {
                                         removeParcel(currentParcel);
-                                        containedParcels.remove(containedParcels.size() - 1);
+                                        containedParcels.remove(currentParcel);
                                         remainingParcelsEachType[parcelType]++;
                                     }
                                 }
@@ -210,6 +209,7 @@ public class ContainerModel {
             System.out.println("Finish");
             cloneFinish(maxValueContainer);
             showResults();
+            printContainedShapes();
             return true;
         }
 
@@ -232,8 +232,10 @@ public class ContainerModel {
         model.setContainerMatrix(newContainerMatrix);
 
         ArrayList<ParcelShape> newContainedParcels = new ArrayList<>();
-        for(ParcelShape parcel:containedParcels){
-            newContainedParcels.add(parcel);
+        for(ParcelShape parcel: containedParcels){
+            ParcelShape someParcel = parcel.clone();
+            someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+            newContainedParcels.add(someParcel);
         }
         model.setContainedParcels(newContainedParcels);
     }
@@ -251,7 +253,9 @@ public class ContainerModel {
 
         ArrayList<ParcelShape> newContainedParcels = new ArrayList<>();
         for(ParcelShape parcel:model.getContainedParcels()){
-            newContainedParcels.add(parcel);
+            ParcelShape someParcel = parcel.clone();
+            someParcel.setCurrentCoordinates(parcel.getPosition().clone());
+            newContainedParcels.add(someParcel);
         }
         setContainedParcels(newContainedParcels);
     }
@@ -388,12 +392,13 @@ public class ContainerModel {
      */
     // TODO
     public boolean doesFit(int z, int y, int x, ParcelShape parcel) {
+        parcel.setCurrentCoordinates(new Coordinates(x, y, z));
         if (	(parcel.getShapeVector().x + x > containerX) ||
                 (parcel.getShapeVector().y + y > containerY) ||
                 (parcel.getShapeVector().z + z > containerZ) ||
-                (z + parcel.getShapeVector().x < 0) ||
+                (z + parcel.getShapeVector().z < 0) ||
                 (y + parcel.getShapeVector().y < 0) ||
-                (x + parcel.getShapeVector().z < 0))
+                (x + parcel.getShapeVector().x < 0))
             return false;
         else{
             for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
@@ -491,7 +496,8 @@ public class ContainerModel {
         ArrayList<Integer> parcelValues = new ArrayList<>();
         ArrayList<ParcelShape> orderedParcelListbyValue = new ArrayList<>();
         for(int i = 0; i < givenParcels.size(); i++){
-            parcelValues.add(givenParcels.get(i).getValue());
+            ParcelShape someShape = givenParcels.get(i).clone();
+            parcelValues.add(someShape.getValue());
         }
         Collections.sort(parcelValues, Collections.reverseOrder());
         int j=0;
@@ -501,7 +507,8 @@ public class ContainerModel {
             if(givenParcels.get(i).getValue()==parcelValues.get(j)){
 
                 j++;
-                orderedParcelListbyValue.add(givenParcels.get(i));
+                ParcelShape otherShape = givenParcels.get(i).clone();
+                orderedParcelListbyValue.add(otherShape);
                 find=true;
             }
             if(find){
@@ -518,13 +525,15 @@ public class ContainerModel {
         ArrayList<Double> parcelRatios = new ArrayList<>();
         ArrayList<ParcelShape> orderedParcelListbyRatio = new ArrayList<>();
         for(int i = 0; i < givenParcels.size(); i++) {
-            parcelRatios.add(givenParcels.get(i).getRatio());
+            ParcelShape someShape = givenParcels.get(i).clone();
+            parcelRatios.add(someShape.getRatio());
         }
         Collections.sort(parcelRatios, Collections.reverseOrder());
         for(int j = 0, i = 0; i < givenParcels.size() && j < parcelRatios.size(); i++){
             if(givenParcels.get(i).getRatio()  == parcelRatios.get(j)){
                 j++;
-                orderedParcelListbyRatio.add(givenParcels.get(i));
+                ParcelShape otherShape = givenParcels.get(i).clone();
+                orderedParcelListbyRatio.add(otherShape);
                 System.out.println(givenParcels.get(i).getRatio());
                 i = 0;
             }
@@ -537,6 +546,23 @@ public class ContainerModel {
     public ArrayList<ParcelShape> orderParcelListRandom(ArrayList<ParcelShape> givenParcels) {
         Collections.shuffle(givenParcels);
         return givenParcels;
+    }
+    public void printContainedShapes(){
+        for(int  i = 0; i < containedParcels.size(); i++){
+            System.out.println("Parcel: " + i);
+            ParcelShape parcel = containedParcels.get(i);
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
+            
+            for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
+                for(int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++){
+                    for(int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++){
+                        System.out.println("X: " + xCoord + " Y: " + yCoord + " Z: " + zCoord);
+                    }
+                }
+            }
+        }    
     }
 
 }

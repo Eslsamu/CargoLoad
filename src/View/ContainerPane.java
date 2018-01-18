@@ -50,6 +50,7 @@ public class ContainerPane extends Parent {
     private Group root;
     private TitlePane title;
     private Box container;
+    private ArrayList<ParcelShape> containedShapes;
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
@@ -100,18 +101,21 @@ public class ContainerPane extends Parent {
      * @param solver an instance of the ContainerModel that found the solution
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+        this.containedShapes = containedShapes;
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
         //setDisplayedValue
         title.setDisplayedValue(totalValue);
         //clean container if there is anything in it
         root.getChildren().remove(2, root.getChildren().size());
-        
-        for(int i = 0; i < containedShapes.size(); i++){
-            ParcelShape parcel = containedShapes.get(i);
+        //for(int i = 0; i < containedShapes.size(); i++){
+            try{
+            ParcelShape parcel = containedShapes.get(62).clone();
+            parcel.setCurrentCoordinates(containedShapes.get(62).getPosition().clone());
             int z = parcel.getPosition().getZ();
             int y = parcel.getPosition().getY();
             int x = parcel.getPosition().getX();
+            //System.out.println(z + " " + y + " " + x);
             
             //create a box as big as it has small boxes in it
             Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
@@ -121,7 +125,11 @@ public class ContainerPane extends Parent {
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
             root.getChildren().add(box);
-        }
+            }
+            catch(Exception e){
+                System.out.println("exception");
+            }
+            
     }
     /**
      * This method will draw pentominoes in the container after a solution has been found.
@@ -188,5 +196,48 @@ public class ContainerPane extends Parent {
             material = new PhongMaterial(Color.ORANGE);
         };
         container.setMaterial(material);    
+    }
+    public void drawOneByOne(int n){
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
+        //setDisplayedValue
+        //title.setDisplayedValue(totalValue);
+        //clean container if there is anything in it
+            ParcelShape parcel = containedShapes.get(n);
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
+            
+            //create a box as big as it has small boxes in it
+            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            box.setDrawMode(DrawMode.FILL);
+            box.setMaterial(parcel.getMaterial().toMaterial());
+            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            root.getChildren().add(box);
+    }
+    public void remove(){
+        root.getChildren().remove(root.getChildren().size() - 1);
+    } 
+     public void printContainedShapes(){
+        for(int  i = 0; i < containedShapes.size(); i++){
+            System.out.println("Parcel: " + i);
+            ParcelShape parcel = containedShapes.get(i);
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
+            
+            for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
+                for(int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++){
+                    for(int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++){
+                        System.out.println("X: " + xCoord + " Y: " + yCoord + " Z: " + zCoord);
+                    }
+                }
+            }
+        }    
+    }
+    public int getSize(){
+        return containedShapes.size();
     }
 }       
