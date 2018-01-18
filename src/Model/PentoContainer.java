@@ -38,6 +38,7 @@ public class PentoContainer {
 	/*
 	 * a list of pentominoes shapes which are given to be placed
 	 */
+	@SuppressWarnings("serial")
 	private ArrayList<PentominoShape> givenPentominoes = new ArrayList<PentominoShape>() {{
 		add(new PentominoP());
 		add(new PentominoL());
