@@ -1,9 +1,6 @@
 package Model;
 
-import Shapes.Facing;
-import Shapes.ParcelA;
-import Shapes.ParcelC;
-import Shapes.ParcelShape;
+import Shapes.*;
 import Util.Coordinates;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -245,14 +242,15 @@ public class ContainerModel {
 
             subspaceContainer.solveBacktracking(maxValueSubspace,true,false);
 
-            for (int z = 0; z < containerZ; z++) {
-                for (int y = 0; y < containerY; y++) {
+             for (int z = 0; z < containerZ; z++) {
+               for (int y = 0; y < containerY; y++) {
                     for (int x = 0; x < containerX; x++) {
+
                         if(enoughBlocksForSubspace()){
 
-                            if(doesSubspaceFit()){ // check in a clone of the main container, by putting inside each parcel according to its coordinates from
+                            if(doesSubspaceFit(subspaceContainer, z, y, x)){ // check in a clone of the main container, by putting inside each parcel according to its coordinates from
                                                     //subspaceContainer.getContainedParcels()
-                                copySubspace(subspaceContainer);
+                                copySubspace(subspaceContainer, z, y, x);
                             }
                         }
                         else{
@@ -266,6 +264,43 @@ public class ContainerModel {
         }
     }
 
+    public boolean doesSubspaceFit(ContainerModel subspaceContainer, int z, int y, int x) {
+        clone(subspaceContainer);
+        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
+        boolean doesFit = true;
+
+        if( (z + subspaceContainer.getContainerZ() > initialContainerZ ) ||
+            (y + subspaceContainer.getContainerY() > initialContainerY ) ||
+            (x + subspaceContainer.getContainerX() > initialContainerX))
+                return false;
+
+        for (int zCoord = z; zCoord < z + subspaceContainer.getContainerZ(); zCoord++) {
+            for (int yCoord = y; yCoord < y + subspaceContainer.getContainerY(); yCoord++) {
+                for (int xCoord = x; xCoord < x + subspaceContainer.getContainerX(); xCoord++) {
+                    if(containerMatrix[zCoord][yCoord][xCoord] == 1 && subspaceMatrix[zCoord - z][yCoord - y][xCoord - x] == 1)
+                        doesFit = false;
+                }
+            }
+        }
+        return doesFit;
+    }
+
+
+    public void copySubspace(ContainerModel subspaceContainer, int z, int y, int x){
+        clone(subspaceContainer);
+        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
+
+        for(int zCoord = z; zCoord < z + subspaceContainer.getContainerZ(); zCoord++){
+            for(int yCoord = y; yCoord < y + subspaceContainer.getContainerY(); yCoord++){
+                for(int xCoord = x; xCoord < x + subspaceContainer.getContainerX(); xCoord++){
+                    containerMatrix[zCoord][yCoord][xCoord] = subspaceMatrix[zCoord - z][yCoord - y][xCoord - x];
+                }
+            }
+
+        }
+    }
+
+/*
     public void copySubspace(ContainerModel subspaceContainer, int i){
         clone(subspaceContainer);
         int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
@@ -275,12 +310,13 @@ public class ContainerModel {
         for(int z = i * subspaceContainer.getContainerZ(); z < (i+1) * subspaceContainer.getContainerZ(); z++){
             for(int y = i * subspaceContainer.getContainerY(); y < (i+1) * subspaceContainer.getContainerY(); y++){
                 for(int x = i * subspaceContainer.getContainerX(); z < (i+1) * subspaceContainer.getContainerX(); x++){
-                    containerMatrix[z][y][x] = subspaceMatrix[z - i * subspaceContainer.getContainerZ()][y - - i * subspaceContainer.getContainerZ()][x - - i * subspaceContainer.getContainerZ()];
+                    containerMatrix[z][y][x] = subspaceMatrix[z - i * subspaceContainer.getContainerZ()][y - i * subspaceContainer.getContainerZ()][x - i * subspaceContainer.getContainerZ()];
                 }
             }
         }
 
     }
+   */
 
     public boolean enoughBlocksForSubspace(){
         //loops through the contained parcel list and counts the nr of each type,
