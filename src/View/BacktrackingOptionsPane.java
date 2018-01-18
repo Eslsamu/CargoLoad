@@ -249,21 +249,18 @@ public class BacktrackingOptionsPane extends VBox{
         //to turn it into milliseconds
         solver.setDelay(timer*1000);
 
+        ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
             case RANDOM :   solver.setParcelList(givenParcels); 
                             solver.solveFirstPackedCargoRandomOrder();
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-
-                            ContainerModel maxValueContainer = new ContainerModel();
                             maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, false);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-
-                            maxValueContainer = new ContainerModel();
                             maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, false);
                             break;

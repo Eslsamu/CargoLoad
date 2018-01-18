@@ -29,7 +29,7 @@ public class ContainerModel {
     static protected int initialContainerX = 5;
     static protected int initialContainerZ = 33;
 
-    private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
+    private int[][][] containerMatrix = new int[initialContainerZ][initialContainerY][initialContainerX];
     private ArrayList<ParcelShape> parcelList;
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
     
@@ -151,9 +151,10 @@ public class ContainerModel {
      */
     public boolean solveBacktracking(ContainerModel maxValueContainer, boolean startTimer, boolean firstCall) {
 
-        Timer timer = new Timer();
-        if (startTimer) {
 
+        if (startTimer) {
+            java.util.Timer timer = new Timer();
+            System.out.println("Timer");
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -209,6 +210,7 @@ public class ContainerModel {
                 }
             }
         }
+
         remainingParcelsEachType = new int[]{AmountTypeA, AmountTypeB, AmountTypeC};
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             System.out.println("Total value container: "+computeTotalValue());
@@ -218,9 +220,17 @@ public class ContainerModel {
             clone(maxValueContainer);
         }
 
-        if(finish||firstCall){
-            timer.cancel();
-            System.out.println("Finish");
+        if(finish){
+                System.out.println("Finish");
+                cloneFinish(maxValueContainer);
+                showResults();
+                return true;
+        }
+
+
+
+        if(firstCall){
+            System.out.println("Finish first call");
             cloneFinish(maxValueContainer);
             showResults();
             return true;
@@ -229,40 +239,40 @@ public class ContainerModel {
         return false;
     }
 
-    public void solveDivideAndConquer(ContainerModel maxValueContainer){
-        int[][] subspaces = {{3,2,5},{3,4,5},{3,8,5},{11,2,5},{11,4,5},{11,8,5}};
-        for(int[] subspace:subspaces){
-            ContainerModel subspaceContainer = new ContainerModel();
-            subspaceContainer.setDimensions(subspace[0],subspace[1],subspace[2]);
-            subspaceContainer.setDelay(2000);
-            subspaceContainer.setParcelList(parcelList);
-
-            ContainerModel maxValueSubspace = new ContainerModel();
-            maxValueSubspace.setDimensions(subspace[0],subspace[1],subspace[2]);
-            maxValueSubspace.setParcelList(parcelList);
-
-            subspaceContainer.solveBacktracking(maxValueSubspace,true,false);
-
-            for (int z = 0; z < containerZ; z++) {
-                for (int y = 0; y < containerY; y++) {
-                    for (int x = 0; x < containerX; x++) {
-                        if(enoughBlocksForSubspace()){
-
-                            if(doesSubspaceFit()){ // check in a clone of the main container, by putting inside each parcel according to its coordinates from
-                                                    //subspaceContainer.getContainedParcels()
-                                copySubspace();
-                            }
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                }
-            }
-            // after copying subspace fill the left space with parcels that are left
-            solveFirstPackedCargoSetAmount();
-        }
-    }
+//    public void solveDivideAndConquer(ContainerModel maxValueContainer){
+//        int[][] subspaces = {{3,2,5},{3,4,5},{3,8,5},{11,2,5},{11,4,5},{11,8,5}};
+//        for(int[] subspace:subspaces){
+//            ContainerModel subspaceContainer = new ContainerModel();
+//            subspaceContainer.setDimensions(subspace[0],subspace[1],subspace[2]);
+//            subspaceContainer.setDelay(2000);
+//            subspaceContainer.setParcelList(parcelList);
+//
+//            ContainerModel maxValueSubspace = new ContainerModel();
+//            maxValueSubspace.setDimensions(subspace[0],subspace[1],subspace[2]);
+//            maxValueSubspace.setParcelList(parcelList);
+//
+//            subspaceContainer.solveBacktracking(maxValueSubspace,true,false);
+//
+//            for (int z = 0; z < containerZ; z++) {
+//                for (int y = 0; y < containerY; y++) {
+//                    for (int x = 0; x < containerX; x++) {
+//                        if(enoughBlocksForSubspace()){
+//
+//                            if(doesSubspaceFit()){ // check in a clone of the main container, by putting inside each parcel according to its coordinates from
+//                                                    //subspaceContainer.getContainedParcels()
+//                                copySubspace();
+//                            }
+//                        }
+//                        else{
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            // after copying subspace fill the left space with parcels that are left
+//            solveFirstPackedCargoSetAmount();
+//        }
+//    }
 
     public void setDelay(int newDelay){
         delay = newDelay;
