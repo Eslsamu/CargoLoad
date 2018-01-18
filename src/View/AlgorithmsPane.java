@@ -47,11 +47,6 @@ public class AlgorithmsPane extends VBox{
         
         setSpacing(20);
         setAlignment(Pos.CENTER);
-<<<<<<< HEAD
     
     }
-    
-=======
-    }  
->>>>>>> 12353d5c2079f2641bf0806dfdb13436c183479a
 }
