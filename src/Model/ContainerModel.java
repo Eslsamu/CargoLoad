@@ -267,7 +267,7 @@ public class ContainerModel {
     }
 
     public boolean enoughBlocksForSubspace(){
-        //loops through the contained parcel list and counts the nr of each type
+        //loops through the contained parcel list and counts the nr of each type,
         //then checks if this is lower than the nr of available parcels left
 
         int nrOfA_needed = 0;
