@@ -209,6 +209,7 @@ public class ContainerModel {
                 }
             }
         }
+
         remainingParcelsEachType = new int[]{AmountTypeA, AmountTypeB, AmountTypeC};
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             System.out.println("Total value container: "+computeTotalValue());
