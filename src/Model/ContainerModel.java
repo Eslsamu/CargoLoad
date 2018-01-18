@@ -1,6 +1,8 @@
 package Model;
 
 import Shapes.Facing;
+import Shapes.ParcelA;
+import Shapes.ParcelC;
 import Shapes.ParcelShape;
 import Util.Coordinates;
 import java.util.ArrayList;
@@ -262,6 +264,28 @@ public class ContainerModel {
             // after copying subspace fill the left space with parcels that are left
             solveFirstPackedCargoSetAmount();
         }
+    }
+
+    public boolean enoughBlocksForSubspace(){
+        //loops through the contained parcel list and counts the nr of each type
+        //then checks if this is lower than the nr of available parcels left
+
+        int nrOfA_needed = 0;
+        int nrOfB_needed = 0;
+        int nrOfC_needed = 0;
+        boolean enoughLeft = true;
+
+        for(ParcelShape parcel : containedParcels){
+            if(parcel instanceof ParcelA) nrOfA_needed++;
+            if(parcel instanceof ParcelB) nrOfB_needed++;
+            if(parcel instanceof ParcelC) nrOfC_needed++;
+        }
+
+        if(nrOfA_needed > remainingParcelsEachType[0]) enoughLeft = false;
+        if(nrOfB_needed > remainingParcelsEachType[1]) enoughLeft = false;
+        if(nrOfC_needed > remainingParcelsEachType[2]) enoughLeft = false;
+
+        return enoughLeft;
     }
 
     public void setDelay(int newDelay){
