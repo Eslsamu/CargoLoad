@@ -258,14 +258,14 @@ public class BacktrackingOptionsPane extends VBox{
 
                             ContainerModel maxValueContainer = new ContainerModel();
                             maxValueContainer.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true);
+                            solver.solveBacktracking(maxValueContainer, true, false);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
 
                             maxValueContainer = new ContainerModel();
                             maxValueContainer.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true);
+                            solver.solveBacktracking(maxValueContainer, true, false);
                             break;
         }
         containedShapes = solver.getContainedParcels();
@@ -287,7 +287,7 @@ public class BacktrackingOptionsPane extends VBox{
             givenParcels.add(new ParcelC());
 
         solver = new ContainerModel();
-        //solver.setDelay(timer*1000);
+        solver.setDelay(timer*1000);
         solver.setAmountOfParcels(a, b, c);
         switch(order){
             case RANDOM :   solver.setParcelList(givenParcels); 
@@ -295,11 +295,11 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true);
+                            solver.solveBacktracking(solver, true, false);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true);
+                            solver.solveBacktracking(solver, true, false);
                             break;
                             
         }
