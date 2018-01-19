@@ -30,6 +30,7 @@ public class ContainerModel {
 
     private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
     private ArrayList<ParcelShape> parcelList;
+
     private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
     
     private int[] remainingParcelsEachType={100,100,100};
@@ -38,7 +39,7 @@ public class ContainerModel {
     private int AmountTypeC = 100;
     private int nonEmptyParcelType = 0;
     private boolean[] triedParcel = new boolean[3];
-    private boolean finish = false;
+    protected boolean finish = false;
     private int delay;
 
 
@@ -181,25 +182,30 @@ public class ContainerModel {
                     if (containerMatrix[z][y][x] == 0) {
                         //for each available parcel type in the parcel list
                         for (int parcelType = nonEmptyParcelType; parcelType < parcelList.size(); parcelType++) {
-                            //create a clone of the current parcel in your list
-                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
-                            //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
-                            
-                            for (Facing o : Facing.values()) {
-                                 currentParcel.setOrientation(o);
-                                //check if this parcel with this orientation can be placed onto these coordinates
-                                if (doesFit(z, y, x, currentParcel)) {
-                                    //place the parcel onto the container matrix
-                                    placeParcel(z, y, x, currentParcel);
-                                    remainingParcelsEachType[parcelType]--;
-                                    //add the parcel object to the containedParcel list
-                                    containedParcels.add(currentParcel);
-                                    if (solveBacktracking(maxValueContainer, startTimer,false)) {
-                                        return true;
-                                    } else {
-                                        removeParcel(currentParcel);
-                                        containedParcels.remove(currentParcel);
-                                        remainingParcelsEachType[parcelType]++;
+                            if(remainingParcelsEachType[parcelType]>0) {
+                                //create a clone of the current parcel in your list
+                                ParcelShape currentParcel = parcelList.get(parcelType).clone();
+                                //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+
+                                for (Facing o : Facing.values()) {
+                                    currentParcel.setOrientation(o);
+                                    //check if this parcel with this orientation can be placed onto these coordinates
+                                    if (doesFit(z, y, x, currentParcel)) {
+                                        //place the parcel onto the container matrix
+                                        placeParcel(z, y, x, currentParcel);
+                                        System.out.println("Remaining" + remainingParcelsEachType[parcelType]);
+                                        remainingParcelsEachType[parcelType]--;
+                                        System.out.println("Remaining2" + remainingParcelsEachType[parcelType]);
+
+                                        //add the parcel object to the containedParcel list
+                                        containedParcels.add(currentParcel);
+                                        if (solveBacktracking(maxValueContainer, startTimer, false)) {
+                                            return true;
+                                        } else {
+                                            removeParcel(currentParcel);
+                                            containedParcels.remove(currentParcel);
+                                            remainingParcelsEachType[parcelType]++;
+                                        }
                                     }
                                 }
                             }
@@ -210,12 +216,13 @@ public class ContainerModel {
             }
         }
 
-        remainingParcelsEachType = new int[]{AmountTypeA, AmountTypeB, AmountTypeC};
+        //remainingParcelsEachType = new int[]{AmountTypeA, AmountTypeB, AmountTypeC};
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             System.out.println("Total value container: "+computeTotalValue());
             System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+            System.out.println(remainingParcelsEachType[0]+" "+remainingParcelsEachType[1]+" "+remainingParcelsEachType[2]);
             System.out.println();
-            printContainer();
+            //printContainer();
             clone(maxValueContainer);
         }
 
@@ -400,6 +407,51 @@ public class ContainerModel {
         return  containerMatrix;
     }
 
+    //only for infinite amount of parcels
+    public boolean solveRandom(ContainerModel maxValueContainer){
+        java.util.Timer timer = new Timer();
+        System.out.println("Timer");
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finish = true;
+                timer.cancel();
+
+            }
+        }, delay);
+        while(true){
+            solveFirstPackedCargoRandomOrder();
+            if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+                System.out.println("Total value container: "+computeTotalValue());
+                System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+                System.out.println();
+
+                clone(maxValueContainer);
+
+
+            }
+
+            if(finish){
+
+                cloneFinish(maxValueContainer);
+                showResults();
+                return true;
+            }
+            newContainer();
+        }
+
+
+    }
+
+    public void newContainer(){
+        setContainedParcels(new ArrayList<>());
+        setContainerMatrix(new int [initialContainerZ][initialContainerY][initialContainerX]);
+
+        setAmountOfParcels(AmountTypeA,AmountTypeB,AmountTypeC);
+        nonEmptyParcelType = 0;
+        triedParcel = new boolean[3];
+    }
+
     public boolean solveFirstPackedCargoRandomOrder(){
 
         //The end condition of the recursive loop --> checks if the container is completely filled
@@ -431,7 +483,6 @@ public class ContainerModel {
                             int parcelType = setRandomParcelType();
 
                             //create a clone of the current parcel in your list
-                            System.out.println(triedParcel[0] + " " + triedParcel[1] + " " + triedParcel[2]);
                             ParcelShape currentParcel = parcelList.get(parcelType).clone();
                             triedParcel[parcelType] = true;
                             //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
@@ -462,7 +513,6 @@ public class ContainerModel {
             }
         }
 
-        System.out.println("check3");
         showResults();
         return true;
     }
@@ -614,8 +664,18 @@ public class ContainerModel {
         AmountTypeA = nrOfA;
         AmountTypeB = nrOfB;
         AmountTypeC = nrOfC;
-        
-        remainingParcelsEachType = new int[]{nrOfA, nrOfB, nrOfC};
+        for(int parcelTypeIndex=0;parcelTypeIndex<parcelList.size();parcelTypeIndex++){
+            if(parcelList.get(parcelTypeIndex) instanceof ParcelA){
+                remainingParcelsEachType[parcelTypeIndex] = nrOfA;
+            }
+            if(parcelList.get(parcelTypeIndex) instanceof ParcelB){
+                remainingParcelsEachType[parcelTypeIndex] = nrOfB;
+            }
+            if(parcelList.get(parcelTypeIndex) instanceof ParcelC){
+                remainingParcelsEachType[parcelTypeIndex] = nrOfC;
+            }
+        }
+
     }
 
     public void setDimensions(int z,int y, int x){
@@ -662,6 +722,9 @@ public class ContainerModel {
             else{
                 i++;
             }
+        }
+        for(ParcelShape parcel:orderedParcelListbyValue){
+            System.out.println(parcel.getValue());
         }
         return orderedParcelListbyValue;
     }

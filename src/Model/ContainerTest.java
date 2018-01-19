@@ -16,15 +16,18 @@ public class ContainerTest {
        
         ContainerModel container = new ContainerModel();
 
-        //givenParcels = container.orderParcelListByValue(givenParcels);
-        givenParcels = container.orderParcelListByRatio(givenParcels);
+        givenParcels = container.orderParcelListByValue(givenParcels);
 
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(20,40,20);
+        //container.setAmountOfParcels(80,10,20);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
-        int delay = 1000; // in milliseconds
+        int delay = 5000; // in milliseconds
         container.setDelay(delay);
-        container.solveBacktracking(maxValueContainer, true,true);
+        container.solveRandom(maxValueContainer);
+        //container.solveBacktracking(maxValueContainer,true,true);
+
+
+
     }
 }
