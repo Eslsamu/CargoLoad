@@ -41,7 +41,7 @@ import javafx.scene.layout.BackgroundSize;
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList();
+    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     
     /**
@@ -108,7 +108,7 @@ public class BacktrackingOptionsPane extends VBox{
             public void handle(ActionEvent e){
                 PentoContainer testContainer = new PentoContainer();
                 testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes());
+                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue());
             }});
         getChildren().add(packPentominoes);
 
@@ -267,7 +267,6 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                         
                             ArrayList<ParcelShape> list1 = solver.getContainedParcels();
@@ -279,6 +278,7 @@ public class BacktrackingOptionsPane extends VBox{
                             container.drawBoxes(containedShapes, solver.computeTotalValue());
                             try{ 
                                 containedShapes.clear();
+                                givenParcels.clear();
                             }
                             catch(Exception e){
                                 
@@ -286,7 +286,6 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             
                             ArrayList<ParcelShape> list = solver.getContainedParcels();
@@ -298,6 +297,7 @@ public class BacktrackingOptionsPane extends VBox{
                             container.drawBoxes(containedShapes, solver.computeTotalValue());
                             try{ 
                                 containedShapes.clear();
+                                givenParcels.clear();
                             }
                             catch(Exception e){
                                 
@@ -345,7 +345,6 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                         
                             ArrayList<ParcelShape> list1 = solver.getContainedParcels();
@@ -364,7 +363,6 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             
                             ArrayList<ParcelShape> list = solver.getContainedParcels();

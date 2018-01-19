@@ -10,6 +10,9 @@ public class PentominoL extends PentominoShape{
 	public PentominoL() {
 		super(name,value,material);
 	}
+        public int getValue(){
+            return value;
+        }
 	
 	@Override
 	public void addChildren() {

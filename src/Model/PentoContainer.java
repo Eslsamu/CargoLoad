@@ -12,6 +12,7 @@ import Util.Axis;
 import Util.Coordinates;
 
 public class PentoContainer {
+        private int value = 0;
 	/*
 	 * the dimensions of the container. can be defined by the user
 	 */
@@ -94,12 +95,14 @@ public class PentoContainer {
 										//check if all of the current pentominos monimoes do fit onto these coordinates in the container
 										if(doesFit(current, new Coordinates(x,y,z))){
 											place(current, new Coordinates(x,y,z));
+                                                                                        value+= current.getValue();
 											iteration--;
 											if(loadContainer(iteration)) {
 												return true;
 											}
 											else {
 												removeLast(current);
+                                                                                                value-= current.getValue();
 											}													
 										}
 									}
@@ -197,6 +200,9 @@ public class PentoContainer {
         System.out.println("holes: "+ holes);
         System.out.println("loaded shapes: "+ loadedPentominoes.size());
     }
+        public int getValue(){
+            return value;
+        }
 
 	public boolean loadContainerRandom(int iteration) {
 		//to find a perfect solution, there have to be 264 pentominoes in the loaded list. 1320(containervolume)/5(pento volume)

@@ -41,7 +41,9 @@ public abstract class PentominoShape {
 		this.material = m;		
 		addChildren();
 	}
-	
+	public int getValue(){
+            return value;
+        }
 	public void rotate(double angle, Axis ax) {
 		for(Monimo m : children) {
 			m.positionParentshape = Algebra.rotateUV(angle,ax,m.positionParentshape);

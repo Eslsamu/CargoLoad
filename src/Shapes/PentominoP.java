@@ -11,7 +11,9 @@ public class PentominoP extends PentominoShape{
 	public PentominoP() {
 		super(name,value, material);
 	}
-	
+	public int getValue(){
+            return value;
+        }
 	@Override
 	public void addChildren() {
 		super.children.add(new Monimo(new Coordinates(0,0,0), material));

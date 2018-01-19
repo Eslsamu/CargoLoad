@@ -50,7 +50,9 @@ public class ContainerPane extends Parent {
     private Group root;
     private TitlePane title;
     private Box container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList();
+    private Camera camera;
+    private SubScene subScene;
+    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
@@ -60,6 +62,7 @@ public class ContainerPane extends Parent {
         this.title = title;
         //add all containers, boxes and camera to a group
         root = new Group();
+        root.setAutoSizeChildren(false);
         
     	//creating container
     	container = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
@@ -82,7 +85,7 @@ public class ContainerPane extends Parent {
     	root.getChildren().add(container);
         
         //create a camera
-        Camera camera = new PerspectiveCamera(true);
+        camera = new PerspectiveCamera(true);
         //add possible rotations and position of camera
         camera.getTransforms().addAll(
                 xAxis, yAxis, zAxis, new Translate(0, 0, -35));
@@ -90,7 +93,7 @@ public class ContainerPane extends Parent {
         root.getChildren().add(camera);
         
         //create a Scene from the group
-        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length, true, SceneAntialiasing.BALANCED);
+        subScene = new SubScene(root, Scene_Width, Scene_Length, true, SceneAntialiasing.BALANCED);
         //set a camera for the scene
         subScene.setCamera(camera);
         getChildren().add(subScene);
@@ -101,6 +104,12 @@ public class ContainerPane extends Parent {
      * @param solver an instance of the ContainerModel that found the solution
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+        root = new Group();
+        root.setAutoSizeChildren(false);
+        subScene.setRoot(root);
+        root.getChildren().clear();
+        root.getChildren().add(container);
+        root.getChildren().add(camera);
         try{ 
         this.containedShapes.clear();
         }
@@ -117,10 +126,9 @@ public class ContainerPane extends Parent {
         //setDisplayedValue
         title.setDisplayedValue(totalValue);
         //clean container if there is anything in it
-        root.getChildren().remove(2, root.getChildren().size());
-        for(int i = 0; i < containedShapes.size(); i++){
-            ParcelShape parcel = containedShapes.get(i).clone();
-            parcel.setCurrentCoordinates(containedShapes.get(i).getPosition().clone());
+        for(int i = 0; i < this.containedShapes.size(); i++){
+            ParcelShape parcel = this.containedShapes.get(i).clone();
+            parcel.setCurrentCoordinates(this.containedShapes.get(i).getPosition().clone());
             int z = parcel.getPosition().getZ();
             int y = parcel.getPosition().getY();
             int x = parcel.getPosition().getX();
@@ -133,17 +141,20 @@ public class ContainerPane extends Parent {
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            if(i != containedShapes.size() - 4){
             root.getChildren().add(box);
             }
+        }
             
     }
     /**
      * This method will draw pentominoes in the container after a solution has been found.
      * @param loadedPentominoes array list with loaded pentominoes
      */
-    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes){
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value){
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
+       title.setDisplayedValue(value);
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < loadedPentominoes.size(); i++){
             Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
