@@ -141,9 +141,9 @@ public class ContainerPane extends Parent {
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
             box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
             box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            if(i != containedShapes.size() - 4){
+            //if(i != containedShapes.size() - 4){
             root.getChildren().add(box);
-            }
+            //}
         }
             
     }
