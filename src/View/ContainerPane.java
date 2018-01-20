@@ -103,7 +103,7 @@ public class ContainerPane extends Parent {
      * @param containedShapes an array list with all boxes in the container
      * @param solver an instance of the ContainerModel that found the solution
      */
-    public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+    public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue, double sth){
         root = new Group();
         root.setAutoSizeChildren(false);
         subScene.setRoot(root);
@@ -135,7 +135,7 @@ public class ContainerPane extends Parent {
             //System.out.println(z + " " + y + " " + x);
             
             //create a box as big as it has small boxes in it
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            Box box = new Box(Box_Width*parcel.getShapeVector().x + sth, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
             box.setDrawMode(DrawMode.FILL);
             box.setMaterial(parcel.getMaterial().toMaterial());
             box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);

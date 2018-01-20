@@ -256,7 +256,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), 0.0001);
                             try{ 
                                 containedShapes.clear();
                             }
@@ -275,7 +275,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), 0);
                             try{ 
                                 containedShapes.clear();
                                 givenParcels.clear();
@@ -294,7 +294,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), -0.0001);
                             try{ 
                                 containedShapes.clear();
                                 givenParcels.clear();
@@ -334,7 +334,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), 0.0001);
                             try{ 
                                 containedShapes.clear();
                             }
@@ -353,7 +353,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), 0);
                             try{ 
                                 containedShapes.clear();
                             }
@@ -371,7 +371,7 @@ public class BacktrackingOptionsPane extends VBox{
                                 someParcel.setCurrentCoordinates(parcel.getPosition().clone());
                                 containedShapes.add(someParcel);
                             }
-                            container.drawBoxes(containedShapes, solver.computeTotalValue());
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), -0.0001);
                             try{ 
                                 containedShapes.clear();
                             }
