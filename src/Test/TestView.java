@@ -18,7 +18,7 @@ public class TestView extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         AppView app = new AppView();
-        Scene scene = new Scene(app);
+        Scene scene = new Scene(app, 1000, 825);
         ViewController controlls = new ViewController(app.getContainer());
         MouseController controlls1 = new MouseController(app.getContainer());
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, controlls1);
