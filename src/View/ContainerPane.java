@@ -1,18 +1,12 @@
 package View;
 
-import Model.ContainerModel;
-import Model.PentoContainer;
 import Shapes.Monimo;
-import Shapes.ParcelA;
-import Shapes.ParcelB;
-import Shapes.ParcelC;
 import Shapes.ParcelShape;
 import Shapes.PentominoShape;
 import Util.Coordinates;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
@@ -21,9 +15,9 @@ import javafx.scene.SubScene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
@@ -35,13 +29,13 @@ import javafx.scene.transform.Translate;
  */
 public class ContainerPane extends Parent {
     //predifined sizes of the container and boxes
-    private double CONTAINER_DEPTH = 16.5;
-    private double CONTAINER_WIDTH = 2.5;
-    private double CONTAINER_HEIGHT = 4.0;
+    private float CONTAINER_DEPTH = 16.5f;
+    private float CONTAINER_WIDTH = 2.5f;
+    private float CONTAINER_HEIGHT = 4.0f;
     //box type small
-    private double Box_Depth = 0.5;
-    private double Box_Width = 0.5;
-    private double Box_Height = 0.5;
+    private float Box_Depth = 0.5f;
+    private float Box_Width = 0.5f;
+    private float Box_Height = 0.5f;
     //set rotation points of camera
     private Rotate xAxis = new Rotate(350, Rotate.X_AXIS);
     private Rotate yAxis = new Rotate(340, Rotate.Y_AXIS);
@@ -49,10 +43,11 @@ public class ContainerPane extends Parent {
     
     private Group root;
     private TitlePane title;
-    private Box container;
-    private Camera camera;
-    private SubScene subScene;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
+    private MeshView container;
+    private ArrayList<ArrayList<ParcelShape>> displayedContainers = new ArrayList<>();
+    private ArrayList<Integer> values = new ArrayList<>();
+    private ArrayList<ArrayList<PentominoShape>> displayedContainers1 = new ArrayList<>();
+    private ArrayList<Integer> values1 = new ArrayList<>();
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
@@ -65,9 +60,10 @@ public class ContainerPane extends Parent {
         root.setAutoSizeChildren(false);
         
     	//creating container
-    	container = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
+    	Box containerMesh = new Box(CONTAINER_WIDTH , CONTAINER_HEIGHT, CONTAINER_DEPTH);
+        container = new MeshView(containerMesh);
         //making the front of the container transparent
-        container.setCullFace(CullFace.BACK);
+        container.setCullFace(CullFace.NONE);
         //drawing the container with only lines
         container.setDrawMode(DrawMode.FILL);
         //setting the color of the container
@@ -85,7 +81,7 @@ public class ContainerPane extends Parent {
     	root.getChildren().add(container);
         
         //create a camera
-        camera = new PerspectiveCamera(true);
+        PerspectiveCamera camera = new PerspectiveCamera(true);
         //add possible rotations and position of camera
         camera.getTransforms().addAll(
                 xAxis, yAxis, zAxis, new Translate(0, 0, -35));
@@ -93,7 +89,7 @@ public class ContainerPane extends Parent {
         root.getChildren().add(camera);
         
         //create a Scene from the group
-        subScene = new SubScene(root, Scene_Width, Scene_Length, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(root, Scene_Width, Scene_Length, true, SceneAntialiasing.BALANCED);
         //set a camera for the scene
         subScene.setCamera(camera);
         getChildren().add(subScene);
@@ -104,43 +100,36 @@ public class ContainerPane extends Parent {
      * @param solver an instance of the ContainerModel that found the solution
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
-        root = new Group();
-        root.setAutoSizeChildren(false);
-        subScene.setRoot(root);
-        root.getChildren().clear();
-        root.getChildren().add(container);
-        root.getChildren().add(camera);
-        try{ 
-        this.containedShapes.clear();
-        }
-        catch(Exception e){
-
-        }
+        ArrayList<ParcelShape> list = new ArrayList<>();
         for(ParcelShape parcel: containedShapes){
             ParcelShape someParcel = parcel.clone();
             someParcel.setCurrentCoordinates(parcel.getPosition().clone());
-            this.containedShapes.add(someParcel);
+            list.add(someParcel);
         }
+        displayedContainers.add(list);
+        values.add(totalValue);
+        root.getChildren().remove(2, root.getChildren().size());
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
         //setDisplayedValue
         title.setDisplayedValue(totalValue);
         //clean container if there is anything in it
-        for(int i = 0; i < this.containedShapes.size(); i++){
-            ParcelShape parcel = this.containedShapes.get(i).clone();
-            parcel.setCurrentCoordinates(this.containedShapes.get(i).getPosition().clone());
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i).clone();
+            parcel.setCurrentCoordinates(containedShapes.get(i).getPosition().clone());
             int z = parcel.getPosition().getZ();
             int y = parcel.getPosition().getY();
             int x = parcel.getPosition().getX();
             //System.out.println(z + " " + y + " " + x);
             
             //create a box as big as it has small boxes in it
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            Box boxMesh = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            MeshView box = new MeshView(boxMesh);
             box.setDrawMode(DrawMode.FILL);
             box.setMaterial(parcel.getMaterial().toMaterial());
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
+            box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*z);
             //if(i != containedShapes.size() - 4){
             root.getChildren().add(box);
             //}
@@ -152,9 +141,12 @@ public class ContainerPane extends Parent {
      * @param loadedPentominoes array list with loaded pentominoes
      */
     public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value){
+        ArrayList<PentominoShape> pentominoes = new ArrayList<>(loadedPentominoes);
+        displayedContainers1.add(pentominoes);
+        values1.add(value);
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
-       title.setDisplayedValue(value);
+        title.setDisplayedValue(value);
         root.getChildren().remove(2, root.getChildren().size());
         for(int i = 0; i < loadedPentominoes.size(); i++){
             Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
@@ -163,12 +155,13 @@ public class ContainerPane extends Parent {
             for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
                 Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
                 
-                Box box = new Box(Box_Width, Box_Height, Box_Depth);
+                Box boxMesh = new Box(Box_Width, Box_Height, Box_Depth);
+                MeshView box = new MeshView(boxMesh);
                 box.setDrawMode(DrawMode.FILL);
                 box.setMaterial(new PhongMaterial(ranColor));
-                box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*coordinates.getY());
-                box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*coordinates.getX());
-                box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*coordinates.getZ());
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*coordinates.getY());
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*coordinates.getX());
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*coordinates.getZ());
                 root.getChildren().add(box);
             }
         }
@@ -214,47 +207,16 @@ public class ContainerPane extends Parent {
         };
         container.setMaterial(material);    
     }
-    public void drawOneByOne(int n){
-        container.setCullFace(CullFace.FRONT);
-        container.setDrawMode(DrawMode.LINE);
-        //setDisplayedValue
-        //title.setDisplayedValue(totalValue);
-        //clean container if there is anything in it
-            ParcelShape parcel = containedShapes.get(n);
-            int z = parcel.getPosition().getZ();
-            int y = parcel.getPosition().getY();
-            int x = parcel.getPosition().getX();
-            
-            //create a box as big as it has small boxes in it
-            Box box = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
-            box.setDrawMode(DrawMode.FILL);
-            box.setMaterial(parcel.getMaterial().toMaterial());
-            box.setTranslateX(-CONTAINER_WIDTH/2 + box.getWidth()/2 + 0.5*x);
-            box.setTranslateY(-CONTAINER_HEIGHT/2 + box.getHeight()/2 + 0.5*y);
-            box.setTranslateZ(CONTAINER_DEPTH/2 - box.getDepth()/2 - 0.5*z);
-            root.getChildren().add(box);
+    public int containers(){
+        return values.size();
     }
-    public void remove(){
-        root.getChildren().remove(root.getChildren().size() - 1);
-    } 
-     public void printContainedShapes(){
-        for(int  i = 0; i < containedShapes.size(); i++){
-            System.out.println("Parcel: " + i);
-            ParcelShape parcel = containedShapes.get(i);
-            int z = parcel.getPosition().getZ();
-            int y = parcel.getPosition().getY();
-            int x = parcel.getPosition().getX();
-            
-            for(int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++){
-                for(int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++){
-                    for(int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++){
-                        System.out.println("X: " + xCoord + " Y: " + yCoord + " Z: " + zCoord);
-                    }
-                }
-            }
-        }    
+    public int containers1(){
+        return values1.size();
     }
-    public int getSize(){
-        return containedShapes.size();
+    public void drawContainers(int n){
+        drawBoxes(displayedContainers.get(n), values.get(n));
+    }
+    public void drawContainers1(int n){
+        drawPentominoes(displayedContainers1.get(n), values1.get(n));
     }
 }       

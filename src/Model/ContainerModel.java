@@ -18,29 +18,24 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    // these are need for subspaces
     protected int containerY = 8;
     protected int containerX = 5;
     protected int containerZ = 33;
 
+    protected int[][][] containerMatrix = new int[containerZ][containerY][containerX];
+    protected ArrayList<ParcelShape> parcelList;
 
-    static protected int initialContainerY = 8;
-    static protected int initialContainerX = 5;
-    static protected int initialContainerZ = 33;
-
-    private int[][][] containerMatrix = new int[containerZ][containerY][containerX];
-    private ArrayList<ParcelShape> parcelList;
-
-    private ArrayList<ParcelShape> containedParcels = new ArrayList<>();
+    protected ArrayList<ParcelShape> containedParcels = new ArrayList<>();
     
-    private int[] remainingParcelsEachType={100,100,100};
-    private int AmountTypeA = 100;
-    private int AmountTypeB = 100;
-    private int AmountTypeC = 100;
-    private int nonEmptyParcelType = 0;
-    private boolean[] triedParcel = new boolean[3];
+    protected int[] remainingParcelsEachType={100,100,100};
+    protected int AmountTypeA = 100;
+    protected int AmountTypeB = 100;
+    protected int AmountTypeC = 100;
+    protected int nonEmptyParcelType = 0;
+    protected boolean[] triedParcel = new boolean[3];
     protected boolean finish = false;
-    private int delay;
+    protected int delay;
+    protected Subspace subspace;
 
 
     /**
@@ -93,7 +88,6 @@ public class ContainerModel {
         return true;
     }
     public boolean solveFirstPackedCargoSetAmount(){
-        //System.out.println("test");
         //printContainer();
 
         //The end condition of the recursive loop --> checks if the container is completely filled
@@ -153,7 +147,6 @@ public class ContainerModel {
 
         if (startTimer) {
             java.util.Timer timer = new Timer();
-            System.out.println("Timer");
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -193,10 +186,7 @@ public class ContainerModel {
                                     if (doesFit(z, y, x, currentParcel)) {
                                         //place the parcel onto the container matrix
                                         placeParcel(z, y, x, currentParcel);
-                                        System.out.println("Remaining" + remainingParcelsEachType[parcelType]);
                                         remainingParcelsEachType[parcelType]--;
-                                        System.out.println("Remaining2" + remainingParcelsEachType[parcelType]);
-
                                         //add the parcel object to the containedParcel list
                                         containedParcels.add(currentParcel);
                                         if (solveBacktracking(maxValueContainer, startTimer, false)) {
@@ -220,7 +210,6 @@ public class ContainerModel {
         if(computeTotalValue()>maxValueContainer.computeTotalValue()){
             System.out.println("Total value container: "+computeTotalValue());
             System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
-            System.out.println(remainingParcelsEachType[0]+" "+remainingParcelsEachType[1]+" "+remainingParcelsEachType[2]);
             System.out.println();
             //printContainer();
             clone(maxValueContainer);
@@ -239,7 +228,7 @@ public class ContainerModel {
             System.out.println("Finish first call");
             cloneFinish(maxValueContainer);
             showResults();
-            printContainedShapes();
+//            printContainedShapes();
             return true;
         }
 
@@ -247,28 +236,31 @@ public class ContainerModel {
     }
 
     public void solveDivideAndConquer(ContainerModel maxValueContainer){
-        int[][] subspaces = {{3,2,5},{3,4,5},{3,8,5},{11,2,5},{11,4,5},{11,8,5}};
-        for(int[] subspace:subspaces){
-            ContainerModel subspaceContainer = new ContainerModel();
-            subspaceContainer.setDimensions(subspace[0],subspace[1],subspace[2]);
-            subspaceContainer.setDelay(2000);
-            subspaceContainer.setParcelList(parcelList);
 
-            ContainerModel maxValueSubspace = new ContainerModel();
-            maxValueSubspace.setDimensions(subspace[0],subspace[1],subspace[2]);
-            maxValueSubspace.setParcelList(parcelList);
 
-            subspaceContainer.solveBacktracking(maxValueSubspace,true,false);
 
+        ArrayList<int[]> subspaces = generateSubspaces();
+        for(int[] subspaceShape:subspaces){
+            newContainer();
+            System.out.println("Subspace "+subspaceShape[0]+" "+subspaceShape[1]+" "+subspaceShape[2]);
+
+            subspace = new Subspace(subspaceShape[0],subspaceShape[1],subspaceShape[2],parcelList);
+            subspace.setDelay(delay);
+
+            Subspace maxValueSubspace = new Subspace(subspaceShape[0],subspaceShape[1],subspaceShape[2],parcelList);
+
+            subspace.solveBacktracking(maxValueSubspace,true,true);
+            subspace.computeNeededParcels();
              for (int z = 0; z < containerZ; z++) {
                for (int y = 0; y < containerY; y++) {
                     for (int x = 0; x < containerX; x++) {
 
                         if(enoughBlocksForSubspace()){
 
-                            if(doesSubspaceFit(subspaceContainer, z, y, x)){ // check in a clone of the main container, by putting inside each parcel according to its coordinates from
-                                                    //subspaceContainer.getContainedParcels()
-                                copySubspace(subspaceContainer, z, y, x);
+                            if(doesSubspaceFit(z, y, x)){
+                                // check in a clone of the main container, by putting inside each parcel according to its coordinates from
+                                //subspace.getContainedParcels()
+                                copySubspace(z, y, x);
                             }
                         }
                         else{
@@ -277,25 +269,80 @@ public class ContainerModel {
                     }
                 }
             }
+            System.out.println("Compute container for current subspace"+computeTotalValue());
             // after copying subspace fill the left space with parcels that are left
             solveFirstPackedCargoSetAmount();
+            System.out.println("Compute container for current subspace"+computeTotalValue());
+            if(computeTotalValue()>maxValueContainer.computeTotalValue()){
+                System.out.println("Total value container: "+computeTotalValue());
+                System.out.println("Total value maxContainer: "+maxValueContainer.computeTotalValue());
+                System.out.println();
+                clone(maxValueContainer);
+            }
         }
+        System.out.println("Finish");
+        cloneFinish(maxValueContainer);
+        showResults();
     }
 
-    public boolean doesSubspaceFit(ContainerModel subspaceContainer, int z, int y, int x) {
-        clone(subspaceContainer);
-        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
+    public ArrayList<int[]> generateSubspaces(){
+        ArrayList<int[]> subspaces = new ArrayList<>();
+
+
+        ArrayList<Integer> zFactors = new ArrayList<>();
+        ArrayList<Integer> yFactors = new ArrayList<>();
+        ArrayList<Integer> xFactors = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> dimensionsFactors = new ArrayList<>();
+        dimensionsFactors.add(zFactors);
+        dimensionsFactors.add(yFactors);
+        dimensionsFactors.add(xFactors);
+        int z = containerZ;
+        int y = containerY;
+        int x = containerX;
+        int[] tempDimensions = {z,y,x};
+        for(int i=0;i<3;i++){
+            int temp = tempDimensions[i];
+            int sqrt = (int)Math.sqrt(tempDimensions[i]);
+            for(int divisor = 2;divisor<temp;divisor++){
+                if(tempDimensions[i]%divisor==0){
+                    dimensionsFactors.get(i).add(divisor);
+                    tempDimensions[i] /= divisor;
+                }
+            }
+            dimensionsFactors.get(i).add(temp);
+        }
+        for(int zFactor=0; zFactor<dimensionsFactors.get(0).size(); zFactor++){
+            for(int yFactor=0; yFactor<dimensionsFactors.get(1).size(); yFactor++){
+                for(int xFactor=0; xFactor<dimensionsFactors.get(2).size(); xFactor++){
+                    int[] subspace = {dimensionsFactors.get(0).get(zFactor),dimensionsFactors.get(1).get(yFactor),dimensionsFactors.get(2).get(xFactor)};
+                    System.out.println(dimensionsFactors.get(0).get(zFactor)+" "+dimensionsFactors.get(1).get(yFactor)+" "+dimensionsFactors.get(2).get(xFactor));
+                    subspaces.add(subspace);
+                }
+            }
+        }
+        boolean containWholeContainer = false;
+        if(!containWholeContainer){
+            subspaces.remove(subspaces.size()-1);
+        }
+        return  subspaces;
+    }
+
+
+    public boolean doesSubspaceFit(int z, int y, int x) {
+        //clone(subspace);
         boolean doesFit = true;
 
-        if( (z + subspaceContainer.getContainerZ() > initialContainerZ ) ||
-            (y + subspaceContainer.getContainerY() > initialContainerY ) ||
-            (x + subspaceContainer.getContainerX() > initialContainerX))
+        if( (z + subspace.containerZ > containerZ ) ||
+            (y + subspace.containerY > containerY ) ||
+            (x + subspace.containerX > containerX))
                 return false;
 
-        for (int zCoord = z; zCoord < z + subspaceContainer.getContainerZ(); zCoord++) {
-            for (int yCoord = y; yCoord < y + subspaceContainer.getContainerY(); yCoord++) {
-                for (int xCoord = x; xCoord < x + subspaceContainer.getContainerX(); xCoord++) {
-                    if(containerMatrix[zCoord][yCoord][xCoord] == 1 && subspaceMatrix[zCoord - z][yCoord - y][xCoord - x] == 1)
+        for (int zCoord = z; zCoord < z + subspace.containerZ; zCoord++) {
+            for (int yCoord = y; yCoord < y + subspace.containerY; yCoord++) {
+                for (int xCoord = x; xCoord < x + subspace.containerX; xCoord++) {
+                    // if container's voxel is 1 and subspace's voxel is 0 - it's ok
+                    // if container's voxel is 0 and subspace's voxel is 1 - it's ok
+                    if(containerMatrix[zCoord][yCoord][xCoord] == 1 && subspace.containerMatrix[zCoord - z][yCoord - y][xCoord - x] == 1)
                         doesFit = false;
                 }
             }
@@ -304,56 +351,43 @@ public class ContainerModel {
     }
 
 
-    public void copySubspace(ContainerModel subspaceContainer, int z, int y, int x){
-        clone(subspaceContainer);
-        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
+    public void copySubspace(int z, int y, int x){
+        for(int zCoord = z; zCoord < z + subspace.containerZ; zCoord++){
+            for(int yCoord = y; yCoord < y + subspace.containerY; yCoord++){
+                for(int xCoord = x; xCoord < x + subspace.containerX; xCoord++){
+                    containerMatrix[zCoord][yCoord][xCoord] = subspace.containerMatrix[zCoord - z][yCoord - y][xCoord - x];
 
-        for(int zCoord = z; zCoord < z + subspaceContainer.getContainerZ(); zCoord++){
-            for(int yCoord = y; yCoord < y + subspaceContainer.getContainerY(); yCoord++){
-                for(int xCoord = x; xCoord < x + subspaceContainer.getContainerX(); xCoord++){
-                    containerMatrix[zCoord][yCoord][xCoord] = subspaceMatrix[zCoord - z][yCoord - y][xCoord - x];
-                }
-            }
 
-        }
-    }
-
-/*
-    public void copySubspace(ContainerModel subspaceContainer, int i){
-        clone(subspaceContainer);
-        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
-
-        //i = nrOfPlacedSubspaces
-
-        for(int z = i * subspaceContainer.getContainerZ(); z < (i+1) * subspaceContainer.getContainerZ(); z++){
-            for(int y = i * subspaceContainer.getContainerY(); y < (i+1) * subspaceContainer.getContainerY(); y++){
-                for(int x = i * subspaceContainer.getContainerX(); z < (i+1) * subspaceContainer.getContainerX(); x++){
-                    containerMatrix[z][y][x] = subspaceMatrix[z - i * subspaceContainer.getContainerZ()][y - i * subspaceContainer.getContainerZ()][x - i * subspaceContainer.getContainerZ()];
                 }
             }
         }
-
+        containedParcels.addAll(subspace.containedParcels);
+        deductNeededParcels();
     }
-   */
 
-    public boolean enoughBlocksForSubspace(){
+    private void deductNeededParcels() {
+
+        for (int parcelTypeIndex = 0; parcelTypeIndex < parcelList.size(); parcelTypeIndex++) {
+            remainingParcelsEachType[parcelTypeIndex] -= subspace.neededParcels[parcelTypeIndex];
+        }
+    }
+
+
+
+    boolean enoughBlocksForSubspace(){
         //loops through the contained parcel list and counts the nr of each type,
         //then checks if this is lower than the nr of available parcels left
 
-        int nrOfA_needed = 0;
-        int nrOfB_needed = 0;
-        int nrOfC_needed = 0;
         boolean enoughLeft = true;
-
-        for(ParcelShape parcel : containedParcels){
-            if(parcel instanceof ParcelA) nrOfA_needed++;
-            if(parcel instanceof ParcelB) nrOfB_needed++;
-            if(parcel instanceof ParcelC) nrOfC_needed++;
+        if(subspace.neededParcels[0] > remainingParcelsEachType[0]){
+            enoughLeft = false;
         }
-
-        if(nrOfA_needed > remainingParcelsEachType[0]) enoughLeft = false;
-        if(nrOfB_needed > remainingParcelsEachType[1]) enoughLeft = false;
-        if(nrOfC_needed > remainingParcelsEachType[2]) enoughLeft = false;
+        if(subspace.neededParcels[1] > remainingParcelsEachType[1]){
+            enoughLeft = false;
+        }
+        if(subspace.neededParcels[2] > remainingParcelsEachType[2]){
+            enoughLeft = false;
+        }
 
         return enoughLeft;
     }
@@ -410,7 +444,6 @@ public class ContainerModel {
     //only for infinite amount of parcels
     public boolean solveRandom(ContainerModel maxValueContainer){
         java.util.Timer timer = new Timer();
-        System.out.println("Timer");
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -445,7 +478,7 @@ public class ContainerModel {
 
     public void newContainer(){
         setContainedParcels(new ArrayList<>());
-        setContainerMatrix(new int [initialContainerZ][initialContainerY][initialContainerX]);
+        setContainerMatrix(new int [containerZ][containerY][containerX]);
 
         setAmountOfParcels(AmountTypeA,AmountTypeB,AmountTypeC);
         nonEmptyParcelType = 0;
@@ -490,7 +523,6 @@ public class ContainerModel {
                                 currentParcel.setOrientation(o);
                                 //check if this parcel with this orientation can be placed onto these coordinates
                                 if (doesFit(z, y, x, currentParcel)) {
-                                    System.out.println("check2");
                                     //place the parcel onto the container matrix
                                     placeParcel(z, y, x, currentParcel);
                                     remainingParcelsEachType[parcelType]--;
@@ -664,25 +696,26 @@ public class ContainerModel {
         AmountTypeA = nrOfA;
         AmountTypeB = nrOfB;
         AmountTypeC = nrOfC;
-        for(int parcelTypeIndex=0;parcelTypeIndex<parcelList.size();parcelTypeIndex++){
-            if(parcelList.get(parcelTypeIndex) instanceof ParcelA){
-                remainingParcelsEachType[parcelTypeIndex] = nrOfA;
+        /**
+         * Always run this method after calling setParcelList().This method needs a parcelList containing parcels to run correctly,
+         * however before running setParcelList() the parcelList doesn't contain any value.
+         *
+         */
+            for(int parcelTypeIndex=0;parcelTypeIndex<parcelList.size();parcelTypeIndex++){
+                if(parcelList.get(parcelTypeIndex) instanceof ParcelA){
+                    remainingParcelsEachType[parcelTypeIndex] = nrOfA;
+                }
+                if(parcelList.get(parcelTypeIndex) instanceof ParcelB){
+                    remainingParcelsEachType[parcelTypeIndex] = nrOfB;
+                }
+                if(parcelList.get(parcelTypeIndex) instanceof ParcelC){
+                    remainingParcelsEachType[parcelTypeIndex] = nrOfC;
+                }
             }
-            if(parcelList.get(parcelTypeIndex) instanceof ParcelB){
-                remainingParcelsEachType[parcelTypeIndex] = nrOfB;
-            }
-            if(parcelList.get(parcelTypeIndex) instanceof ParcelC){
-                remainingParcelsEachType[parcelTypeIndex] = nrOfC;
-            }
-        }
 
     }
 
-    public void setDimensions(int z,int y, int x){
-        containerZ = z;
-        containerY = y;
-        containerX = x;
-    }
+
 
     //when setAmountOfParcels is called without parameters we consider the amount of each parcel as "infinite"
     public void setAmountOfParcels() {
@@ -722,9 +755,6 @@ public class ContainerModel {
             else{
                 i++;
             }
-        }
-        for(ParcelShape parcel:orderedParcelListbyValue){
-            System.out.println(parcel.getValue());
         }
         return orderedParcelListbyValue;
     }
