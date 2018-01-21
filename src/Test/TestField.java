@@ -12,7 +12,7 @@ public class TestField {
 		 testF.container[4][4]=true;
 		 testF.container[3][5]=true;
 
-		 for(int[] rect : testF.largestRectangles(new int[]{0,6,3,0,4,5,5,0,5,0})) {
+		 for(int[] rect : testF.findRectangles2D(testF.container)) {
 			 System.out.print("pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
 			 System.out.println();
 		 }
@@ -63,21 +63,33 @@ public class TestField {
 		 }
 	 }
 	 
-	 public void find(){
-		 int[] histogram = new int[container[0].length];
-		 for(int row = 0; row < container.length; row++) {
-			 for(int col = 0; col < container[0].length;col++) {
-				 if(container[row][col]) histogram[col]++;  
-				 else 					 histogram[col]=0;
+	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
+		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
+		 int[] heights = new int[matrix[0].length];
+		 for(int rows = 0; rows < matrix.length;rows++) {
+			 ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
+			 for(int col = 0; col < heights.length; col++) {
+				 if(matrix[rows][col])heights[col]++;
+				 else {
+					 rectanglesRow.addAll(largestRectangles(heights));
+					 for(int[] rect: rectanglesRow) {
+						 if(rectangleFinished(heights,col)) foundRectangles.add(rect); 
+					 }
+				 }
 			 }
-			 
 		 }
+		 return foundRectangles;
+	 }
+	 public boolean rectangleFinished(int[] rect, int pos) {
+		 if(rect[0]<=pos&&(rect[0]+rect[2])>=pos) return true;
+		 else return false;
 	 }
 	 
-	 //time: O(n), space:O(n)
+	 //time: O(n), space:O(n) n =indexes
 	 public ArrayList<int[]> largestRectangles(int[] height) {
-		 	ArrayList<int[]> listRect = new ArrayList<int[]>();
-		 
+		 	ArrayList<int[]> potentialRect = new ArrayList<int[]>();
+		 	
+		 	
 			if (height == null || height.length == 0) {
 				return null;
 			}
