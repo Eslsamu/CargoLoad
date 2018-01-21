@@ -1,6 +1,7 @@
 package Test;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class TestField {
 	 boolean[][] container = new boolean[6][6];
@@ -11,9 +12,10 @@ public class TestField {
 		 testF.container[4][4]=true;
 		 testF.container[3][5]=true;
 
-		 
-		 testF.find(0, 0);
-		 testF.printList();
+		 for(int[] rect : testF.largestRectangles(new int[]{0,6,3,0,4,5,5,0,5,0})) {
+			 System.out.print("pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+			 System.out.println();
+		 }
 	 }
 	 
 	 class SubSpace {
@@ -34,27 +36,6 @@ public class TestField {
 		 }
 	 }
 	 
-	 public void findMaxSpaces(int startX,int startY) {
-		 int vX = container.length;
-		 int vY = container[0].length;
-		 
-		 //into y direction 
-		 
-		 
-		 for(int x = startX; x < vX; x++) {
-			 if(x == vX-1 && vY > 0) maxSpaces.add(new SubSpace(x+1, vY, startX,startY));
-			 for(int y = startY; y < vY; y++) {
-				 if(container[x][y]) {
-					 if(x > 0) {
-						 maxSpaces.add(new SubSpace(x,vY,startX,startY));
-					 }
-					 if(y <= 0) break;
-					 vY = y;
-				 }
-				 
-			 }
-		 }
-	 }
 	 
 	 public void find(int startX, int startY) {
 		 int xMax = container.length;
@@ -81,7 +62,76 @@ public class TestField {
 			 }
 		 }
 	 }
-
+	 
+	 public void find(){
+		 int[] histogram = new int[container[0].length];
+		 for(int row = 0; row < container.length; row++) {
+			 for(int col = 0; col < container[0].length;col++) {
+				 if(container[row][col]) histogram[col]++;  
+				 else 					 histogram[col]=0;
+			 }
+			 
+		 }
+	 }
+	 
+	 //time: O(n), space:O(n)
+	 public ArrayList<int[]> largestRectangles(int[] height) {
+		 	ArrayList<int[]> listRect = new ArrayList<int[]>();
+		 
+			if (height == null || height.length == 0) {
+				return null;
+			}
+		 
+			Stack<Integer> hStack = new Stack<Integer>();
+			Stack<Integer> pStack = new Stack<Integer>();
+			
+			int pos = 0;
+			
+			while (pos < height.length) {
+				
+				//if the height is bigger than the top of the stack, then add the position and an increasing height
+				//to both stacks until the peek of hStack is equal to the height of the current position
+				if (hStack.empty()) {
+					for(int i = 0; i <= height[pos]; i++) {
+					hStack.push(i);
+					pStack.push(pos);
+					System.out.println("push "+i+" "+pos);
+					}
+				}
+				else if(hStack.peek()==height[pos]) pos++;
+				else if(hStack.peek()>height[pos]) {
+					int p = pStack.pop();
+					int h = hStack.pop();
+					int w = pos-p;
+					System.out.println("pop "+h+" "+p);
+					int[] lastRect = listRect.size()==0 ? null : listRect.get(listRect.size()-1);
+					if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)) {
+						listRect.add(new int[]{p,h,w});
+					}
+				}
+				//if height(pos) is bigger than hStack
+				else{
+					for(int i = hStack.peek()+1; i <= height[pos];i++) {
+						pStack.push(pos);
+						hStack.push(i);
+						System.out.println("push "+i+" "+pos);
+					}
+				}
+				//System.out.println(pStack.peek()+" "+hStack.peek()+" "+pos+" "+height[pos]);
+			}
+			
+			while (!hStack.isEmpty()) {
+				int p = pStack.isEmpty() ? 0 : pStack.pop();
+				int h = hStack.pop();
+				int w = height.length-p;
+				int[] lastRect = listRect.size()==0 ? null : listRect.get(listRect.size()-1);
+				if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)) {
+					listRect.add(new int[]{p,h,w});
+				};
+			}
+		 
+			return listRect;
+		}
 	 
 	 public void printList() {
 		 for(SubSpace s : maxSpaces) {

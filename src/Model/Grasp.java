@@ -7,8 +7,8 @@ import java.util.*;
 import Util.Coordinates;
 
 public class Grasp {
-
-    private int[][][] containerMatrix = new int[ContainerModel.initialContainerX][ContainerModel.initialContainerY][ContainerModel.initialContainerX];
+    ContainerModel exampleContainer = new ContainerModel();
+    private int[][][] containerMatrix = new int[exampleContainer.containerX][exampleContainer.containerY][exampleContainer.containerX];
 
     private ArrayList<ParcelShape> typesLeft = new  ArrayList<ParcelShape>(); //parcel types (A,B,C) of which there are still atleast 1 parcel left (should maybe have type of chars or enums instead of ParcelShape?)
     private int A_ParcelsLeft;
@@ -21,13 +21,13 @@ public class Grasp {
 
     /*
     private final static Coordinates v1 = new Coordinates(0,0,0);
-    private final static Coordinates v2 = new Coordinates(ContainerModel.initialContainerX,0,0);
-    private final static Coordinates v3 = new Coordinates(0,ContainerModel.initialContainerY,0);
-    private final static Coordinates v4 = new Coordinates(0,0,ContainerModel.initialContainerZ);
-    private final static Coordinates v5 = new Coordinates(ContainerModel.initialContainerX,ContainerModel.initialContainerY,0);
-    private final static Coordinates v6 = new Coordinates(ContainerModel.initialContainerX,0,ContainerModel.initialContainerZ);
-    private final static Coordinates v7 = new Coordinates(0,ContainerModel.initialContainerY,ContainerModel.initialContainerZ);
-    private final static Coordinates v8 = new Coordinates(ContainerModel.initialContainerX,ContainerModel.initialContainerY,ContainerModel.initialContainerZ);
+    private final static Coordinates v2 = new Coordinates(exampleContainer.containerX,0,0);
+    private final static Coordinates v3 = new Coordinates(0,exampleContainer.containerY,0);
+    private final static Coordinates v4 = new Coordinates(0,0,exampleContainer.containerZ);
+    private final static Coordinates v5 = new Coordinates(exampleContainer.containerX,exampleContainer.containerY,0);
+    private final static Coordinates v6 = new Coordinates(exampleContainer.containerX,0,exampleContainer.containerZ);
+    private final static Coordinates v7 = new Coordinates(0,exampleContainer.containerY,exampleContainer.containerZ);
+    private final static Coordinates v8 = new Coordinates(exampleContainer.containerX,exampleContainer.containerY,exampleContainer.containerZ);
     */
 
     public Grasp(int nrOfA, int nrOfB, int nrOfC){
@@ -36,11 +36,11 @@ public class Grasp {
         C_ParcelsLeft = nrOfC;
 
         Coordinates containerMinCoords = new Coordinates(0,0,0);
-        Coordinates containerMaxCoords = new Coordinates(ContainerModel.initialContainerX,ContainerModel.initialContainerY,ContainerModel.initialContainerZ);
+        Coordinates containerMaxCoords = new Coordinates(exampleContainer.containerX,exampleContainer.containerY,exampleContainer.containerZ);
         containerVertices = findAllVertices(containerMinCoords,containerMaxCoords);
 
         Coordinates initialMinCoords = new Coordinates(0,0,0);
-        Coordinates initialMaxCoords = new Coordinates(ContainerModel.initialContainerX, ContainerModel.initialContainerY, ContainerModel.initialContainerZ);
+        Coordinates initialMaxCoords = new Coordinates(exampleContainer.containerX, exampleContainer.containerY, exampleContainer.containerZ);
         MaximalSpace initialMaximalSpace = new MaximalSpace(initialMinCoords,initialMaxCoords);
         maximalSpaces.add(initialMaximalSpace);
     }
@@ -159,11 +159,11 @@ public class Grasp {
     }
 
     public void testPrintContainer(){
-        for(int z=0;z<ContainerModel.initialContainerZ;z++){
+        for(int z=0;z<exampleContainer.containerZ;z++){
             System.out.println("Layer for z = "+z);
-            for(int y =0;y<ContainerModel.initialContainerY;y++){
-                for (int x=0;x<ContainerModel.initialContainerX;x++){
-                    System.out.print(containerMatrix[z][ContainerModel.initialContainerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+            for(int y =0;y<exampleContainer.containerY;y++){
+                for (int x=0;x<exampleContainer.containerX;x++){
+                    System.out.print(containerMatrix[z][exampleContainer.containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
                 }
                 System.out.println();
             }
@@ -215,13 +215,13 @@ public class Grasp {
             int y = blockVertices[i].getY();
             int x = blockVertices[i].getX();
 
-            for (; z < ContainerModel.initialContainerZ-1 && containerMatrix[z][y][x] == 1; z++) {
+            for (; z < exampleContainer.containerZ-1 && containerMatrix[z][y][x] == 1; z++) {
                 int zDimension = z;
             }
-            for (; y < ContainerModel.initialContainerY-1 && containerMatrix[z][y][x] == 1; y++) {
+            for (; y < exampleContainer.containerY-1 && containerMatrix[z][y][x] == 1; y++) {
                 int yDimension = y;
             }
-            for (; x < ContainerModel.initialContainerX-1 && containerMatrix[z][y][x] == 1; x++) {
+            for (; x < exampleContainer.containerX-1 && containerMatrix[z][y][x] == 1; x++) {
                 int xDimension = x;
             }
 
@@ -237,9 +237,9 @@ public class Grasp {
 
 /*
         for(int i = 0; i < blockVertices.length; i++){
-            for(int z = blockVertices[i].getZ(); z < ContainerModel.initialContainerZ || containerMatrix[z][y][x] == 1; z++){
-                for(int y = blockVertices[i].getY(); y < ContainerModel.initialContainerY || containerMatrix[z][y][x] == 1; y++){
-                    for(int x = blockVertices[i].getX(); x < ContainerModel.initialContainerX || containerMatrix[z][y][x] == 1; x++){
+            for(int z = blockVertices[i].getZ(); z < exampleContainer.containerZ || containerMatrix[z][y][x] == 1; z++){
+                for(int y = blockVertices[i].getY(); y < exampleContainer.containerY || containerMatrix[z][y][x] == 1; y++){
+                    for(int x = blockVertices[i].getX(); x < exampleContainer.containerX || containerMatrix[z][y][x] == 1; x++){
 
                         Coordinates minCoords = new Coordinates(blockVertices[i].getX(), y, blockVertices[i].getZ());
                         Coordinates maxCoords = new Coordinates(x, blockVertices[i].getY(), z);

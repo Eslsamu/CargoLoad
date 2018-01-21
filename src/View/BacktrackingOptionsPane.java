@@ -269,8 +269,8 @@ public class BacktrackingOptionsPane extends VBox{
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels); 
-                            solver.solveFirstPackedCargoRandomOrder();
+            case RANDOM :   solver.setParcelList(givenParcels);
+                            solver.solveRandom(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
                             container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, infinite amount boxes");
                             break;
@@ -306,16 +306,17 @@ public class BacktrackingOptionsPane extends VBox{
 
         solver = new ContainerModel();
         solver.setDelay(timer*1000);
-        solver.setAmountOfParcels(a, b, c);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels); 
-                            solver.solveFirstPackedCargoRandomOrder();
+            case RANDOM :   solver.setParcelList(givenParcels);
+                            solver.setAmountOfParcels(a, b, c);
+                            solver.solveRandom(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
                             container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
+                            solver.setAmountOfParcels(a, b, c);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
                             container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
@@ -323,7 +324,7 @@ public class BacktrackingOptionsPane extends VBox{
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true, true);
+                            solver.setAmountOfParcels(a, b, c);solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
                             container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
