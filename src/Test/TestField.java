@@ -38,32 +38,6 @@ public class TestField {
 	 }
 	 
 	 
-	 public void find(int startX, int startY) {
-		 int xMax = container.length;
-		 int yMax = container[0].length;
-		 int pivotY = yMax; 
-
-		 maxSpaces.add(new SubSpace(xMax,yMax,startX, startY));
-		 for(int x = 0; x < xMax; x++) {
-			 for(int y = 0; y < pivotY; y++) {
-				 if(container[x][y]) {
-					if(x==0) {
-						maxSpaces.remove(maxSpaces.size()-1);
-						}
-					else{
-					maxSpaces.get(maxSpaces.size()-1).vectorX = x;
-					maxSpaces.get(maxSpaces.size()-1).vectorY = pivotY;
-					}
-					
-					pivotY = y;
-					
-					if(y>0) maxSpaces.add(new SubSpace(xMax, y, startX, startY));
-					break;
-				 }
-			 }
-		 }
-	 }
-	 
 	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
 		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
 		 int[] heights = new int[matrix[0].length];
@@ -78,28 +52,19 @@ public class TestField {
 					 heights[col]=0;
 					 //if it is not empty, then check if 
 					 for(int[] rect: rectanglesRow) {
-						 System.out.println("col:"+col+"row:"+rows+"check");
-						 if(rectangleFinished(heights,col)) { foundRectangles.add(rect); 
-						 System.out.println("Is added in FOUND:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
-						 }
-						 else System.out.println("Is rejected:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+						 if(rectangleFinished(heights,col)) foundRectangles.add(rect); 
 					 }
 				 }
 			 }
-			 if((rows+1)==container.length) {
-				 rectanglesRow.clear();
-				 rectanglesRow.addAll(largestRectangles(heights));
-					 for(int[] rect: rectanglesRow) {
-						 System.out.println("Added LAST:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
-						 foundRectangles.add(rect); 
-					 }		 
-			 } else {
-				rectanglesRow.clear();
-			 	rectanglesRow.addAll(largestRectangles(heights));
-			 	for(int[] rect: rectanglesRow) {
-			 		System.out.println("Are added to rects in this row pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
-			 	}
-			 }
+				 
+			 rectanglesRow.clear();
+			 rectanglesRow.addAll(largestRectangles(heights));
+			 
+			 if((rows+1)==container.length) {				 
+				for(int[] rect: rectanglesRow) {
+					foundRectangles.add(rect); 
+				}		 
+			 } 
 		 }
 		 return foundRectangles;
 	 }
@@ -107,10 +72,7 @@ public class TestField {
 	  * if position is filled or if next block is the containerlength
 	  */
 	 public boolean rectangleFinished(int[] rect, int pos) {
-		if((rect[0]+rect[2] - pos)>0) {return true;}
-		else {
-			return false;
-		}
+		return ((rect[0]+rect[2] - pos)>0) ? true : false;
 	 }
 	 
 	 //time: O(n), space:O(n) n =indexes
