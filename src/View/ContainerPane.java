@@ -44,15 +44,14 @@ public class ContainerPane extends Parent {
     private Group root;
     private TitlePane title;
     private MeshView container;
-    private ArrayList<ArrayList<ParcelShape>> displayedContainers = new ArrayList<>();
-    private ArrayList<Integer> values = new ArrayList<>();
-    private ArrayList<ArrayList<PentominoShape>> displayedContainers1 = new ArrayList<>();
-    private ArrayList<Integer> values1 = new ArrayList<>();
+    private ArrayList<ShownContainers> shownContainers = new ArrayList<>();
+    private ContainerView view;
     
     /**
      * Constructor creates a Scene with container and a camera is being set to it.
      */
-    public ContainerPane(int Scene_Width, int Scene_Length, TitlePane title){
+    public ContainerPane(int Scene_Width, int Scene_Length, TitlePane title, ContainerView view){
+        this.view = view;
         //an instance of TitlePane, to redraw container value, when it changes
         this.title = title;
         //add all containers, boxes and camera to a group
@@ -99,15 +98,44 @@ public class ContainerPane extends Parent {
      * @param containedShapes an array list with all boxes in the container
      * @param solver an instance of the ContainerModel that found the solution
      */
-    public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
+    public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue, String name){
         ArrayList<ParcelShape> list = new ArrayList<>();
         for(ParcelShape parcel: containedShapes){
             ParcelShape someParcel = parcel.clone();
             someParcel.setCurrentCoordinates(parcel.getPosition().clone());
             list.add(someParcel);
         }
-        displayedContainers.add(list);
-        values.add(totalValue);
+        ShownContainers shownContainer = new ShownContainers(list, totalValue, name);
+        shownContainers.add(shownContainer);
+        root.getChildren().remove(2, root.getChildren().size());
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
+        //setDisplayedValue
+        title.setDisplayedValue(totalValue);
+        //clean container if there is anything in it
+        for(int i = 0; i < containedShapes.size(); i++){
+            ParcelShape parcel = containedShapes.get(i).clone();
+            parcel.setCurrentCoordinates(containedShapes.get(i).getPosition().clone());
+            int z = parcel.getPosition().getZ();
+            int y = parcel.getPosition().getY();
+            int x = parcel.getPosition().getX();
+            //System.out.println(z + " " + y + " " + x);
+            
+            //create a box as big as it has small boxes in it
+            Box boxMesh = new Box(Box_Width*parcel.getShapeVector().x, Box_Height*parcel.getShapeVector().y, Box_Depth*parcel.getShapeVector().z);
+            MeshView box = new MeshView(boxMesh);
+            box.setDrawMode(DrawMode.FILL);
+            box.setMaterial(parcel.getMaterial().toMaterial());
+            box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*x);
+            box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*y);
+            box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*z);
+            //if(i != containedShapes.size() - 4){
+            root.getChildren().add(box);
+            //}
+        }
+            
+    }
+     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
         root.getChildren().remove(2, root.getChildren().size());
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
@@ -140,10 +168,33 @@ public class ContainerPane extends Parent {
      * This method will draw pentominoes in the container after a solution has been found.
      * @param loadedPentominoes array list with loaded pentominoes
      */
-    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value){
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value, String name){
         ArrayList<PentominoShape> pentominoes = new ArrayList<>(loadedPentominoes);
-        displayedContainers1.add(pentominoes);
-        values1.add(value);
+        ShownContainers shownContainer = new ShownContainers(value, pentominoes, name);
+        shownContainers.add(shownContainer);
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
+        title.setDisplayedValue(value);
+        root.getChildren().remove(2, root.getChildren().size());
+        for(int i = 0; i < loadedPentominoes.size(); i++){
+            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            ArrayList<Monimo> PentominoBoxCoordinates = loadedPentominoes.get(i).getChildren();
+            
+            for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
+                Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
+                
+                Box boxMesh = new Box(Box_Width, Box_Height, Box_Depth);
+                MeshView box = new MeshView(boxMesh);
+                box.setDrawMode(DrawMode.FILL);
+                box.setMaterial(new PhongMaterial(ranColor));
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*coordinates.getY());
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*coordinates.getX());
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*coordinates.getZ());
+                root.getChildren().add(box);
+            }
+        }
+    }
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value){
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
         title.setDisplayedValue(value);
@@ -207,16 +258,16 @@ public class ContainerPane extends Parent {
         };
         container.setMaterial(material);    
     }
-    public int containers(){
-        return values.size();
+    public void drawShownContainers(int n){
+        view.setHeading(shownContainers.get(n).getName());
+        try{ 
+            drawBoxes(shownContainers.get(n).getContainedParcels(), shownContainers.get(n).getValue());
+        }
+        catch(Exception e){
+            drawPentominoes(shownContainers.get(n).getContainedPentominoes(), shownContainers.get(n).getValue());
+        }
     }
-    public int containers1(){
-        return values1.size();
-    }
-    public void drawContainers(int n){
-        drawBoxes(displayedContainers.get(n), values.get(n));
-    }
-    public void drawContainers1(int n){
-        drawPentominoes(displayedContainers1.get(n), values1.get(n));
+    public int getSizeShownContainers(){
+        return shownContainers.size();
     }
 }       

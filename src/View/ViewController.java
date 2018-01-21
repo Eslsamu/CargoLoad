@@ -55,57 +55,5 @@ public class ViewController implements EventHandler<KeyEvent>{
             angleZ-= 10;
             pane.rotateZ(angleZ);
         }
-        else if(event.getCode() == KeyCode.A){
-            if(pane.containers() - 1 == boxes){
-                boxes = 0;
-            }
-            else{
-                boxes++;
-            }
-            try{
-                pane.drawContainers(boxes);
-            }
-            catch(IndexOutOfBoundsException e){
-            }
-        }
-        else if(event.getCode() == KeyCode.S){
-            if(0 == boxes){
-                boxes = pane.containers() - 1;
-            }
-            else{
-                boxes--;
-            }
-            try{
-                pane.drawContainers(boxes);
-            }
-            catch(IndexOutOfBoundsException e){
-            }
-        }
-        else if(event.getCode() == KeyCode.D){
-            if(pane.containers1() - 1 == pentominoes){
-                pentominoes = 0;
-            }
-            else{
-                pentominoes++;
-            }
-            try{
-                pane.drawContainers1(pentominoes);
-            }
-            catch(IndexOutOfBoundsException e){
-            }
-        }
-        else if(event.getCode() == KeyCode.F){
-            if(0 == pentominoes){
-                pentominoes = pane.containers1() - 1;
-            }
-            else{
-                pentominoes--;
-            }
-            try{
-                pane.drawContainers1(pentominoes);
-            }
-            catch(IndexOutOfBoundsException e){
-            }
-        }
     }    
 }
