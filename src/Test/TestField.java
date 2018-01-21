@@ -9,13 +9,14 @@ public class TestField {
 	 
 	 public static void main(String[] args) {
 		 TestField testF = new TestField();
-		 testF.container[4][4]=true;
-		 testF.container[3][5]=true;
+		 testF.container[1][1]=true;
 
 		 for(int[] rect : testF.findRectangles2D(testF.container)) {
 			 System.out.print("pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
 			 System.out.println();
 		 }
+		 
+		
 	 }
 	 
 	 class SubSpace {
@@ -66,23 +67,50 @@ public class TestField {
 	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
 		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
 		 int[] heights = new int[matrix[0].length];
-		 for(int rows = 0; rows < matrix.length;rows++) {
-			 ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
+		 
+		 ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
+		 for(int rows = 0; rows < matrix.length;rows++) {					 		 
+			
+			 //for each column increase the heights of the histogram if it the matrix index is empty
 			 for(int col = 0; col < heights.length; col++) {
-				 if(matrix[rows][col])heights[col]++;
+				 if(!matrix[rows][col])heights[col]++;
 				 else {
-					 rectanglesRow.addAll(largestRectangles(heights));
+					 heights[col]=0;
+					 //if it is not empty, then check if 
 					 for(int[] rect: rectanglesRow) {
-						 if(rectangleFinished(heights,col)) foundRectangles.add(rect); 
+						 System.out.println("col:"+col+"row:"+rows+"check");
+						 if(rectangleFinished(heights,col)) { foundRectangles.add(rect); 
+						 System.out.println("Is added in FOUND:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+						 }
+						 else System.out.println("Is rejected:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
 					 }
 				 }
+			 }
+			 if((rows+1)==container.length) {
+				 rectanglesRow.clear();
+				 rectanglesRow.addAll(largestRectangles(heights));
+					 for(int[] rect: rectanglesRow) {
+						 System.out.println("Added LAST:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+						 foundRectangles.add(rect); 
+					 }		 
+			 } else {
+				rectanglesRow.clear();
+			 	rectanglesRow.addAll(largestRectangles(heights));
+			 	for(int[] rect: rectanglesRow) {
+			 		System.out.println("Are added to rects in this row pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+			 	}
 			 }
 		 }
 		 return foundRectangles;
 	 }
+	 /*
+	  * if position is filled or if next block is the containerlength
+	  */
 	 public boolean rectangleFinished(int[] rect, int pos) {
-		 if(rect[0]<=pos&&(rect[0]+rect[2])>=pos) return true;
-		 else return false;
+		if((rect[0]+rect[2] - pos)>0) {return true;}
+		else {
+			return false;
+		}
 	 }
 	 
 	 //time: O(n), space:O(n) n =indexes
@@ -108,7 +136,6 @@ public class TestField {
 					for(int i = 0; i <= height[pos]; i++) {
 					hStack.push(i);
 					pStack.push(pos);
-					System.out.println("push "+i+" "+pos);
 					}
 				}
 				else if(hStack.peek()==height[pos]) pos++;
@@ -116,10 +143,9 @@ public class TestField {
 					int p = pStack.pop();
 					int h = hStack.pop();
 					int w = pos-p;
-					System.out.println("pop "+h+" "+p);
-					int[] lastRect = listRect.size()==0 ? null : listRect.get(listRect.size()-1);
-					if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)) {
-						listRect.add(new int[]{p,h,w});
+					int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+					if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
+						potentialRect.add(new int[]{p,h,w});
 					}
 				}
 				//if height(pos) is bigger than hStack
@@ -127,7 +153,6 @@ public class TestField {
 					for(int i = hStack.peek()+1; i <= height[pos];i++) {
 						pStack.push(pos);
 						hStack.push(i);
-						System.out.println("push "+i+" "+pos);
 					}
 				}
 				//System.out.println(pStack.peek()+" "+hStack.peek()+" "+pos+" "+height[pos]);
@@ -137,13 +162,13 @@ public class TestField {
 				int p = pStack.isEmpty() ? 0 : pStack.pop();
 				int h = hStack.pop();
 				int w = height.length-p;
-				int[] lastRect = listRect.size()==0 ? null : listRect.get(listRect.size()-1);
-				if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)) {
-					listRect.add(new int[]{p,h,w});
+				int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+				if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
+					potentialRect.add(new int[]{p,h,w});
 				};
 			}
 		 
-			return listRect;
+			return potentialRect;
 		}
 	 
 	 public void printList() {
