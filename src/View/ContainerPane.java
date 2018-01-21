@@ -83,7 +83,7 @@ public class ContainerPane extends Parent {
         PerspectiveCamera camera = new PerspectiveCamera(true);
         //add possible rotations and position of camera
         camera.getTransforms().addAll(
-                xAxis, yAxis, zAxis, new Translate(0, 0, -40));
+                xAxis, yAxis, zAxis, new Translate(0, 0, -35));
         
         root.getChildren().add(camera);
         
