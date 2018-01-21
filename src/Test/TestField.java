@@ -86,6 +86,7 @@ public class TestField {
 	 }
 	 
 	 //time: O(n), space:O(n) n =indexes
+	 //TODO potentialRect
 	 public ArrayList<int[]> largestRectangles(int[] height) {
 		 	ArrayList<int[]> potentialRect = new ArrayList<int[]>();
 		 	
