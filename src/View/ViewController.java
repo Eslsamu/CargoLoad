@@ -15,6 +15,9 @@ public class ViewController implements EventHandler<KeyEvent>{
     private double angleY = 0;
     private double angleX = 0;
     private double angleZ = 0;
+    
+    private int boxes = 0;
+    private int pentominoes = 0;
     /**
      * Constructor takes as a parameter the ContainerPane so it can call methods in it
      * @param pane an instance of ContainerPane
@@ -52,11 +55,57 @@ public class ViewController implements EventHandler<KeyEvent>{
             angleZ-= 10;
             pane.rotateZ(angleZ);
         }
-        else if(event.getCode() == KeyCode.X){
-            pane.drawOneByOne(pane.getSize());
+        else if(event.getCode() == KeyCode.A){
+            if(pane.containers() - 1 == boxes){
+                boxes = 0;
+            }
+            else{
+                boxes++;
+            }
+            try{
+                pane.drawContainers(boxes);
+            }
+            catch(IndexOutOfBoundsException e){
+            }
         }
-        else if(event.getCode() == KeyCode.C){
-            pane.remove();
+        else if(event.getCode() == KeyCode.S){
+            if(0 == boxes){
+                boxes = pane.containers() - 1;
+            }
+            else{
+                boxes--;
+            }
+            try{
+                pane.drawContainers(boxes);
+            }
+            catch(IndexOutOfBoundsException e){
+            }
+        }
+        else if(event.getCode() == KeyCode.D){
+            if(pane.containers1() - 1 == pentominoes){
+                pentominoes = 0;
+            }
+            else{
+                pentominoes++;
+            }
+            try{
+                pane.drawContainers1(pentominoes);
+            }
+            catch(IndexOutOfBoundsException e){
+            }
+        }
+        else if(event.getCode() == KeyCode.F){
+            if(0 == pentominoes){
+                pentominoes = pane.containers1() - 1;
+            }
+            else{
+                pentominoes--;
+            }
+            try{
+                pane.drawContainers1(pentominoes);
+            }
+            catch(IndexOutOfBoundsException e){
+            }
         }
     }    
 }
