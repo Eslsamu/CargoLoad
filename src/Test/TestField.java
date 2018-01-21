@@ -37,7 +37,7 @@ public class TestField {
 		 }
 	 }
 	 
-	 
+	 //TODO save row position of rectangle
 	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
 		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
 		 int[] heights = new int[matrix[0].length];
