@@ -176,6 +176,50 @@ public class Grasp {
         
     }
 
+    public void setCoordinatesParcelsInLayer(MaximalSpace space, ParcelLayer layer){
+        Coordinates origin = space.getMinCoords();
+
+        AxisMaxSpaces axis = layer.getAxis();
+        int spaceDim1;
+        int spaceDim2;
+
+        if(axis == axis.XY || axis == axis.XZ) {
+            spaceDim1 = exampleContainer.containerX;
+        }
+        if(axis == axis.YX || axis == axis.YZ) {
+            spaceDim1 = exampleContainer.containerY;
+        }
+        if(axis == axis.ZX || axis == axis.ZY) {
+            spaceDim1 = exampleContainer.containerZ;
+        }
+        if(axis == axis.YX || axis == axis.ZX) {
+            spaceDim2 = exampleContainer.containerX;
+        }
+        if(axis == axis.XY || axis == axis.ZY) {
+            spaceDim2 = exampleContainer.containerY;
+        }
+        if(axis == axis.XZ || axis == axis.YZ) {
+            spaceDim2 = exampleContainer.containerZ;
+        }
+
+/*
+        if(axis == axis.XY || axis == axis.YX) {
+            spaceDim3 = spaceLength;
+            parcelDim3 = p.getShapeVector().getZ();
+        }
+        if(axis == axis.XZ || axis == axis.ZX) {
+            spaceDim3 = spaceHeight;
+            parcelDim3 = p.getShapeVector().getY();
+        }
+        if(axis == axis.YZ || axis == axis.ZY) {
+            spaceDim3 = spaceWidth;
+            parcelDim3 = p.getShapeVector().getX();
+        }
+*/
+        //for(int dim1 = origin; dim1 < spaceDim1; dim1 += )
+
+    }
+
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
         int currentValue;
         int bestValue = 0;

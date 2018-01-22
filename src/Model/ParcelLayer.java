@@ -38,4 +38,12 @@ public class ParcelLayer {
     public AxisMaxSpaces getAxis() {
         return a;
     }
+
+    public int getDim1Used() {
+        return dim1Used;
+    }
+
+    public int getDim2Used() {
+        return dim2Used;
+    }
 }
