@@ -172,6 +172,10 @@ public class Grasp {
         }
     }
 
+    public void placeLayer(ParcelLayer layer){
+        
+    }
+
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
         int currentValue;
         int bestValue = 0;
