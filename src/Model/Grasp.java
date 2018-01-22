@@ -496,7 +496,7 @@ public class Grasp {
         and save the dimensions.
 
         for each vertex there are certain directions on which there can be empty space and certain directions
-        in which the block is.
+        in which the block is
 
         When a new maximal space is created any old maximal space with which it overlaps should be removed from the list
 
