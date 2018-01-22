@@ -1,5 +1,19 @@
-package View;
+package View.Options;
 
+import View.Options.ParcelSetDivideConquer;
+import View.Options.OptionsPane;
+import View.Options.ORDER;
+import Model.ContainerModel;
+import Model.PentoContainer;
+import Shapes.ParcelA;
+import Shapes.ParcelB;
+import Shapes.ParcelC;
+import Shapes.ParcelShape;
+import View.ContainerPane;
+import View.ContainerView;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -8,47 +22,34 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import Model.ContainerModel;
-import Model.PentoContainer;
-import Shapes.ParcelA;
-import Shapes.ParcelB;
-import Shapes.ParcelC;
-import Shapes.ParcelShape;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 
 /**
- * Class ButtonPane will create a Pane that displays Backtracking options
- * @author Basia, Jordan
- * @version 1.5
+ *
+ * @author danyp
  */
-public class BacktrackingOptionsPane extends VBox{
+public class DivideConquerOptions extends VBox{
     private Stage stage;
     private ContainerPane container;
     private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     private ContainerView view;
     
-    /**
-     * Constructor creates a pane with options
-     */
-    public BacktrackingOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
+    public DivideConquerOptions(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
         this.view = view;
         
@@ -70,7 +71,7 @@ public class BacktrackingOptionsPane extends VBox{
             public void handle(ActionEvent e){
                 view.hideButtons();
                 if(setAmount.isSelected()){
-                    ParcelsSet set = new ParcelsSet(getButtonPane());
+                    ParcelSetDivideConquer set = new ParcelSetDivideConquer(getButtonPane());
                     Scene scene = new Scene(set);
                     
                     stage = new Stage();
@@ -114,7 +115,7 @@ public class BacktrackingOptionsPane extends VBox{
                 testContainer.loadContainer(300);
                 container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Pentominoes");
             }});
-        getChildren().add(packPentominoes);
+        //getChildren().add(packPentominoes);
 
         /* ToggleGroup packPentoGroup = new ToggleGroup();
 
@@ -159,10 +160,6 @@ public class BacktrackingOptionsPane extends VBox{
         setSpacing(15);
         setAlignment(Pos.CENTER);
     }
-    /**
-     * This method generates a new stage that will ask the user to specify how he wants the backtracking to sort.
-     * It will give options as:(by value, by ratio and randomly).
-     */
     public void setPackingOrder(){
         VBox pane = new VBox();
         Label title = new Label("Choose packing order:");
@@ -178,19 +175,13 @@ public class BacktrackingOptionsPane extends VBox{
         value.setSelected(true);
         pane.getChildren().add(value);
         
-        RadioButton random = new RadioButton("Random");
-        random.setFocusTraversable(false);
-        random.setFont(new Font("Arial", 15));
-        random.setToggleGroup(packingOrderGroup);
-        pane.getChildren().add(random);
-        
         RadioButton ratio  = new RadioButton("By value/volume ratio");
         ratio.setFocusTraversable(false);
         ratio.setFont(new Font("Arial", 15));
         ratio.setToggleGroup(packingOrderGroup);
         pane.getChildren().add(ratio);
         
-        Label timer = new Label("Set timer for backtracking:");
+        Label timer = new Label("Set timer:");
         timer.setFont(new Font("Arial", 19));
         pane.getChildren().add(timer);
         
@@ -226,10 +217,7 @@ public class BacktrackingOptionsPane extends VBox{
             @Override
             public void handle(ActionEvent e){
                 stage.close();
-                if(random.isSelected()){
-                    generateSolution(ORDER.RANDOM, Integer.parseInt(Timer.getText()));
-                }
-                else if(ratio.isSelected()){
+                if(ratio.isSelected()){
                     generateSolution(ORDER.RATIO, Integer.parseInt(Timer.getText()));
                 }
                 else if(value.isSelected()){
@@ -269,22 +257,17 @@ public class BacktrackingOptionsPane extends VBox{
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels);
-                            solver.solveRandom(maxValueContainer);
-                            containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, infinite amount boxes");
-                            break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true, true);
+                            solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, infinite amount boxes, timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "D&C, By value order, infinite amount boxes, timer: " + timer);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true, true);
+                            solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, infinite amount boxes, timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "D&C, By ratio order, infinite amount boxes, timer: " + timer);
                             break;                              
         }
     }
@@ -308,25 +291,20 @@ public class BacktrackingOptionsPane extends VBox{
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels);
-                            solver.setAmountOfParcels(a, b, c);
-                            solver.solveRandom(maxValueContainer);
-                            containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
-                            break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
                             solver.setAmountOfParcels(a, b, c);
-                            solver.solveBacktracking(maxValueContainer, true, true);
+                            solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "D&C, By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            solver.setAmountOfParcels(a, b, c);solver.solveBacktracking(maxValueContainer, true, true);
+                            solver.setAmountOfParcels(a, b, c);
+                            solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "D&C, By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
                             break;
         }
@@ -335,7 +313,7 @@ public class BacktrackingOptionsPane extends VBox{
      * A method that returns an instance of this class
      * @return instance of this class
      */
-    public BacktrackingOptionsPane getButtonPane(){
+    public DivideConquerOptions getButtonPane(){
         return this;
     }
 }

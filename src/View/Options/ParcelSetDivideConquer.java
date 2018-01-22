@@ -1,10 +1,15 @@
-package View;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package View.Options;
 
+import View.Options.ORDER;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,22 +25,20 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
-import static javafx.scene.layout.GridPane.setHalignment;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
- * This class opens a stage with options used by backtracking algorithm when we use set amount of parcels.
- * @author Basia, Jordan
- * @version 1.5
+ *
+ * @author danyp
  */
-public class ParcelsSet extends VBox{
+public class ParcelSetDivideConquer extends VBox{
     /**
      * Constructor generates all options.
      * @param options an instance of BacktrackingOptionsPane
      */
-    public ParcelsSet(BacktrackingOptionsPane options){
+    public ParcelSetDivideConquer(DivideConquerOptions options){
 
         Label amount = new Label("Enter amount of parcels:");
         amount.setFont(new Font("Arial", 19));
@@ -83,13 +86,7 @@ public class ParcelsSet extends VBox{
         ratio.setToggleGroup(packingOrderGroup);
         getChildren().add(ratio);
 
-        RadioButton random = new RadioButton("Random");
-        random.setFocusTraversable(false);
-        random.setFont(new Font("Arial", 15));
-        random.setToggleGroup(packingOrderGroup);
-        getChildren().add(random);
-
-        Label timer = new Label("Set timer for backtracking:");
+        Label timer = new Label("Set timer:");
         timer.setFont(new Font("Arial", 19));
         getChildren().add(timer);
 
@@ -105,10 +102,7 @@ public class ParcelsSet extends VBox{
                 if(value.isSelected()){
                     options.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.VALUE, Integer.parseInt(Timer.getText()));
                 }
-                else if(random.isSelected()){
-                   options.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RANDOM, Integer.parseInt(Timer.getText()));
-                }
-                else{
+                else if(ratio.isSelected()){
                     options.solveSetAmountBoxes(Integer.parseInt(typea.getText()), Integer.parseInt(typeb.getText()), Integer.parseInt(typec.getText()), ORDER.RATIO, Integer.parseInt(Timer.getText()));
                 }
             }});

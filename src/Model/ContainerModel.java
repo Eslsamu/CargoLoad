@@ -361,7 +361,11 @@ public class ContainerModel {
                 }
             }
         }
-        containedParcels.addAll(subspace.containedParcels);
+        for(ParcelShape parcel: subspace.containedParcels){
+            ParcelShape someParcel = parcel.clone();
+            someParcel.setCurrentCoordinates(new Coordinates(parcel.getPosition().getX() + x, parcel.getPosition().getY() + y, parcel.getPosition().getZ() + z));
+            containedParcels.add(someParcel);
+        }
         deductNeededParcels();
     }
 

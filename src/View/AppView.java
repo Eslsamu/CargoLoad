@@ -1,5 +1,6 @@
 package View;
 
+import View.Options.OptionsPane;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.geometry.Insets;
@@ -24,7 +25,7 @@ import javafx.scene.paint.Color;
 public class AppView extends BorderPane{
     private ContainerView containerView;
     /**
-     * Constructor will create a BorderPane with title, ContainerPane and ButtonPane
+     * Constructor will create a BorderPane with title, ContainerView and ButtonPane
      */
     public AppView(){
         TitlePane title = new TitlePane();
