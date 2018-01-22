@@ -41,14 +41,16 @@ import javafx.scene.layout.BackgroundSize;
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes;
+    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
+    private ContainerView view;
     
     /**
      * Constructor creates a pane with options
      */
-    public BacktrackingOptionsPane(ContainerPane container, OptionsPane options){
+    public BacktrackingOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
+        this.view = view;
         
         Label title = new Label("Choose packing:");
         title.setFont(new Font("Arial", 20));
@@ -66,6 +68,7 @@ public class BacktrackingOptionsPane extends VBox{
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
+                view.hideButtons();
                 if(setAmount.isSelected()){
                     ParcelsSet set = new ParcelsSet(getButtonPane());
                     Scene scene = new Scene(set);
@@ -106,9 +109,10 @@ public class BacktrackingOptionsPane extends VBox{
         packPentominoes.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
+                view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
                 testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes());
+                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Pentominoes");
             }});
         getChildren().add(packPentominoes);
 
@@ -122,6 +126,22 @@ public class BacktrackingOptionsPane extends VBox{
         maximum.setFont(new Font("Arial", 15));
         maximum.setToggleGroup(packPentoGroup);
         maximum.setFocusTraversable(false); */
+        Button shownContainers = new Button("Generated Containers");
+        shownContainers.setFocusTraversable(false);
+        shownContainers.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        shownContainers.setFocusTraversable(false);
+        shownContainers.setMinSize(225, 50);
+        //RadioButton fill = new RadioButton("Fill cargo-space");
+        //RadioButton maximum = new RadioButton("Maximum value");
+        shownContainers.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                if(container.getSizeShownContainers() != 0){
+                    view.showButtons();
+                    view.setSize(container.getSizeShownContainers());
+                }
+            }});
+        getChildren().add(shownContainers);
         
         Button back = new Button("Back");
         back.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
@@ -130,6 +150,7 @@ public class BacktrackingOptionsPane extends VBox{
         back.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
+                view.hideButtons();
                 container.redrawContainer();
                 options.drawAlgorithmOptions();
             }});
@@ -211,10 +232,9 @@ public class BacktrackingOptionsPane extends VBox{
                 else if(ratio.isSelected()){
                     generateSolution(ORDER.RATIO, Integer.parseInt(Timer.getText()));
                 }
-                else{
+                else if(value.isSelected()){
                     generateSolution(ORDER.VALUE, Integer.parseInt(Timer.getText()));
                 }
-                container.drawBoxes(containedShapes, solver.computeTotalValue());
         }});
     }
     /**
@@ -230,7 +250,6 @@ public class BacktrackingOptionsPane extends VBox{
     public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int timer){
         stage.close();
         generateSolution(a, b, c, order, timer);
-        container.drawBoxes(containedShapes, solver.computeTotalValue());
     }
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
@@ -248,24 +267,26 @@ public class BacktrackingOptionsPane extends VBox{
         solver = new ContainerModel();
         //to turn it into milliseconds
         solver.setDelay(timer*1000);
-
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels); 
-                            solver.solveFirstPackedCargoRandomOrder();
+            case RANDOM :   solver.setParcelList(givenParcels);
+                            solver.solveRandom(maxValueContainer);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, infinite amount boxes");
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true, false);
+                            solver.solveBacktracking(maxValueContainer, true, true);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, infinite amount boxes, timer: " + timer);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
-                            maxValueContainer.setParcelList(givenParcels);
-                            solver.solveBacktracking(maxValueContainer, true, false);
-                            break;
+                            solver.solveBacktracking(maxValueContainer, true, true);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, infinite amount boxes, timer: " + timer);
+                            break;                              
         }
-        containedShapes = solver.getContainedParcels();
     }
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container with
@@ -285,22 +306,30 @@ public class BacktrackingOptionsPane extends VBox{
 
         solver = new ContainerModel();
         solver.setDelay(timer*1000);
-        solver.setAmountOfParcels(a, b, c);
+        ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels); 
-                            solver.solveFirstPackedCargoRandomOrder();
+            case RANDOM :   solver.setParcelList(givenParcels);
+                            solver.setAmountOfParcels(a, b, c);
+                            solver.solveRandom(maxValueContainer);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true, false);
-                            break;
-            case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels); 
-                            solver.setParcelList(givenParcels);
-                            solver.solveBacktracking(solver, true, false);
-                            break;
+                            solver.setAmountOfParcels(a, b, c);
+                            solver.solveBacktracking(maxValueContainer, true, true);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
+                            break;
+            case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
+                            solver.setParcelList(givenParcels);
+                            solver.setAmountOfParcels(a, b, c);solver.solveBacktracking(maxValueContainer, true, true);
+                            containedShapes = solver.getContainedParcels();
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
+                            
+                            break;
         }
-        containedShapes = solver.getContainedParcels();
     }
     /**
      * A method that returns an instance of this class

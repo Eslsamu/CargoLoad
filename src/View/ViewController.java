@@ -15,6 +15,9 @@ public class ViewController implements EventHandler<KeyEvent>{
     private double angleY = 0;
     private double angleX = 0;
     private double angleZ = 0;
+    
+    private int boxes = 0;
+    private int pentominoes = 0;
     /**
      * Constructor takes as a parameter the ContainerPane so it can call methods in it
      * @param pane an instance of ContainerPane

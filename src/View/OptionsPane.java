@@ -15,8 +15,8 @@ public class OptionsPane extends VBox{
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
      */
-    public OptionsPane(ContainerPane container){
-        options = new BacktrackingOptionsPane(container, this);
+    public OptionsPane(ContainerPane container, ContainerView view){
+        options = new BacktrackingOptionsPane(container, this, view);
         algorithms = new AlgorithmsPane(this);
          
         drawAlgorithmOptions();

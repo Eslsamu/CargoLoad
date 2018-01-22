@@ -13,7 +13,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -23,14 +22,14 @@ import javafx.scene.paint.Color;
  * @version 1.2
  */
 public class AppView extends BorderPane{
-    private ContainerPane container;
+    private ContainerView containerView;
     /**
      * Constructor will create a BorderPane with title, ContainerPane and ButtonPane
      */
     public AppView(){
         TitlePane title = new TitlePane();
-        container = new ContainerPane(750, 750, title);
-        OptionsPane options = new OptionsPane(container);
+        containerView = new ContainerView(title);
+        OptionsPane options = new OptionsPane(containerView.getContainer(), containerView);
         
         VBox pane = new VBox();
         pane.getChildren().add(title);
@@ -38,7 +37,7 @@ public class AppView extends BorderPane{
         pane.setAlignment(Pos.TOP_CENTER);
         pane.setSpacing(15);
         
-        setCenter(container);
+        setCenter(containerView);
         setRight(pane);
         
         BorderPane.setMargin(pane, new Insets(15));
@@ -56,6 +55,6 @@ public class AppView extends BorderPane{
      * @return current instance of ContainerPane
      */
     public ContainerPane getContainer(){
-        return container;
+        return containerView.getContainer();
     }
 }

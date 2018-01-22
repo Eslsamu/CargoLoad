@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 public class AlgorithmsPane extends VBox{
     /**
      * Constructor will create a VBox with 3 buttons.
-      an instance of class controls that is used to redraw the options pane
+     * @param controls an instance of class controls that is used to redraw the options pane
      */
     public AlgorithmsPane(OptionsPane options){
         Label chooseAlgorithm = new Label("Choose algorithm:");
@@ -47,11 +47,6 @@ public class AlgorithmsPane extends VBox{
         
         setSpacing(20);
         setAlignment(Pos.CENTER);
-
     
     }
-    
-
-    }  
-
-
+}
