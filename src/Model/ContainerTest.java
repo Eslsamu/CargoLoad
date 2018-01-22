@@ -26,7 +26,7 @@ public class ContainerTest {
         container.setDelay(delay);
         //container.solveRandom(maxValueContainer);
         //container.solveBacktracking(maxValueContainer,true,true);
-        container.setContainerDimensions(33,5,8);
+        //container.setContainerDimensions(33,5,8);
         //container.solveHalfRandomHalfDeterministic();
         container.solveBacktracking(maxValueContainer,true,true);
 

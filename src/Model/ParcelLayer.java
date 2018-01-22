@@ -46,4 +46,15 @@ public class ParcelLayer {
     public int getDim2Used() {
         return dim2Used;
     }
+
+    public Facing getOrientation(){
+        return orientation;
+    }
+
+    public ParcelShape getParcel(){
+        if (parcelType instanceof ParcelA) return new ParcelA();
+        else if (parcelType instanceof ParcelB) return new ParcelB();
+        else if (parcelType instanceof ParcelC) return new ParcelC();
+        else return new ParcelA();
+    }
 }

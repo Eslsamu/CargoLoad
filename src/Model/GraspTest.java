@@ -35,5 +35,9 @@ public class GraspTest {
 
         System.out.println("Best: " + bestLayer.toString());
 
+        graspModel.placeLayer(space, bestLayer);
+
+        graspModel.testPrintContainer();
+
     }
 }

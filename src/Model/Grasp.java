@@ -164,7 +164,7 @@ public class Grasp {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<exampleContainer.containerY;y++){
                 for (int x=0;x<exampleContainer.containerX;x++){
-                    System.out.print(containerMatrix[z][exampleContainer.containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(exampleContainer.containerMatrix[z][y][x]);
                 }
                 System.out.println();
             }
@@ -172,52 +172,124 @@ public class Grasp {
         }
     }
 
-    public void placeLayer(ParcelLayer layer){
-        
-    }
-
-    public void setCoordinatesParcelsInLayer(MaximalSpace space, ParcelLayer layer){
+    public void placeLayer(MaximalSpace space, ParcelLayer layer) {
         Coordinates origin = space.getMinCoords();
 
+        int originX = origin.getX();
+        int originY = origin.getY();
+        int originZ = origin.getZ();
+
         AxisMaxSpaces axis = layer.getAxis();
-        int spaceDim1;
-        int spaceDim2;
 
-        if(axis == axis.XY || axis == axis.XZ) {
-            spaceDim1 = exampleContainer.containerX;
+        ParcelShape usedParcel = layer.getParcel();
+        Facing usedFacing = layer.getOrientation();
+        usedParcel.setOrientation(usedFacing);
+
+        int dim1Used = layer.getDim1Used();
+        int dim2Used = layer.getDim2Used();
+
+        int originDim1 = 0;
+        int originDim2 = 0;
+        int originDim3 = 0;
+
+        int parcelDim1 = 0;
+        int parcelDim2 = 0;
+        int parcelDim3 = 0;
+
+        if (axis == axis.XY || axis == axis.XZ) {
+            originDim1 = origin.getX();
+            parcelDim1 = usedParcel.getShapeVector().getX();
         }
-        if(axis == axis.YX || axis == axis.YZ) {
-            spaceDim1 = exampleContainer.containerY;
+        if (axis == axis.YX || axis == axis.YZ) {
+            originDim1 = origin.getY();
+            parcelDim1 = usedParcel.getShapeVector().getY();
         }
-        if(axis == axis.ZX || axis == axis.ZY) {
-            spaceDim1 = exampleContainer.containerZ;
+        if (axis == axis.ZX || axis == axis.ZY) {
+            originDim1 = origin.getZ();
+            parcelDim1 = usedParcel.getShapeVector().getZ();
         }
-        if(axis == axis.YX || axis == axis.ZX) {
-            spaceDim2 = exampleContainer.containerX;
+        if (axis == axis.YX || axis == axis.ZX) {
+            originDim2 = origin.getX();
+            parcelDim2 = usedParcel.getShapeVector().getX();
         }
-        if(axis == axis.XY || axis == axis.ZY) {
-            spaceDim2 = exampleContainer.containerY;
+        if (axis == axis.XY || axis == axis.ZY) {
+            originDim2 = origin.getY();
+            parcelDim2 = usedParcel.getShapeVector().getY();
         }
-        if(axis == axis.XZ || axis == axis.YZ) {
-            spaceDim2 = exampleContainer.containerZ;
+        if (axis == axis.XZ || axis == axis.YZ) {
+            originDim2 = origin.getY();
+            parcelDim2 = usedParcel.getShapeVector().getZ();
         }
 
-/*
+
         if(axis == axis.XY || axis == axis.YX) {
-            spaceDim3 = spaceLength;
-            parcelDim3 = p.getShapeVector().getZ();
+            originDim3 = origin.getZ();
+            parcelDim3 = usedParcel.getShapeVector().getZ();
         }
         if(axis == axis.XZ || axis == axis.ZX) {
-            spaceDim3 = spaceHeight;
-            parcelDim3 = p.getShapeVector().getY();
+            originDim3 = origin.getY();
+            parcelDim3 = usedParcel.getShapeVector().getY();
         }
         if(axis == axis.YZ || axis == axis.ZY) {
-            spaceDim3 = spaceWidth;
-            parcelDim3 = p.getShapeVector().getX();
+            originDim3 = origin.getX();
+            parcelDim3 = usedParcel.getShapeVector().getX();
         }
-*/
-        //for(int dim1 = origin; dim1 < spaceDim1; dim1 += )
 
+
+
+
+        for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
+            for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {
+
+                    ParcelShape currentParcel = usedParcel.clone();
+
+                    switch (axis) {
+                        case XY:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim1, dim2, originZ));
+                        case YX:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim2, dim1, originZ));
+                        case XZ:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim1, originY, dim2));
+                        case ZX:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim2, originY, dim1));
+                        case YZ:
+                            currentParcel.setCurrentCoordinates(new Coordinates(originX, dim1, dim2));
+                        case ZY:
+                            currentParcel.setCurrentCoordinates(new Coordinates(originX, dim2, dim1));
+                    }
+            }
+        }
+
+        for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1++) {
+            for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2++) {
+                for(int dim3 = originDim3; dim3 < originDim3+ parcelDim3; dim3++) {
+                    switch (axis) {
+                        case XY:
+                            exampleContainer.containerMatrix[dim3][dim2][dim1] = 1;
+                            break;
+                        case YX:
+                            exampleContainer.containerMatrix[dim3][dim1][dim2] = 1;
+                            break;
+                        case XZ:
+                            exampleContainer.containerMatrix[dim2][dim3][dim1] = 1;
+                            break;
+                        case ZX:
+                            exampleContainer.containerMatrix[dim1][dim3][dim2] = 1;
+                            break;
+                        case YZ:
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim2][dim1][dim3] = 1;
+                            break;
+                        case ZY:
+                            System.out.println("originDim1 = " + originDim1 + " parcelDim1 = " + parcelDim1 + " dim1Used = " + dim1Used);
+                            System.out.println("originDim2 = " + originDim2 + " parcelDim2 = " + parcelDim2 + " dim2Used = " + dim1Used);
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim1][dim2][dim3] = 1;
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
