@@ -283,9 +283,15 @@ public class DivideConquerOptions extends VBox{
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
         
-            givenParcels.add(new ParcelA());
-            givenParcels.add(new ParcelB());
-            givenParcels.add(new ParcelC());
+            if(a != 0){
+                givenParcels.add(new ParcelA());
+            }
+            if(b != 0){
+                givenParcels.add(new ParcelB());
+            }
+            if(c != 0){
+                givenParcels.add(new ParcelC());
+            }
 
         solver = new ContainerModel();
         solver.setDelay(timer*1000);
