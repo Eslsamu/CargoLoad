@@ -1,6 +1,7 @@
 package View.Options;
 
 import Model.ContainerModel;
+import Model.Grasp;
 import Model.PentoContainer;
 import Shapes.ParcelShape;
 import View.ContainerPane;
@@ -48,7 +49,12 @@ public class GraspOptionsPane extends VBox{
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                view.hideButtons();
+                //view.hideButtons();
+                //stage.close();
+                Grasp graspModel = new Grasp(100,100,100);
+                graspModel.graspTest();
+                container.drawBoxes(graspModel.getParcelsPacked(), graspModel.getTotalValue());
+
             }});
         getChildren().add(packBox);
         

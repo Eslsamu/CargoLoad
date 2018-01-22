@@ -14,8 +14,9 @@ public class Grasp {
     private int A_ParcelsLeft;
     private int B_ParcelsLeft;
     private int C_ParcelsLeft;
-    private ArrayList<ParcelShape> parcelsPacked = new ArrayList<ParcelShape>();
     private ArrayList<MaximalSpace> maximalSpaces = new ArrayList<MaximalSpace>();
+    private ArrayList<ParcelShape> parcelsPacked = new ArrayList<ParcelShape>();
+    private int totalValue;
 
     private static Coordinates[] containerVertices;
 
@@ -172,6 +173,23 @@ public class Grasp {
         }
     }
 
+    public void graspTest(){
+        ParcelShape parcel3 = new ParcelB();
+
+        Coordinates coords1 = new Coordinates(0,0,0);
+        Coordinates coords2 = new Coordinates(5,8,12);
+
+        MaximalSpace space = new MaximalSpace(coords1, coords2);
+
+        ParcelLayer bestLayer = findBestLayer(space, parcel3);
+
+        System.out.println("Best: " + bestLayer.toString());
+
+        placeLayer(space, bestLayer);
+
+        testPrintContainer();
+    }
+
     public void placeLayer(MaximalSpace space, ParcelLayer layer) {
         Coordinates origin = space.getMinCoords();
 
@@ -257,6 +275,9 @@ public class Grasp {
                         case ZY:
                             currentParcel.setCurrentCoordinates(new Coordinates(originX, dim2, dim1));
                     }
+
+                    parcelsPacked.add(currentParcel);
+                    totalValue+= currentParcel.getValue();
             }
         }
 
@@ -441,6 +462,14 @@ public class Grasp {
         //we place parcels in the chosen space to try to either completely fill the container or get the highest value
 
 
+    }
+
+    public ArrayList<ParcelShape> getParcelsPacked() {
+        return parcelsPacked;
+    }
+
+    public int getTotalValue() {
+        return totalValue;
     }
 
     /*
