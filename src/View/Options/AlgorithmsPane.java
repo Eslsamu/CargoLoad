@@ -56,6 +56,17 @@ public class AlgorithmsPane extends VBox{
             }});
         getChildren().add(divide);
         
+        Button grasp = new Button("GRASP");
+        grasp.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        grasp.setMinSize(225, 50);
+        grasp.setFocusTraversable(false);
+        grasp.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                options.drawGraspOptions();   
+        }});
+        getChildren().add(grasp);
+        
         setSpacing(20);
         setAlignment(Pos.CENTER);
     
