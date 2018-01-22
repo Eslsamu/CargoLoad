@@ -171,6 +171,135 @@ public class Grasp {
         }
     }
 
+    public void findBestLayer(MaximalSpace space, ParcelShape p){
+        //if(p instanceof ParcelA)  p = (ParcelA) p;
+
+        Coordinates minCoords2D = space.getMinCoords();
+        Coordinates maxCoords2D = new Coordinates(space.getMaxCoords().getZ(), space.getMinCoords().getY(),space.getMaxCoords().getX());
+
+        int spaceWidth = maxCoords2D.getX() - minCoords2D.getX();
+        int spaceLength = maxCoords2D.getZ() - minCoords2D.getZ();
+
+        int nrOfFittingParcelsX = 0;
+        int filledVolumeX = nrOfFittingParcelsX * p.getShapeVector().getZ();
+        int emptyVolumeX = spaceWidth * p.getShapeVector().getZ() - filledVolumeX;
+        int valueX = 0;
+
+        for(int x = 0; x < spaceWidth; x+= p.getShapeVector().getX()){
+            nrOfFittingParcelsX++;
+            valueX += p.getValue();
+        }
+
+        int nrOfFittingParcelsZ = 0;
+        int filledVolumeZ = nrOfFittingParcelsZ * p.getShapeVector().getX();
+        int emptyVolumeZ = spaceLength * p.getShapeVector().getY() - filledVolumeZ;
+
+        for(int z = 0; z < spaceLength; z+= p.getShapeVector().getZ()){
+            nrOfFittingParcelsZ++;
+        }
+
+    }
+
+    public void createPotentialLayer(MaximalSpace space, ParcelShape p, AxisMaxSpaces axis){
+        Coordinates minCoords2D = space.getMinCoords();
+        Coordinates maxCoords2D = new Coordinates(space.getMaxCoords().getZ(), space.getMinCoords().getY(),space.getMaxCoords().getX());
+
+        int spaceWidth = maxCoords2D.getX() - minCoords2D.getX();
+        int spaceHeight = maxCoords2D.getY() - minCoords2D.getY();
+        int spaceLength = maxCoords2D.getZ() - minCoords2D.getZ();
+
+        int spaceDim1 = 0;
+        int spaceDim2 = 0;
+        int spaceDim3 = 0;
+
+        int parcelDim1 = 0;
+        int parcelDim2 = 0;
+        int parcelDim3 = 0;
+
+
+
+
+        int nrOfFittingParcelsDim1 = 0;
+        int nrOfFittingParcelsDim2 = 0;
+        int valueLayer = 0;
+        int volumeLayer = 0;
+        int maxValueLayer = 0;
+        int maxVolumeLayer = 0;
+
+        //int filledVolumeDim1 = nrOfFittingParcelsDim1 * parcelDim1 * parcelDim2;
+
+        //try all parcel rotations, save layer value and keep the highest
+        //first: check if unused dimension has enough space for the layer
+
+
+        for(Facing o : Facing.values()){
+            p.setOrientation(o);
+
+            if(axis == axis.XY || axis == axis.XZ) {
+                spaceDim1 = spaceWidth;
+                parcelDim1 = p.getShapeVector().getX();
+            }
+            if(axis == axis.YX || axis == axis.YZ) {
+                spaceDim1 = spaceHeight;
+                parcelDim1 = p.getShapeVector().getY();
+            }
+            if(axis == axis.ZX || axis == axis.ZY) {
+                spaceDim1 = spaceLength;
+                parcelDim1 = p.getShapeVector().getZ();
+            }
+            if(axis == axis.YX || axis == axis.ZX) {
+                spaceDim2 = spaceWidth;
+                parcelDim2 = p.getShapeVector().getX();
+            }
+            if(axis == axis.XY || axis == axis.ZY) {
+                spaceDim2 = spaceHeight;
+                parcelDim2 = p.getShapeVector().getY();
+            }
+            if(axis == axis.XZ || axis == axis.YZ) {
+                spaceDim2 = spaceLength;
+                parcelDim2 = p.getShapeVector().getZ();
+            }
+
+
+            if(axis == axis.XY || axis == axis.YX) {
+                spaceDim3 = spaceLength;
+                parcelDim3 = p.getShapeVector().getZ();
+            }
+            if(axis == axis.XZ || axis == axis.ZX) {
+                spaceDim3 = spaceHeight;
+                parcelDim3 = p.getShapeVector().getY();
+            }
+            if(axis == axis.YZ || axis == axis.ZY) {
+                spaceDim3 = spaceWidth;
+                parcelDim3 = p.getShapeVector().getX();
+            }
+
+            if(parcelDim3 < spaceDim3){
+                for(int i = 0; i < spaceDim1; i += parcelDim1){
+                    nrOfFittingParcelsDim1++;
+                }
+
+                for(int i = 0; i < spaceDim2; i += parcelDim2){
+                    nrOfFittingParcelsDim2++;
+                }
+
+                valueLayer = nrOfFittingParcelsDim1 * nrOfFittingParcelsDim2 * p.getValue();
+                volumeLayer = (nrOfFittingParcelsDim1 * parcelDim1) * (nrOfFittingParcelsDim2 * parcelDim2) * parcelDim3;
+
+                if(valueLayer > maxValueLayer) maxValueLayer = valueLayer;
+                if(volumeLayer > maxVolumeLayer) maxVolumeLayer = volumeLayer;
+            }
+
+        }
+
+
+
+
+
+
+
+    }
+
     public void fillChosenMaximalSpace(){
         //we place parcels in the chosen space to try to either completely fill the container or get the highest value
 
