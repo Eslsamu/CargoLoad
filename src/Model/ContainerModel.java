@@ -18,8 +18,8 @@ public class ContainerModel {
      */
 
     // in 0.5 meters
-    protected int containerY = 8;
     protected int containerX = 5;
+    protected int containerY = 8;
     protected int containerZ = 33;
 
     protected int[][][] containerMatrix = new int[containerZ][containerY][containerX];
@@ -28,9 +28,11 @@ public class ContainerModel {
     protected ArrayList<ParcelShape> containedParcels = new ArrayList<>();
     
     protected int[] remainingParcelsEachType={100,100,100};
+    protected int totalRemainingParcels = remainingParcelsEachType[0] + remainingParcelsEachType[1] + remainingParcelsEachType[2];
     protected int AmountTypeA = 100;
     protected int AmountTypeB = 100;
     protected int AmountTypeC = 100;
+    protected int totalGivenParcels = 300;
     protected int nonEmptyParcelType = 0;
     protected boolean[] triedParcel = new boolean[3];
     protected boolean finish = false;
@@ -553,6 +555,65 @@ public class ContainerModel {
         return true;
     }
 
+    public boolean solveHalfRandomHalfDeterministic(){
+        //printContainer();
+
+        //The end condition of the recursive loop --> checks if the container is completely filled
+        if(checkIfFull()){
+            showResults();
+            System.out.println("The cargo is full.");
+            return true;
+        }
+
+
+
+        //check if the parcel type we're currently using has run out of parcels, if it has we move onto the next type
+        while(nonEmptyParcelType < parcelList.size() && remainingParcelsEachType[nonEmptyParcelType] == 0) nonEmptyParcelType++;
+        //for each voxel of the space
+        for (int z = 0; z < containerZ; z++) {
+            for (int y = 0; y < containerY; y++) {
+                for (int x = 0; x < containerX; x++) {
+                    //check if it is empty
+                    if (containerMatrix[z][y][x] == 0) {
+                        //for each available parcel type in the parcel list
+                        //while (parcelType < parcelList.size()) {
+                        for (int parcelType = nonEmptyParcelType; parcelType < parcelList.size(); parcelType++) {
+                            //create a clone of the current parcel in your list
+                            ParcelShape currentParcel = parcelList.get(parcelType).clone();
+                            //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
+                            for (Facing o : Facing.values()) {
+                                currentParcel.setOrientation(o);
+                                //check if this parcel with this orientation can be placed onto these coordinates
+                                if (doesFit(z, y, x, currentParcel)) {
+                                    //place the parcel onto the container matrix
+                                    placeParcel(z, y, x, currentParcel);
+                                    remainingParcelsEachType[parcelType]--;
+                                    //add the parcel object to the containedParcel list
+                                    containedParcels.add(currentParcel);
+                                    if(totalRemainingParcels < 0.5 * totalGivenParcels) {
+                                        System.out.println("check");
+                                        solveFirstPackedCargoRandomOrder();
+                                    }
+                                    if (solveFirstPackedCargoSetAmount()) {
+                                        return true;
+                                    } else {
+                                        removeParcel(currentParcel);
+                                        containedParcels.remove(containedParcels.size() - 1);
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+
+        showResults();
+        return true;
+    }
+
     public boolean triedAllTypes(){
         if (triedParcel[0] && triedParcel[1] && triedParcel[2])
             return true;
@@ -700,6 +761,7 @@ public class ContainerModel {
         AmountTypeA = nrOfA;
         AmountTypeB = nrOfB;
         AmountTypeC = nrOfC;
+        totalGivenParcels = nrOfA + nrOfB + nrOfC;
         /**
          * Always run this method after calling setParcelList().This method needs a parcelList containing parcels to run correctly,
          * however before running setParcelList() the parcelList doesn't contain any value.
@@ -718,6 +780,14 @@ public class ContainerModel {
             }
 
     }
+
+    public void setContainerDimensions(int x, int y, int z){
+        containerX = x;
+        containerY = y;
+        containerZ = z;
+        containerMatrix = new int[z][y][x];
+    }
+
 
 
 
