@@ -3,7 +3,7 @@ package Shapes;
 import Util.Coordinates;
 
 public class PentominoT extends PentominoShape{
-	private static int value = 3;
+	private static int value = 5;
 	private static String name = "T";
 	private static ShapeMaterial material = ShapeMaterial.GREEN;
 	

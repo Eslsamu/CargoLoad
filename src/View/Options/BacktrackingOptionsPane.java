@@ -36,9 +36,10 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 
 /**
- * Class ButtonPane will create a Pane that displays Backtracking options
+ * This class will create a Pane that displays Backtracking options
  * @author Basia, Jordan
- * @version 1.5
+ * @version 2.0
+ * @date 23.01.2018
  */
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
@@ -49,6 +50,8 @@ public class BacktrackingOptionsPane extends VBox{
     /**
      * Constructor creates a pane with options
      * @param container an instance of current shown ContainerPane
+     * @param options an instance of OptionsPane to control shown options
+     * @param view an instance of ContainerView to control shown container
      */
     public BacktrackingOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
@@ -64,8 +67,6 @@ public class BacktrackingOptionsPane extends VBox{
         packBox.setMinSize(225, 50);
         RadioButton infiniteAmount = new RadioButton("Infinite amount of boxes");
         RadioButton setAmount = new RadioButton("Custom amount of boxes");
-        /* when button is pressed it checks, which radiobutton is selected and then acts accordingly
-        */
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -113,7 +114,7 @@ public class BacktrackingOptionsPane extends VBox{
                 view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
                 testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes");
+                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes", "Y");
             }});
         getChildren().add(packPentominoes);
 
@@ -132,8 +133,6 @@ public class BacktrackingOptionsPane extends VBox{
         shownContainers.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         shownContainers.setFocusTraversable(false);
         shownContainers.setMinSize(225, 50);
-        //RadioButton fill = new RadioButton("Fill cargo-space");
-        //RadioButton maximum = new RadioButton("Maximum value");
         shownContainers.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -162,7 +161,7 @@ public class BacktrackingOptionsPane extends VBox{
     }
     /**
      * This method generates a new stage that will ask the user to specify how he wants the backtracking to sort.
-     * It will give options as:(by value, by ratio and randomly).
+     * It will give options as:(by value, by ratio).
      */
     public void setPackingOrder(){
         VBox pane = new VBox();
@@ -257,7 +256,6 @@ public class BacktrackingOptionsPane extends VBox{
             givenParcels.add(new ParcelC());
 
         solver = new ContainerModel();
-        //to turn it into milliseconds
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){

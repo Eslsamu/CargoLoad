@@ -168,7 +168,7 @@ public class ContainerPane extends Parent {
      * This method will draw pentominoes in the container after a solution has been found.
      * @param loadedPentominoes array list with loaded pentominoes
      */
-    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value, String name){
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value, String name, String param){
         ArrayList<PentominoShape> pentominoes = new ArrayList<>(loadedPentominoes);
         ShownContainers shownContainer = new ShownContainers(value, pentominoes, name);
         shownContainers.add(shownContainer);
@@ -181,15 +181,22 @@ public class ContainerPane extends Parent {
             ArrayList<Monimo> PentominoBoxCoordinates = loadedPentominoes.get(i).getChildren();
             
             for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
-                Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
-                
+                //Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
+                Monimo monimo = PentominoBoxCoordinates.get(m);
                 Box boxMesh = new Box(Box_Width, Box_Height, Box_Depth);
                 MeshView box = new MeshView(boxMesh);
                 box.setDrawMode(DrawMode.FILL);
                 box.setMaterial(new PhongMaterial(ranColor));
-                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*coordinates.getY());
-                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*coordinates.getX());
-                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*coordinates.getZ());
+                if(param == "X"){
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().x);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().y);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*monimo.getPositionShape().z);
+                }
+                else if(param == "Y"){
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().y);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().x);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*monimo.getPositionShape().z);
+                }
                 root.getChildren().add(box);
             }
         }

@@ -2,14 +2,14 @@ package View.Options;
 
 import View.ContainerPane;
 import View.ContainerView;
-import View.Options.BacktrackingOptionsPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 
 /**
  * This class makes a vbox containing currently displayed options
- * @author Basia
+ * @author Basia, Jordan
  * @version 1.2
+ * @date 23.01.2018
  */
 public class OptionsPane extends VBox{
     private BacktrackingOptionsPane options;

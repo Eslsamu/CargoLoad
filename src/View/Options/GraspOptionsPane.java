@@ -1,7 +1,6 @@
 package View.Options;
 
 import Model.ContainerModel;
-import Model.PentoContainer;
 import Shapes.ParcelShape;
 import View.ContainerPane;
 import View.ContainerView;
@@ -9,16 +8,19 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+/**
+ * This class will create a Pane that displays GRASP options
+ * @author Basia, Jordan
+ * @version 2.0
+ * @date 23.01.2018
+ */
 public class GraspOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
@@ -28,6 +30,8 @@ public class GraspOptionsPane extends VBox{
     /**
      * Constructor creates a pane with options
      * @param container an instance of current shown ContainerPane
+     * @param options an instance of OptionsPane to control shown options
+     * @param view an instance of ContainerView to control shown container
      */
     public GraspOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
