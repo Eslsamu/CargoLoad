@@ -1,6 +1,5 @@
 package View.Options;
 
-import View.Options.OptionsPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -11,12 +10,14 @@ import javafx.scene.text.Font;
 
 /**
  * This class will create a Pane that contains options for using different algorithms.
- * @author Basia
+ * @author Basia, Jordan
+ * @version 1.3
+ * @date 23.01.2018
  */
 public class AlgorithmsPane extends VBox{
     /**
-     * Constructor will create a VBox with 3 buttons.
-     * @param options an instance of class controls that is used to redraw the options pane
+     * Constructor will create a VBox with 4 buttons.
+     * @param options an instance of class OptionsPane that is used to redraw the options pane
      */
     public AlgorithmsPane(OptionsPane options){
         Label chooseAlgorithm = new Label("Choose algorithm:");
@@ -69,6 +70,5 @@ public class AlgorithmsPane extends VBox{
         
         setSpacing(20);
         setAlignment(Pos.CENTER);
-    
     }
 }

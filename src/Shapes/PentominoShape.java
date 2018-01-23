@@ -127,4 +127,7 @@ public abstract class PentominoShape {
 	public String getLabel() {
 		return label;
 	}
+        public ShapeMaterial getMaterial(){
+            return material;
+        }
 }
