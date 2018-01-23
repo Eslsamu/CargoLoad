@@ -5,6 +5,7 @@ import Shapes.*;
 import java.lang.reflect.Array;
 import java.util.*;
 import Util.Coordinates;
+import Util.Vertex;
 
 public class Grasp {
     ContainerModel exampleContainer = new ContainerModel();
@@ -113,12 +114,12 @@ public class Grasp {
         return minDistance;
     }
 
-    public Coordinates computeLexicographicalDestinance(MaximalSpace space) {
+    public Vertex computeLexicographicalDestinance(MaximalSpace space) {
 
         Coordinates minCoords = space.getMinCoords();
         Coordinates maxCoords = space.getMaxCoords();
         Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
-        Coordinates minDistanceVertex = maximalSpaceVertices[0];
+        Vertex minDistanceVertex = new Vertex(maximalSpaceVertices[0],0);
 
         int[][][] distance = new int[8][8][3]; //distance of each MaximalSpace vertex to each container corner
         int[][] minDistancePerVertex = new int[8][3]; //distance of each MaximalSpace vertex to its closest container corner
@@ -153,11 +154,11 @@ public class Grasp {
             //else if(minDistancePerVertex[i][0] < minDistance) minDistance = minDistancePerVertex[i][0]
               if(i == 0){
                 minDistance = minDistancePerVertex[i][0];
-                minDistanceVertex = maximalSpaceVertices[0];
+                minDistanceVertex = new Vertex(maximalSpaceVertices[0],0);
               }
               else if(minDistancePerVertex[i][0] < minDistance){
                 minDistance = minDistancePerVertex[i][0];
-                minDistanceVertex = maximalSpaceVertices[i];
+                minDistanceVertex = new Vertex(maximalSpaceVertices[i],i);
               }
         }
         //return minDistance;
@@ -266,8 +267,14 @@ public class Grasp {
 
         //Coordinates minCoords = space.getMinCoords();
 
-        Coordinates origin = space.getMinCoords();
-        //Coordinates origin = computeLexicographicalDestinance(space);
+        //Coordinates origin = space.getMinCoords();
+        Coordinates maxCoords = space.getMaxCoords();
+
+        //Coordinates[] vertices = findAllVertices(origin,maxCoords);
+
+        Vertex origin = computeLexicographicalDestinance(space);
+        int nrOfVertex = origin.getVertexNr();
+
         System.out.println(origin.getX() + " " + origin.getY() + " " + origin.getZ());
 
         int originX = origin.getX();
@@ -330,8 +337,99 @@ public class Grasp {
             parcelDim3 = usedParcel.getShapeVector().getX();
         }
 
-        //if(axis == axis.XY || axis == axis.YX && minCoords.getX() < origin.getX())
 
+
+
+
+        int dim1 = originDim1;
+        int dim2 = originDim2;
+
+        int signDim1;
+        boolean posDirectionDim1 = (dim1 < originDim1 + parcelDim1 * dim1Used);
+        if(posDirectionDim1) signDim1 = 1;
+        else signDim1 = -1;
+
+        int signDim2;
+        boolean posDirectionDim2 = (dim2 < originDim2 + parcelDim2 * dim2Used);
+        if(posDirectionDim2) signDim2 = 1;
+        else signDim2 = -1;
+
+        if(nrOfVertex == 1){
+            //posDirectionDim1 = !posDirectionDim1;
+            //posDirectionDim2 = !posDirectionDim2;
+        }
+        else if(nrOfVertex == 2){
+            if(axis == axis.XY || axis == axis.XZ){
+                posDirectionDim1 = !posDirectionDim1;
+            }
+            if(axis == axis.YX )
+        }
+
+
+        for (; posDirectionDim1; dim1 += signDim1*parcelDim1) {
+            for (; posDirectionDim2; dim2 += signDim2*parcelDim2) {
+                ParcelShape currentParcel = usedParcel.clone();
+
+                switch (axis) {
+                    case XY:
+                        currentParcel.setCurrentCoordinates(new Coordinates(dim1, dim2, originZ));
+                        break;
+                    case YX:
+                        currentParcel.setCurrentCoordinates(new Coordinates(dim2, dim1, originZ));
+                        break;
+                    case XZ:
+                        currentParcel.setCurrentCoordinates(new Coordinates(dim1, originY, dim2));
+                        break;
+                    case ZX:
+                        currentParcel.setCurrentCoordinates(new Coordinates(dim2, originY, dim1));
+                        break;
+                    case YZ:
+                        currentParcel.setCurrentCoordinates(new Coordinates(originX, dim1, dim2));
+                        break;
+                    case ZY:
+                        currentParcel.setCurrentCoordinates(new Coordinates(originX, dim2, dim1));
+                        break;
+                }
+
+                parcelsPacked.add(currentParcel);
+                totalValue+= currentParcel.getValue();
+            }
+        }
+
+        for (; dim1 < originDim1 + parcelDim1 * dim1Used; dim1++) {
+            for (; dim2 < originDim2 + parcelDim2 * dim2Used; dim2++) {
+                for(int dim3 = originDim3; dim3 < originDim3+ parcelDim3; dim3++) {
+                    switch (axis) {
+                        case XY:
+                            exampleContainer.containerMatrix[dim3][dim2][dim1] = 1;
+                            break;
+                        case YX:
+                            exampleContainer.containerMatrix[dim3][dim1][dim2] = 1;
+                            break;
+                        case XZ:
+                            exampleContainer.containerMatrix[dim2][dim3][dim1] = 1;
+                            break;
+                        case ZX:
+                            exampleContainer.containerMatrix[dim1][dim3][dim2] = 1;
+                            break;
+                        case YZ:
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim2][dim1][dim3] = 1;
+                            break;
+                        case ZY:
+                            System.out.println("originDim1 = " + originDim1 + " parcelDim1 = " + parcelDim1 + " dim1Used = " + dim1Used);
+                            System.out.println("originDim2 = " + originDim2 + " parcelDim2 = " + parcelDim2 + " dim2Used = " + dim1Used);
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim1][dim2][dim3] = 1;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+
+/*
         for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
             for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {
 
@@ -394,7 +492,7 @@ public class Grasp {
             }
         }
     }
-
+*/
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
         int currentValue = 0;
         int bestValue = 0;
