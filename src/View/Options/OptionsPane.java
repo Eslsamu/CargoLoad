@@ -1,5 +1,8 @@
-package View;
+package View.Options;
 
+import View.ContainerPane;
+import View.ContainerView;
+import View.Options.BacktrackingOptionsPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 
@@ -11,6 +14,9 @@ import javafx.scene.layout.VBox;
 public class OptionsPane extends VBox{
     private BacktrackingOptionsPane options;
     private AlgorithmsPane algorithms;
+    private DivideConquerOptions divideOptions;
+    private RandomOptionsPane randomOptions;
+    private GraspOptionsPane graspOptions;
     /**
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
@@ -18,6 +24,9 @@ public class OptionsPane extends VBox{
     public OptionsPane(ContainerPane container, ContainerView view){
         options = new BacktrackingOptionsPane(container, this, view);
         algorithms = new AlgorithmsPane(this);
+        divideOptions = new DivideConquerOptions(container, this, view);
+        randomOptions = new RandomOptionsPane(container, this, view);
+        graspOptions = new GraspOptionsPane(container, this, view);
          
         drawAlgorithmOptions();
         
@@ -31,11 +40,26 @@ public class OptionsPane extends VBox{
         getChildren().remove(algorithms);
         getChildren().add(options);
     }
+    public void drawDivideConquerOptions(){
+        getChildren().remove(algorithms);
+        getChildren().add(divideOptions);
+    }
+    public void drawRandomOptions(){
+        getChildren().remove(algorithms);
+        getChildren().add(randomOptions);
+    }
+    public void drawGraspOptions(){
+        getChildren().remove(algorithms);
+        getChildren().add(graspOptions);
+    }
     /**
      * Remove backtracking options and open algorithm options
      */
     public void drawAlgorithmOptions(){
         getChildren().remove(options);
+        getChildren().remove(divideOptions);
+        getChildren().remove(randomOptions);
+        getChildren().remove(graspOptions);
         getChildren().add(algorithms);
     }
 }

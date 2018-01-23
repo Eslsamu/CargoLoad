@@ -1,4 +1,4 @@
-package View;
+package View.Options;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +23,8 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
+import View.ContainerPane;
+import View.ContainerView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -43,14 +45,13 @@ public class BacktrackingOptionsPane extends VBox{
     private ContainerPane container;
     private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
-    private ContainerView view;
     
     /**
      * Constructor creates a pane with options
+     * @param container an instance of current shown ContainerPane
      */
     public BacktrackingOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
-        this.view = view;
         
         Label title = new Label("Choose packing:");
         title.setFont(new Font("Arial", 20));
@@ -112,7 +113,7 @@ public class BacktrackingOptionsPane extends VBox{
                 view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
                 testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Pentominoes");
+                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes");
             }});
         getChildren().add(packPentominoes);
 
@@ -178,12 +179,6 @@ public class BacktrackingOptionsPane extends VBox{
         value.setSelected(true);
         pane.getChildren().add(value);
         
-        RadioButton random = new RadioButton("Random");
-        random.setFocusTraversable(false);
-        random.setFont(new Font("Arial", 15));
-        random.setToggleGroup(packingOrderGroup);
-        pane.getChildren().add(random);
-        
         RadioButton ratio  = new RadioButton("By value/volume ratio");
         ratio.setFocusTraversable(false);
         ratio.setFont(new Font("Arial", 15));
@@ -226,10 +221,7 @@ public class BacktrackingOptionsPane extends VBox{
             @Override
             public void handle(ActionEvent e){
                 stage.close();
-                if(random.isSelected()){
-                    generateSolution(ORDER.RANDOM, Integer.parseInt(Timer.getText()));
-                }
-                else if(ratio.isSelected()){
+                if(ratio.isSelected()){
                     generateSolution(ORDER.RATIO, Integer.parseInt(Timer.getText()));
                 }
                 else if(value.isSelected()){
@@ -269,22 +261,17 @@ public class BacktrackingOptionsPane extends VBox{
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels);
-                            solver.solveRandom(maxValueContainer);
-                            containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, infinite amount boxes");
-                            break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, infinite amount boxes, timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Backtracking, By value order, infinite amount boxes, timer: " + timer);
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, infinite amount boxes, timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Backtracking, By ratio order, infinite amount boxes, timer: " + timer);
                             break;                              
         }
     }
@@ -308,25 +295,19 @@ public class BacktrackingOptionsPane extends VBox{
         solver.setDelay(timer*1000);
         ContainerModel maxValueContainer = new ContainerModel();
         switch(order){
-            case RANDOM :   solver.setParcelList(givenParcels);
-                            solver.setAmountOfParcels(a, b, c);
-                            solver.solveRandom(maxValueContainer);
-                            containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Random order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
-                            break;
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
                             solver.setAmountOfParcels(a, b, c);
                             solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Backtracking, By value order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
                             solver.setAmountOfParcels(a, b, c);solver.solveBacktracking(maxValueContainer, true, true);
                             containedShapes = solver.getContainedParcels();
-                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
+                            container.drawBoxes(containedShapes, solver.computeTotalValue(), "Backtracking, By ratio order, TypeA: "+ a + " TypeB: " + b + " TypeC: " + c + " timer: " + timer);
                             
                             break;
         }

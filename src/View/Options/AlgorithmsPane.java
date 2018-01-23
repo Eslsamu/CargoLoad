@@ -1,5 +1,6 @@
-package View;
+package View.Options;
 
+import View.Options.OptionsPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -15,7 +16,7 @@ import javafx.scene.text.Font;
 public class AlgorithmsPane extends VBox{
     /**
      * Constructor will create a VBox with 3 buttons.
-     * @param controls an instance of class controls that is used to redraw the options pane
+     * @param options an instance of class controls that is used to redraw the options pane
      */
     public AlgorithmsPane(OptionsPane options){
         Label chooseAlgorithm = new Label("Choose algorithm:");
@@ -33,17 +34,38 @@ public class AlgorithmsPane extends VBox{
         }});
         getChildren().add(backtracking);
         
-        Button grasp = new Button("GRASP");
-        grasp.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
-        grasp.setMinSize(225, 50);
-        grasp.setFocusTraversable(false);
-        getChildren().add(grasp);
+        Button random = new Button("Random");
+        random.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        random.setMinSize(225, 50);
+        random.setFocusTraversable(false);
+        random.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                options.drawRandomOptions();   
+        }});
+        getChildren().add(random);
         
         Button divide = new Button("Divide & Conquer");
         divide.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         divide.setMinSize(225, 50);
         divide.setFocusTraversable(false);
+        divide.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                options.drawDivideConquerOptions();
+            }});
         getChildren().add(divide);
+        
+        Button grasp = new Button("GRASP");
+        grasp.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        grasp.setMinSize(225, 50);
+        grasp.setFocusTraversable(false);
+        grasp.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                options.drawGraspOptions();   
+        }});
+        getChildren().add(grasp);
         
         setSpacing(20);
         setAlignment(Pos.CENTER);
