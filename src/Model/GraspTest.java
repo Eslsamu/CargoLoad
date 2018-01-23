@@ -14,33 +14,23 @@ public class GraspTest {
         ParcelShape parcel3 = new ParcelB();
         ParcelShape parcel4 = new ParcelC();
 
-
-
-        //graspModel.testPlaceParcel(1,1,1,parcel2);
-        //graspModel.generateMaximalSpaces(parcel2);
-        // graspModel.testPrintContainer();
-
-        //graspModel.testPlaceParcel(20,1,1,parcel1);
-        //graspModel.generateMaximalSpaces(parcel1);
-        //graspModel.testPrintContainer();
-
-        //MaximalSpace chosenMaximalSpace = graspModel.chooseMaximalSpace();
-
-        //Grasp graspModel = new Grasp();
-
         ParcelShape parcel = new ParcelB();
 
-        Coordinates coords1 = new Coordinates(0,0,0);
-        Coordinates coords2 = new Coordinates(5,8,12);
+        Coordinates coords1 = new Coordinates(1,3,5);
+        Coordinates coords2 = new Coordinates(4,7,25);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
+        System.out.println(graspModel.computeLexicographicalDestinance(space));
 
-        System.out.println("Best: " + bestLayer.toString());
+        //ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
 
-        graspModel.placeLayer(space, bestLayer);
+        //System.out.println("Best: " + bestLayer.toString());
 
-        graspModel.testPrintContainer();
+        //graspModel.placeLayer(space, bestLayer);
+
+        //graspModel.testPrintContainer();
+
+
     }
 }
