@@ -1,116 +1,178 @@
 package Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
-public class TestField {
-	 boolean[][] container = new boolean[6][6];
-	 ArrayList<SubSpace> maxSpaces = new ArrayList<SubSpace>();
-	 
+import Model.PentoContainer;
+import Util.Coordinates;
+
+public class TestField extends PentoContainer{
+	
+	@SuppressWarnings("serial")
+	private ArrayList<Coordinates> containerCorners = new ArrayList<Coordinates>() {{
+		add(new Coordinates(0,0,0));
+		add(new Coordinates(0,0,containerHeight));
+		add(new Coordinates(0,containerWidth,0));
+		add(new Coordinates(0,containerWidth,containerHeight));
+		add(new Coordinates(containerLength,0,0));
+		add(new Coordinates(containerLength,0,containerHeight));
+		add(new Coordinates(containerLength,containerWidth,0));
+		add(new Coordinates(containerLength,containerWidth,containerHeight));
+	}};
+	
+	
+	private Coordinates closestContainerCorner;
+	private int[] closestDistance;
+	private Coordinates closestLayerCorner;
+	
 	 public static void main(String[] args) {
 		 TestField testF = new TestField();
-		 testF.container[1][1]=true;
-
-		 for(int[] rect : testF.findRectangles2D(testF.container)) {
-			 System.out.print("pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
-			 System.out.println();
-		 }
+		 testF.containerMatrix[0][0][0]="A";
 		 
-		
+		 for(EML l: testF.getMaxLayers()) {
+			 System.out.println(l.toString());
+		 } 
 	 }
 	 
-	 class SubSpace {
-		 int vectorX;
-		 int vectorY;
-		 int startX;
-		 int startY;
-		 
-		 public SubSpace(int vx, int vy, int xS, int yS) {
-			 vectorX = vx;
-			 vectorY = vy;
-			 startX = xS;
-			 startY = yS;
+	 /*
+	  * returns the layer of a list which is the closest to a corner/edge/wall
+	  */
+	 public EML getBestLayer() {
+		 EML best = new EML();
+		 for(EML layer: getMaxLayers()) {
+			 //!global variable
+			 findClosestCorner(layer);
+			 
 		 }
 		 
-		 public String toString() {
-			 return new String("vectorX:" +vectorX+" vectorY:"+vectorY+" startX:"+startX+" startY:"+startY);
+		 return best;
+	 }
+	 
+	 public void findClosestCorner(EML layer) {	 
+		 boolean stop = false;
+		 for(Coordinates contCorner : containerCorners) {
+			 if(stop) break;
+			 for(Coordinates layCorner : layer.corners) {
+				 int[] distance = getDistance(layCorner,contCorner);
+				 if(isCloser(distance,closestDistance)){
+					 closestDistance = distance;
+					 closestContainerCorner = contCorner;
+					 closestLayerCorner = layCorner;
+				 }
+				 if(distance[0]==0&&distance[1]==0&&distance[2]==0) {
+					 stop = true;
+					 break;
+				 }
+			 }
 		 }
 	 }
+	 
+	 /*
+	  * returns if a distance is closer in lexicographical order than another distance
+	  */
+	 public boolean isCloser(int[] distance1, int[] distance2) {
+		 for(int i = 0; i < distance1.length; i++) {
+			 if(distance1[i]<distance2[i]) {
+				 return true;
+			 }
+			 else if(distance1[i]>distance2[i]) {
+				 return false;
+			 }
+		 }
+		 return false;
+	 }
+	 
+	 /*
+	  * returns an array which represents the distance between two points in ascending order
+	  */
+	 public int[] getDistance(Coordinates vertexFrom, Coordinates vertexTo) {
+		 int[] distance = new int[]{Math.abs(vertexFrom.x-vertexTo.x),Math.abs(vertexFrom.y-vertexTo.y),Math.abs(vertexFrom.z-vertexTo.z)};
+		 Arrays.sort(distance);
+		 return distance;
+	 }
+	 
+	 public ArrayList<EML> getMaxLayers(){
+	        ArrayList<EML> allMaxLayers = new ArrayList<>();
+	        
+	        //YZ	
+	        for(int x = 0; x < containerMatrix.length; x++){
+	            allMaxLayers.addAll(findEML(containerMatrix[x],x));
+
+	        }
+	        
+	        //XY
+	        for(int z = 0; z < containerMatrix[0][0].length; z++) {
+		        //get 2D matrix for the zAxis
+		        String[][] matrix = new String[containerMatrix[0].length][containerMatrix.length];
+		        for(int y = 0; y < matrix.length; y++) {
+		        	for(int x = 0; x < matrix[0].length; x++) {
+		        		matrix[y][x] = containerMatrix[x][y][z]; 
+		        	}
+		        }
+		        ArrayList<EML> foundLayers = findEML(matrix,z);
+		        for(EML l : foundLayers) {
+		        	l.switchToY();
+		        }
+		        allMaxLayers.addAll(foundLayers);
+	        }
+	        
+	        //XZ
+	        for(int y = 0; y < containerMatrix[0].length; y++) {
+		        //get 2D matrix for the zAxis
+		        String[][] matrix = new String[containerMatrix[0].length][containerMatrix.length];
+		        for(int z = 0; z < matrix.length; z++) {
+		        	for(int x = 0; x < matrix[0].length; x++) {
+		        		matrix[y][x] = containerMatrix[x][y][z]; 
+		        	}
+		        }
+		        ArrayList<EML> foundLayers = findEML(matrix,y);
+		        for(EML l : foundLayers) {
+		        	l.switchToZ();
+		        }
+		        allMaxLayers.addAll(foundLayers);
+	        }
+	        
+	        return allMaxLayers;
+	    }
 	 
 	 //TODO save row position of rectangle
-	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
-		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
-		 int[] heights = new int[matrix[0].length];
+	 public ArrayList<EML> findEML(String[][] matrix, int xPos){
+		 ArrayList<EML> foundRectangles = new ArrayList<EML>();
+		 ArrayList<EML> rectanglesRow = new ArrayList<EML>();
 		 
-		 ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
-		 for(int rows = 0; rows < matrix.length;rows++) {					 		 
-			
+		 int[] heights = new int[matrix[0].length];	 
+		 
+		 for(int rows = 0; rows < matrix.length;rows++) {			
 			 //for each column increase the heights of the histogram if it the matrix index is empty
 			 for(int col = 0; col < heights.length; col++) {
-				 if(!matrix[rows][col])heights[col]++;
+				 if(matrix[rows][col]==null) { 
+					 heights[col]++;
+				 }
 				 else {
 					 heights[col]=0;
-					 //if it is not empty, then check if 
-					 for(int[] rect: rectanglesRow) {
-						 if(rectangleFinished(heights,col)) foundRectangles.add(rect); 
+					 for(EML rect: rectanglesRow) {
+						 if(rectangleFinished(rect,col)) foundRectangles.add(rect); 
 					 }
 				 }
 			 }
 				 
 			 rectanglesRow.clear();
-			 rectanglesRow.addAll(largestRectangles(heights));
+			 rectanglesRow.addAll(largestRectangles(heights,xPos,rows));
 			 
-			 if((rows+1)==container.length) {				 
-				for(int[] rect: rectanglesRow) {
+			 if((rows+1)==matrix.length) {				 
+				for(EML rect: rectanglesRow) {
 					foundRectangles.add(rect); 
 				}		 
 			 } 
 		 }
 		 return foundRectangles;
 	 }
-
-    public ArrayList<int[]> findRectangles2D(int[][] matrix){
-        ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
-        int[] heights = new int[matrix[0].length];
-
-        ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
-        for(int rows = 0; rows < matrix.length;rows++) {
-
-            //for each column increase the heights of the histogram if it the matrix index is empty
-            for(int col = 0; col < heights.length; col++) {
-                if(matrix[rows][col] == 0)heights[col]++;
-                else {
-                    heights[col]=0;
-                    //if it is not empty, then check if
-                    for(int[] rect: rectanglesRow) {
-                        if(rectangleFinished(heights,col)) foundRectangles.add(rect);
-                    }
-                }
-            }
-
-            rectanglesRow.clear();
-            rectanglesRow.addAll(largestRectangles(heights));
-
-            if((rows+1)==container.length) {
-                for(int[] rect: rectanglesRow) {
-                    foundRectangles.add(rect);
-                }
-            }
-        }
-        return foundRectangles;
-    }
-	 /*
-	  * if position is filled or if next block is the containerlength
-	  */
-	 public boolean rectangleFinished(int[] rect, int pos) {
-		return ((rect[0]+rect[2] - pos)>0) ? true : false;
-	 }
 	 
 	 //time: O(n), space:O(n) n =indexes
 	 //TODO potentialRect
-	 public ArrayList<int[]> largestRectangles(int[] height) {
-		 	ArrayList<int[]> potentialRect = new ArrayList<int[]>();
-		 	
+	 public ArrayList<EML> largestRectangles(int[] height,int xPos, int zPos) {
+		 	ArrayList<EML> potentialRect = new ArrayList<EML>();
 		 	
 			if (height == null || height.length == 0) {
 				return null;
@@ -136,9 +198,9 @@ public class TestField {
 					int p = pStack.pop();
 					int h = hStack.pop();
 					int w = pos-p;
-					int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
-					if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
-						potentialRect.add(new int[]{p,h,w});
+					EML lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+					if((lastRect==null)||!(lastRect.startY==p&&lastRect.vectorY==w&&lastRect.vectorZ>h)&&h!=0) {
+						potentialRect.add(new EML(xPos,p,zPos, w, h));
 					}
 				}
 				//if height(pos) is bigger than hStack
@@ -155,18 +217,70 @@ public class TestField {
 				int p = pStack.isEmpty() ? 0 : pStack.pop();
 				int h = hStack.pop();
 				int w = height.length-p;
-				int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
-				if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
-					potentialRect.add(new int[]{p,h,w});
-				};
+				EML lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+				if((lastRect==null)||!(lastRect.startY==p&&lastRect.vectorY==w&&lastRect.vectorZ>h)&&h!=0) {
+					potentialRect.add(new EML(xPos,p,zPos, w, h));
+				}
 			}
-		 
 			return potentialRect;
 		}
-	 
-	 public void printList() {
-		 for(SubSpace s : maxSpaces) {
-			 System.out.println(s.toString());
+	 /*
+	  *
+	  */
+	 public boolean rectangleFinished(EML rect, int pos) {
+		return ((rect.startY+rect.vectorY - pos)>0) ? true : false;
+	 }
+	 /*
+	  * empty maximal layer
+	  */
+	 class EML {
+		 int vectorX;
+		 int vectorY;
+		 int vectorZ;
+		 int startX;
+		 int startY;
+		 int startZ;
+		 
+		 ArrayList<Coordinates> corners = new ArrayList<Coordinates>();
+		 
+		 public EML(int xS, int yS, int zS, int yV, int zV) {
+			 vectorY = yV;
+			 vectorZ = zV;
+			 startX = xS;
+			 startY = yS;
+			 startZ = zS;
+			 generateCorners();
+		 }
+		 
+		public EML() {
+			// TODO Auto-generated constructor stub
+		}
+		
+		private void generateCorners() {
+			corners.add(new Coordinates(startX,startY,startZ));
+			corners.add(new Coordinates(startX,startY,startZ+vectorZ));
+			corners.add(new Coordinates(startX,startY+vectorY,startZ));
+			corners.add(new Coordinates(startX,startY+vectorY,startZ+vectorZ));
+			corners.add(new Coordinates(startX+vectorX,startY,startZ));
+			corners.add(new Coordinates(startX+vectorX,startY,startZ+vectorZ));
+			corners.add(new Coordinates(startX+vectorX,startY+vectorY,startZ));
+			corners.add(new Coordinates(startX+vectorX,startY+vectorY,startZ+vectorZ));
+		}
+		
+		public void switchToY() {
+			 vectorX = vectorY;
+			 vectorY = 0;
+			 generateCorners();
+		 }
+		 
+		 public void switchToZ() {
+			 vectorX = vectorZ;
+			 vectorZ = 0;
+			 generateCorners();
+		 }
+		 
+		 public String toString() {
+			 return new String("vectorX: "+ vectorZ+" vectorY:"+vectorY+" vectorZ: "+vectorZ+" startX:"+startX+" startY:"+startY+" startZ: "+startZ);
 		 }
 	 }
 }

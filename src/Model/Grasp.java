@@ -116,12 +116,12 @@ public class Grasp {
         return minDistance;
     }
 
-    public Vertex computeLexicographicalDestinance(MaximalSpace space) {
+    public Coordinates computeLexicographicalDestinance(MaximalSpace space) {
 
         Coordinates minCoords = space.getMinCoords();
         Coordinates maxCoords = space.getMaxCoords();
         Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
-        Vertex minDistanceVertex = new Vertex(maximalSpaceVertices[0],0);
+        Coordinates minDistanceVertex = new Coordinates(maximalSpaceVertices[0],0);
 
         int[][][] distance = new int[8][8][3]; //distance of each MaximalSpace vertex to each container corner
         int[][] minDistancePerVertex = new int[8][3]; //distance of each MaximalSpace vertex to its closest container corner
