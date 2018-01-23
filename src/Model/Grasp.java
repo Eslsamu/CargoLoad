@@ -8,14 +8,15 @@ import Util.Coordinates;
 
 public class Grasp {
     ContainerModel exampleContainer = new ContainerModel();
-    private int[][][] containerMatrix = new int[exampleContainer.containerX][exampleContainer.containerY][exampleContainer.containerX];
+    private int[][][] containerMatrix = new int[exampleContainer.containerZ][exampleContainer.containerY][exampleContainer.containerX];
 
     private ArrayList<ParcelShape> typesLeft = new  ArrayList<ParcelShape>(); //parcel types (A,B,C) of which there are still atleast 1 parcel left (should maybe have type of chars or enums instead of ParcelShape?)
     private int A_ParcelsLeft;
     private int B_ParcelsLeft;
     private int C_ParcelsLeft;
-    private ArrayList<ParcelShape> parcelsPacked = new ArrayList<ParcelShape>();
     private ArrayList<MaximalSpace> maximalSpaces = new ArrayList<MaximalSpace>();
+    private ArrayList<ParcelShape> parcelsPacked = new ArrayList<ParcelShape>();
+    private int totalValue;
 
     private static Coordinates[] containerVertices;
 
@@ -68,7 +69,7 @@ public class Grasp {
         return vertices;
     }
 
-    public double computeDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
+    public double computeEuclideanDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
         /*
         "For each
         new maximal-space, we compute the distance from every corner of the
@@ -97,7 +98,7 @@ public class Grasp {
         for (int i = 0; i < maximalSpaceVertices.length; i++) {
             for(int j = 0; j < containerVertices.length; j++){
                 distance[i][j] =  Math.sqrt(
-                                   Math.pow(/*containerVertices[j].getX()*/ - maximalSpaceVertices[i].getX(),2)
+                                   Math.pow(containerVertices[j].getX() - maximalSpaceVertices[i].getX(),2)
                                  + Math.pow(containerVertices[j].getY() - maximalSpaceVertices[i].getY(),2)
                                  + Math.pow(containerVertices[j].getZ() - maximalSpaceVertices[i].getZ(),2));
                 if(j == 0) minDistancePerVertex[i] = distance[i][0];
@@ -112,7 +113,78 @@ public class Grasp {
         return minDistance;
     }
 
-    public MaximalSpace chooseMaximalSpace() {
+    public Coordinates computeLexicographicalDestinance(MaximalSpace space) {
+
+        Coordinates minCoords = space.getMinCoords();
+        Coordinates maxCoords = space.getMaxCoords();
+        Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
+        Coordinates minDistanceVertex = maximalSpaceVertices[0];
+
+        int[][][] distance = new int[8][8][3]; //distance of each MaximalSpace vertex to each container corner
+        int[][] minDistancePerVertex = new int[8][3]; //distance of each MaximalSpace vertex to its closest container corner
+        int minDistance = 0;
+        int k = 0;
+
+        for (int i = 0; i < maximalSpaceVertices.length; i++) {
+            for (int j = 0; j < containerVertices.length; j++) {
+                distance[i][j][0] = Math.abs(containerVertices[j].getX() - maximalSpaceVertices[i].getX());
+                distance[i][j][1] = Math.abs(containerVertices[j].getY() - maximalSpaceVertices[i].getY());
+                distance[i][j][2] = Math.abs(containerVertices[j].getZ() - maximalSpaceVertices[i].getZ());
+
+                sortDistances(distance[i][j]); //sorts distances from lowest to highest
+
+                //for(int k = 0; k < distance[i][j].length; k++){
+                k = 0;
+
+                if(j == 0) minDistancePerVertex[i] = distance[i][j];
+                else if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                else if(distance[i][j][k] == minDistancePerVertex[i][k]){
+                    k++;
+                    if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                    else if(distance[i][j][k] == minDistancePerVertex[i][k]) {
+                        k++;
+                        if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                        else if(distance[i][j][k] == minDistancePerVertex[i][k]){ break; //should  have tie-breaker: volume of maximal space
+                        }
+                    }   
+                }
+            }
+            //if(i == 0) minDistance = minDistancePerVertex[i][0];
+            //else if(minDistancePerVertex[i][0] < minDistance) minDistance = minDistancePerVertex[i][0]
+              if(i == 0){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[0];
+              }
+              else if(minDistancePerVertex[i][0] < minDistance){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[i];
+              }
+        }
+        //return minDistance;
+        return minDistanceVertex;
+    }
+
+    public int[] sortDistances(int[] distances){
+        for(int i = 0; i < distances.length - 1; i++){
+            if(distances[i] > distances[i+1]){
+                int temp = distances[i];
+                distances[i] = distances[i+1];
+                distances[i+1] = temp;
+                for(int j = i; j > 0; j--)
+                {
+                    if(distances[j] < distances[j-1]) {
+                        int temp2 = distances[j];
+                        distances[j] = distances[j - 1];
+                        distances[j - 1] = temp2;
+                    }
+
+                }
+            }
+        }
+        return distances;
+    }
+
+    public MaximalSpace chooseMaximalSpace(){
 
         ArrayList<Double> closestCornerDistances = new ArrayList<>();
         //double[] closestCornerDistances = new double[8];
@@ -122,7 +194,7 @@ public class Grasp {
             //computeDistanceClosestCorner(space);
 
             //closestCornerDistances[i] = computeDistanceClosestCorner(maximalSpaces.get(i));
-            closestCornerDistances.add(computeDistanceClosestCorner(maximalSpaces.get(i)));
+            closestCornerDistances.add(computeEuclideanDistanceClosestCorner(maximalSpaces.get(i)));
         }
 
         double minimumClosestCornerDistance = 0;
@@ -152,6 +224,7 @@ public class Grasp {
         for (int zCoord = z; zCoord < z + parcel.getShapeVector().z; zCoord++) {
             for (int yCoord = y; yCoord < y + parcel.getShapeVector().y; yCoord++) {
                 for (int xCoord = x; xCoord < x + parcel.getShapeVector().x; xCoord++) {
+                    System.out.println(xCoord + " " + yCoord + " " + zCoord);
                     containerMatrix[zCoord][yCoord][xCoord] = 1;
                 }
             }
@@ -163,7 +236,7 @@ public class Grasp {
             System.out.println("Layer for z = "+z);
             for(int y =0;y<exampleContainer.containerY;y++){
                 for (int x=0;x<exampleContainer.containerX;x++){
-                    System.out.print(containerMatrix[z][exampleContainer.containerY-1-y][x]+" "); // supposing the origin is in lower left corner (instead of upper)
+                    System.out.print(exampleContainer.containerMatrix[z][y][x]);
                 }
                 System.out.println();
             }
@@ -171,12 +244,319 @@ public class Grasp {
         }
     }
 
+    public void graspTest(){
+        ParcelShape parcel = new ParcelB();
+
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
+
+        MaximalSpace space = new MaximalSpace(coords1, coords2);
+
+        ParcelLayer bestLayer = findBestLayer(space, parcel);
+
+        System.out.println("Best: " + bestLayer.toString());
+
+        placeLayer(space, bestLayer);
+
+        testPrintContainer();
+    }
+
+    public void placeLayer(MaximalSpace space, ParcelLayer layer) {
+        if(layer == null) return;
+
+        //Coordinates minCoords = space.getMinCoords();
+
+        Coordinates origin = space.getMinCoords();
+        //Coordinates origin = computeLexicographicalDestinance(space);
+        System.out.println(origin.getX() + " " + origin.getY() + " " + origin.getZ());
+
+        int originX = origin.getX();
+        int originY = origin.getY();
+        int originZ = origin.getZ();
+
+        AxisMaxSpaces axis = layer.getAxis();
+
+        ParcelShape usedParcel = layer.getParcel();
+        Facing usedFacing = layer.getOrientation();
+        usedParcel.setOrientation(usedFacing);
+
+        int dim1Used = layer.getDim1Used();
+        int dim2Used = layer.getDim2Used();
+
+        int originDim1 = 0;
+        int originDim2 = 0;
+        int originDim3 = 0;
+
+        int parcelDim1 = 0;
+        int parcelDim2 = 0;
+        int parcelDim3 = 0;
+
+        if (axis == axis.XY || axis == axis.XZ) {
+            originDim1 = origin.getX();
+            parcelDim1 = usedParcel.getShapeVector().getX();
+        }
+        if (axis == axis.YX || axis == axis.YZ) {
+            originDim1 = origin.getY();
+            parcelDim1 = usedParcel.getShapeVector().getY();
+        }
+        if (axis == axis.ZX || axis == axis.ZY) {
+            originDim1 = origin.getZ();
+            parcelDim1 = usedParcel.getShapeVector().getZ();
+        }
+        if (axis == axis.YX || axis == axis.ZX) {
+            originDim2 = origin.getX();
+            parcelDim2 = usedParcel.getShapeVector().getX();
+        }
+        if (axis == axis.XY || axis == axis.ZY) {
+            originDim2 = origin.getY();
+            parcelDim2 = usedParcel.getShapeVector().getY();
+        }
+        if (axis == axis.XZ || axis == axis.YZ) {
+            originDim2 = origin.getZ();
+            parcelDim2 = usedParcel.getShapeVector().getZ();
+        }
+
+
+        if(axis == axis.XY || axis == axis.YX) {
+            originDim3 = origin.getZ();
+            parcelDim3 = usedParcel.getShapeVector().getZ();
+        }
+        if(axis == axis.XZ || axis == axis.ZX) {
+            originDim3 = origin.getY();
+            parcelDim3 = usedParcel.getShapeVector().getY();
+        }
+        if(axis == axis.YZ || axis == axis.ZY) {
+            originDim3 = origin.getX();
+            parcelDim3 = usedParcel.getShapeVector().getX();
+        }
+
+        //if(axis == axis.XY || axis == axis.YX && minCoords.getX() < origin.getX())
+
+        for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
+            for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {
+
+                    ParcelShape currentParcel = usedParcel.clone();
+
+                    switch (axis) {
+                        case XY:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim1, dim2, originZ));
+                            break;
+                        case YX:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim2, dim1, originZ));
+                            break;
+                        case XZ:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim1, originY, dim2));
+                            break;
+                        case ZX:
+                            currentParcel.setCurrentCoordinates(new Coordinates(dim2, originY, dim1));
+                            break;
+                        case YZ:
+                            currentParcel.setCurrentCoordinates(new Coordinates(originX, dim1, dim2));
+                            break;
+                        case ZY:
+                            currentParcel.setCurrentCoordinates(new Coordinates(originX, dim2, dim1));
+                            break;
+                    }
+
+                    parcelsPacked.add(currentParcel);
+                    totalValue+= currentParcel.getValue();
+            }
+        }
+
+        for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1++) {
+            for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2++) {
+                for(int dim3 = originDim3; dim3 < originDim3+ parcelDim3; dim3++) {
+                    switch (axis) {
+                        case XY:
+                            exampleContainer.containerMatrix[dim3][dim2][dim1] = 1;
+                            break;
+                        case YX:
+                            exampleContainer.containerMatrix[dim3][dim1][dim2] = 1;
+                            break;
+                        case XZ:
+                            exampleContainer.containerMatrix[dim2][dim3][dim1] = 1;
+                            break;
+                        case ZX:
+                            exampleContainer.containerMatrix[dim1][dim3][dim2] = 1;
+                            break;
+                        case YZ:
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim2][dim1][dim3] = 1;
+                            break;
+                        case ZY:
+                            System.out.println("originDim1 = " + originDim1 + " parcelDim1 = " + parcelDim1 + " dim1Used = " + dim1Used);
+                            System.out.println("originDim2 = " + originDim2 + " parcelDim2 = " + parcelDim2 + " dim2Used = " + dim1Used);
+                            //System.out.println("originX: " + originX + " dim1: " + dim1 + " dim2: " + dim2);
+                            exampleContainer.containerMatrix[dim1][dim2][dim3] = 1;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
+        int currentValue = 0;
+        int bestValue = 0;
+
+        ParcelLayer currentLayer;
+        ParcelLayer bestLayer = null;
+
+        for(AxisMaxSpaces axes : AxisMaxSpaces.values()){
+            currentLayer = createLayer(space, p, axes);
+            //System.out.println(currentLayer.toString());
+            if(currentLayer != null) currentValue = createLayer(space, p, axes).getVolume();
+            //else System.exit(0);
+
+            //System.out.println("currentVolume: " + currentValue);
+
+            //if(currentValue == bestValue && axes == AxisMaxSpaces.ZY || axes == AxisMaxSpaces.ZX)
+
+            if(currentValue == bestValue && currentLayer.getParcelsUsed() < bestLayer.getParcelsUsed()){
+                bestValue = currentValue;
+                bestLayer = currentLayer;
+            }
+            else if(currentValue > bestValue) {
+                bestValue = currentValue;
+                bestLayer = currentLayer;
+                //bestLayer = createLayer(space, p, axes);
+            }
+        }
+        return bestLayer;
+    }
+
+    public ParcelLayer createLayer(MaximalSpace space, ParcelShape p, AxisMaxSpaces axis){
+        Coordinates minCoords = space.getMinCoords();
+        Coordinates maxCoords = space.getMaxCoords();
+        //Coordinates maxCoords2D = new Coordinates(space.getMaxCoords().getZ(), space.getMinCoords().getY(),space.getMaxCoords().getX());
+
+        int spaceWidth  = maxCoords.getX() - minCoords.getX();
+        int spaceHeight = maxCoords.getY() - minCoords.getY();
+        int spaceLength = maxCoords.getZ() - minCoords.getZ();
+
+        int spaceDim1 = 0;
+        int spaceDim2 = 0;
+        int spaceDim3 = 0;
+
+        int parcelDim1 = 0;
+        int parcelDim2 = 0;
+        int parcelDim3 = 0;
+
+        int nrOfFittingParcelsDim1 = 0;
+        int nrOfFittingParcelsDim2 = 0;
+        int valueLayer = 0;
+        int volumeLayer = 0;
+        int maxValueLayer = 0;
+        int maxVolumeLayer = 0;
+
+        ParcelLayer bestVolumeLayer = null;
+        ParcelLayer bestValueLayer = null;
+
+        //int filledVolumeDim1 = nrOfFittingParcelsDim1 * parcelDim1 * parcelDim2;
+
+        //try all parcel rotations, save layer value and keep the highest
+        //first: check if unused dimension has enough space for the layer
+
+
+        for(Facing o : Facing.values()){
+            p.setOrientation(o);
+
+            if(axis == axis.XY || axis == axis.XZ) {
+                spaceDim1 = spaceWidth;
+                parcelDim1 = p.getShapeVector().getX();
+                //System.out.println("parcelX: " + p.getShapeVector().getX());
+            }
+            if(axis == axis.YX || axis == axis.YZ) {
+                spaceDim1 = spaceHeight;
+                parcelDim1 = p.getShapeVector().getY();
+            }
+            if(axis == axis.ZX || axis == axis.ZY) {
+                spaceDim1 = spaceLength;
+                parcelDim1 = p.getShapeVector().getZ();
+            }
+            if(axis == axis.YX || axis == axis.ZX) {
+                spaceDim2 = spaceWidth;
+                parcelDim2 = p.getShapeVector().getX();
+            }
+            if(axis == axis.XY || axis == axis.ZY) {
+                spaceDim2 = spaceHeight;
+                parcelDim2 = p.getShapeVector().getY();
+            }
+            if(axis == axis.XZ || axis == axis.YZ) {
+                spaceDim2 = spaceLength;
+                parcelDim2 = p.getShapeVector().getZ();
+            }
+
+
+            if(axis == axis.XY || axis == axis.YX) {
+                spaceDim3 = spaceLength;
+                parcelDim3 = p.getShapeVector().getZ();
+            }
+            if(axis == axis.XZ || axis == axis.ZX) {
+                spaceDim3 = spaceHeight;
+                parcelDim3 = p.getShapeVector().getY();
+            }
+            if(axis == axis.YZ || axis == axis.ZY) {
+                spaceDim3 = spaceWidth;
+                parcelDim3 = p.getShapeVector().getX();
+            }
+
+            if(parcelDim3 <= spaceDim3){
+                nrOfFittingParcelsDim1 = 0;
+                for(int i = parcelDim1; i <= spaceDim1; i += parcelDim1){
+                    //System.out.println("spaceDim1 = " + spaceDim1 + "parcelDim1 = " + parcelDim1);
+                    nrOfFittingParcelsDim1++;
+                }
+
+                //System.out.println("nrOfFittingParcelsDim1: " + nrOfFittingParcelsDim1);
+
+                nrOfFittingParcelsDim2 = 0;
+                for(int i = parcelDim2; i <= spaceDim2; i += parcelDim2){
+                    nrOfFittingParcelsDim2++;
+                }
+
+                valueLayer = nrOfFittingParcelsDim1 * nrOfFittingParcelsDim2 * p.getValue();
+                volumeLayer = (nrOfFittingParcelsDim1 * parcelDim1) * (nrOfFittingParcelsDim2 * parcelDim2) * parcelDim3;
+
+                ParcelLayer currentLayer = new ParcelLayer(p,o, nrOfFittingParcelsDim1, nrOfFittingParcelsDim2, volumeLayer, valueLayer, axis);
+                System.out.println("currentLayer: " + currentLayer.toString());
+
+                if(valueLayer > maxValueLayer){
+                    maxValueLayer = valueLayer;
+                    Facing usedFacing = o;
+                    int dim1Used = nrOfFittingParcelsDim1;
+                    int dim2Used = nrOfFittingParcelsDim2;
+                    bestValueLayer = new ParcelLayer(p, o, dim1Used, dim2Used,volumeLayer,maxValueLayer, axis);
+                }
+                if(volumeLayer > maxVolumeLayer){
+                    maxVolumeLayer = volumeLayer;
+                    Facing usedFacing = o;
+                    int dim1Used = nrOfFittingParcelsDim1;
+                    int dim2Used = nrOfFittingParcelsDim2;
+                    bestVolumeLayer = new ParcelLayer(p, o, dim1Used, dim2Used,maxVolumeLayer,valueLayer, axis);
+                }
+            }
+
+        }
+        if(bestValueLayer != null)System.out.println("Sub-best: " + bestValueLayer.toString());
+        return bestValueLayer;
+    }
+
     public void fillChosenMaximalSpace(){
-        //we place parcels in the chosen space to try to either completely fill the container or get the highest value
+        //we place parcels in the chosen space to try to either completely fill the container or get the highest value.
 
 
     }
 
+    public ArrayList<ParcelShape> getParcelsPacked() {
+        return parcelsPacked;
+    }
+
+    public int getTotalValue() {
+        return totalValue;
+    }
+
+    /*
     public void generateMaximalSpaces(ParcelShape lastPlacedParcel){ //should later use blocks (groups of parcels put into a layer) instead of single parcels
 
         Coordinates coords = lastPlacedParcel.getPosition();
@@ -200,7 +580,7 @@ public class Grasp {
         and save the dimensions.
 
         for each vertex there are certain directions on which there can be empty space and certain directions
-        in which the block is.
+        in which the block is
 
         When a new maximal space is created any old maximal space with which it overlaps should be removed from the list
 
@@ -208,6 +588,7 @@ public class Grasp {
 
         //Coordinates[] currentMaxSpaceVertices = new Coordinates[8];
 
+    /*
         MaximalSpace currentMaxSpace;
 
         for(int i = 0; i < blockVertices.length; i++) {
@@ -251,9 +632,10 @@ public class Grasp {
             }
         }
 
-*/
+
         maximalSpaces.addAll(generatedSpaces);
        // return generatedSpaces;
       }
+*/
 
 }

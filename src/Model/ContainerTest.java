@@ -19,16 +19,16 @@ public class ContainerTest {
         givenParcels = container.orderParcelListByValue(givenParcels);
         //givenParcels = container.orderParcelListByRatio(givenParcels);
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(30,20,10);
+        container.setAmountOfParcels(0,0,1);
         ContainerModel maxValueContainer = new ContainerModel();
         maxValueContainer.setParcelList(givenParcels);
         int delay = 5000; // in milliseconds
         container.setDelay(delay);
         //container.solveRandom(maxValueContainer);
         //container.solveBacktracking(maxValueContainer,true,true);
-        //container.setContainerDimensions(5,33,8);
-        container.solveHalfRandomHalfDeterministic();
-
+        //container.setContainerDimensions(33,5,8);
+        //container.solveHalfRandomHalfDeterministic();
+        container.solveBacktracking(maxValueContainer,true,true);
 
 
     }

@@ -1,7 +1,8 @@
 package Model;
 
-import Shapes.ParcelA;
+import Shapes.*;
 import Shapes.ParcelShape;
+import Util.Coordinates;
 
 public class GraspTest {
 
@@ -10,15 +11,30 @@ public class GraspTest {
         ParcelShape parcel1 = new ParcelA();
         ParcelShape parcel2 = new ParcelA();
 
-        graspModel.testPlaceParcel(1,1,1,parcel2);
-        graspModel.generateMaximalSpaces(parcel2);
-       // graspModel.testPrintContainer();
+        ParcelShape parcel3 = new ParcelB();
+        ParcelShape parcel4 = new ParcelC();
 
-        graspModel.testPlaceParcel(20,1,1,parcel1);
-        graspModel.generateMaximalSpaces(parcel1);
+        ParcelShape parcel = new ParcelB();
+
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
+
+        MaximalSpace space = new MaximalSpace(coords1, coords2);
+
+        Coordinates minDistVertex = graspModel.computeLexicographicalDestinance(space);
+
+        System.out.println(minDistVertex.getX() + " " + minDistVertex.getY() + " " + minDistVertex.getZ());
+
+        //System.out.println(graspModel.computeLexicographicalDestinance(space));
+
+        //ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
+
+        //System.out.println("Best: " + bestLayer.toString());
+
+        //graspModel.placeLayer(space, bestLayer);
+
         //graspModel.testPrintContainer();
 
-        MaximalSpace chosenMaximalSpace = graspModel.chooseMaximalSpace();
 
     }
 }

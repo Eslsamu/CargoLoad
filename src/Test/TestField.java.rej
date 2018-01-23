@@ -1,0 +1,10 @@
+diff a/src/Test/TestField.java b/src/Test/TestField.java	(rejected hunks)
+@@ -37,7 +37,7 @@
+ 		 }
+ 	 }
+ 	 
+-	 
++	 //TODO save row position of rectangle
+ 	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
+ 		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
+ 		 int[] heights = new int[matrix[0].length];
