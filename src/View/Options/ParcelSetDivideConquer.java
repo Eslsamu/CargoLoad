@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View.Options;
 
-import View.Options.ORDER;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.event.ActionEvent;
@@ -30,13 +24,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
- *
- * @author danyp
+ * This class opens a stage with options used by divide and conquer algorithm when we use set amount of parcels.
+ * @author Basia, Jordan
+ * @version 1.5
  */
 public class ParcelSetDivideConquer extends VBox{
     /**
      * Constructor generates all options.
-     * @param options an instance of BacktrackingOptionsPane
+     * @param options an instance of DivideConquerOptions
      */
     public ParcelSetDivideConquer(DivideConquerOptions options){
 

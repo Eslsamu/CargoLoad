@@ -8,13 +8,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-
+/**
+ * This class creates a GridPane, on top of it when showing already displayed containers there will be a title with
+ * information about the container, following the ContainerPane and if needed buttons to scroll between already generated solutions.
+ * @author Jordan, Basia
+ */
 public class ContainerView extends GridPane{
     private Label heading;
     private GridPane pane;
     private ContainerPane container;
     private int size;
     private int move = 0;
+    /**
+     * Constructor will add a title with no text and create an instance of ContainerPane which we will run.
+     * @param title is an instance of TitlePane, which is used by the ContainerPane 
+     */
     public ContainerView(TitlePane title){
         heading = new Label();
         heading.setFont(new Font("Arial", 20));
@@ -26,12 +34,23 @@ public class ContainerView extends GridPane{
         setHalignment(container, HPos.CENTER);
         drawButtons();
     }
+    /**
+     * Get the container
+     * @return instance of ContainerPane
+     */
     public ContainerPane getContainer(){
         return container;
     }
+    /**
+     * Add a title with information
+     * @param name the string with the information
+     */
     public void setHeading(String name){
         heading.setText(name);
     }
+    /**
+     * Show buttons for scrolling between already shown solutions
+     */
     public void showButtons(){
         try{
         add(pane, 0, 2);
@@ -42,6 +61,9 @@ public class ContainerView extends GridPane{
         
         }
     }
+    /**
+     * Hide buttons
+     */
     public void hideButtons(){
         try{
         getChildren().remove(pane);
@@ -52,9 +74,16 @@ public class ContainerView extends GridPane{
         
         }
     }
+    /**
+     * This method will give a value to an int representing the size of already shown containers.
+     * @param size size of ArrayList with pentominoes
+     */
     public void setSize(int size){
         this.size = size; 
     }
+    /**
+     * Create buttons and assign actions to them.
+     */
     public void drawButtons(){
         pane = new GridPane();
         Button left = new Button("Left");

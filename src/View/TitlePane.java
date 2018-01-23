@@ -9,7 +9,8 @@ import javafx.scene.text.FontWeight;
 
 /**
  * A class drawing a GridPane with title, box values and container value.
- * @author Jordan
+ * @author Jordan, Basia
+ * @version 1.3
  */
 public class TitlePane extends GridPane{
     Label value;
@@ -67,6 +68,10 @@ public class TitlePane extends GridPane{
         
         return gridPane;
     }
+    /**
+     * This method adds some text with instructions for the user.
+     * @return GridPane containing the instructions
+     */
     public GridPane drawInstructionsPane(){
         GridPane gridPane = new GridPane();
         

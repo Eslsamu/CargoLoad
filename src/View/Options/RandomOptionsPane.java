@@ -33,13 +33,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+/**
+ * This class will create a Pane that displays Random algorithm options
+ * @author Basia, Jordan
+ * @version 2.0
+ * @date 23.01.2018
+ */
 public class RandomOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
     private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
-    
+    /**
+     * Constructor creates a pane with options
+     * @param container an instance of current shown ContainerPane
+     * @param options an instance of OptionsPane to control shown options
+     * @param view an instance of ContainerView to control shown container
+     */
     public RandomOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
         Label title = new Label("Choose packing:");
@@ -53,8 +63,6 @@ public class RandomOptionsPane extends VBox{
         packBox.setMinSize(225, 50);
         RadioButton infiniteAmount = new RadioButton("Infinite amount of boxes");
         RadioButton setAmount = new RadioButton("Custom amount of boxes");
-        /* when button is pressed it checks, which radiobutton is selected and then acts accordingly
-        */
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -94,8 +102,6 @@ public class RandomOptionsPane extends VBox{
         shownContainers.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         shownContainers.setFocusTraversable(false);
         shownContainers.setMinSize(225, 50);
-        //RadioButton fill = new RadioButton("Fill cargo-space");
-        //RadioButton maximum = new RadioButton("Maximum value");
         shownContainers.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -122,6 +128,9 @@ public class RandomOptionsPane extends VBox{
         setSpacing(15);
         setAlignment(Pos.CENTER);
     }
+     /**
+     * This method generates a new stage that will ask the user for the timer.
+     */
     public void setPackingOrder(){
         VBox pane = new VBox();
        
@@ -164,6 +173,15 @@ public class RandomOptionsPane extends VBox{
                 generateSolution(Integer.parseInt(Timer.getText()));
         }});
     }
+    /**
+     * If the user chooses option set amount of boxes and submits them this method will be called.
+     * It will close the other stage and generate Solutions according to the set amount of boxes,
+     * give timer and Order type.
+     * @param a number of boxes typeA
+     * @param b number of boxes typeB
+     * @param c number of boxes typeC
+     * @param timer representing the timer of the algorithm
+     */
     public void solveSetAmountBoxes(int a, int b, int c, int timer){
         stage.close();
         generateSolution(a, b, c, timer);
@@ -171,8 +189,7 @@ public class RandomOptionsPane extends VBox{
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
      * at the end draws the best found result.
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param timer representing the timer of the algorithm
      */
     public void generateSolution(int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
@@ -198,8 +215,7 @@ public class RandomOptionsPane extends VBox{
      * @param a number of boxes typeA
      * @param b number of boxes typeB
      * @param c number of boxes typeC
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param timer representing the timer of the algorithm
      */
     public void generateSolution(int a, int b, int c, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();

@@ -223,8 +223,8 @@ public class DivideConquerOptions extends VBox{
      * @param a number of boxes typeA
      * @param b number of boxes typeB
      * @param c number of boxes typeC
-     * @param order Order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order Order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int timer){
         stage.close();
@@ -233,8 +233,8 @@ public class DivideConquerOptions extends VBox{
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
      * at the end draws the best found result.
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
@@ -268,8 +268,8 @@ public class DivideConquerOptions extends VBox{
      * @param a number of boxes typeA
      * @param b number of boxes typeB
      * @param c number of boxes typeC
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();

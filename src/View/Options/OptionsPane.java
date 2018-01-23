@@ -20,6 +20,7 @@ public class OptionsPane extends VBox{
     /**
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
+     * @param view an instance of ContainerView
      */
     public OptionsPane(ContainerPane container, ContainerView view){
         options = new BacktrackingOptionsPane(container, this, view);
@@ -40,20 +41,29 @@ public class OptionsPane extends VBox{
         getChildren().remove(algorithms);
         getChildren().add(options);
     }
+    /**
+     * Remove algorithm options and open divide and conquer options.
+     */
     public void drawDivideConquerOptions(){
         getChildren().remove(algorithms);
         getChildren().add(divideOptions);
     }
+    /**
+     * Remove algorithm options and open random options.
+     */
     public void drawRandomOptions(){
         getChildren().remove(algorithms);
         getChildren().add(randomOptions);
     }
+    /**
+     * Remove algorithm options and open grasp options.
+     */
     public void drawGraspOptions(){
         getChildren().remove(algorithms);
         getChildren().add(graspOptions);
     }
     /**
-     * Remove backtracking options and open algorithm options
+     * Remove all other options and open algorithm options
      */
     public void drawAlgorithmOptions(){
         getChildren().remove(options);

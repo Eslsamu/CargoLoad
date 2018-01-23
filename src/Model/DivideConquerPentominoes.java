@@ -8,6 +8,12 @@ import Shapes.PentominoT;
 import Util.Coordinates;
 import java.util.ArrayList;
 
+/**
+ * This class will try to create layers out of the container and fill them with pentominoes.
+ * @author Jordan
+ * @version 2.1
+ * @date 23.01.2018
+ */
 public class DivideConquerPentominoes {
     private String[][][] CONTAINER = new String[33][8][5];
     private String[][] t = {{"T", "T", "T"},
@@ -28,6 +34,9 @@ public class DivideConquerPentominoes {
     private ArrayList<PentominoShape> ContainerLoadedPentominoes = new ArrayList<>();
     private int counter = 0;
     
+    /**
+     * The constructor will generate all possible rotations and will then find a solution.
+     */
     public DivideConquerPentominoes(){
         ArrayList<String[][]> givenPentominoes = new ArrayList<>();
         givenPentominoes.add(t);
@@ -53,12 +62,25 @@ public class DivideConquerPentominoes {
         printContainedShapes(ContainerLoadedPentominoes);
         
     }
+    /**
+     * Gets the value of the container
+     * @return value of Container
+     */
     public int getContainerValue(){
         return ContainerValue;
     }
+    /**
+     * Get the pentominoes used for the solution.
+     * @return ArrayList with pentominoes that are used for a solution
+     */
     public ArrayList<PentominoShape> getContainedPentominoes(){
         return ContainerLoadedPentominoes;
     }
+    /**
+     * This method is used when a layer is found to multiply it several times in the container
+     * @param multiply the number of times it can be multiplied in the container
+     * @param dimension the coordinate(width, length, depth) in which it can be multiplied
+     */
     public void spreadLayer(int multiply, int dimension){
         if(dimension == 0){
             for(int z = 0; z < multiply; z++){
@@ -118,6 +140,11 @@ public class DivideConquerPentominoes {
             }
         }
     }
+    /**
+     * This method tries to find the biggest empty cuboid in the container
+     * @param container a String representation of the container
+     * @return an array with dimensions of the cuboid
+     */
     public int[] checkMatrix(String[][][] container){
         int z = 0;
         int y = 0;
@@ -133,6 +160,13 @@ public class DivideConquerPentominoes {
         }
         return new int[]{z + 1, y + 1, x + 1};
     }
+    /**
+     * Finds the best possible layer to be filled in the cuboid
+     * @param containerDimensions the dimensions of the cuboid
+     * @return array with data, first two are dimensions of the
+     * layer that should be filled, third is the times the layer can 
+     * be spread and forth is the orientation of multiplaying it
+     */
     public int[] generateLayers(int[] containerDimensions){
         int[] dimensions = new int[4];
         for(int i = 0; i < containerDimensions.length; i++){
@@ -160,6 +194,11 @@ public class DivideConquerPentominoes {
         }    
         return dimensions;
     }
+    /**
+     * Find a solution for a layer
+     * @param y y dimension of the layer
+     * @param x x dimension of the layer
+     */
     public void findLayers(int y, int x){
        layer = new String[y][x];
         if(find()){
@@ -172,6 +211,10 @@ public class DivideConquerPentominoes {
         System.out.println(bestValue);
         System.out.println(bestLoadedPentominoes.size());
     }
+    /**
+     * The actual backtracking method used to find a solution of a layer.
+     * @return boolean when it finds/doesnt find solution
+     */
     public boolean find(){
         if(loadedPentominoes.size() >= (layer.length*layer[0].length)/5) {
             counter++;
@@ -230,6 +273,14 @@ public class DivideConquerPentominoes {
         }
         return false;
     }
+    /**
+     * Convert a String pentominoe to a PentominoShape, to be added in an arrayList with pentominoes needed for the solution
+     * @param pentominoe a String representation of a pentominoes
+     * @param shape a PentominoShape pentomino  
+     * @param yy the starting height position
+     * @param xx the starting width position
+     * @return a converted PentominoShape
+     */
     public PentominoShape load(String[][] pentominoe, PentominoShape shape, int yy, int xx){
         int[] coordinates = new int[10];
         int count = 0;
@@ -251,6 +302,11 @@ public class DivideConquerPentominoes {
         }
         return shape;
     }
+    /**
+     * Used to rotate the String pentominoe
+     * @param pentominoe take a String as a parameter and rotate it left
+     * @return a String with left rotated pentominoe
+     */
     public String[][] rotateLeft(String[][] pentominoe){
         String[][] rotated = new String[pentominoe[0].length][pentominoe.length];
         for(int x = 0; x < pentominoe[0].length; x++){
@@ -260,6 +316,11 @@ public class DivideConquerPentominoes {
         }
         return rotated;
     }
+    /**
+     * Used to rotate the String pentominoe
+     * @param pentominoe take a String as a parameter and rotate it upside down
+     * @return a String with upside down rotated pentominoe
+     */
     public String[][] rotateUpsideDown(String[][] pentominoe){
         String[][] rotated = new String[pentominoe.length][pentominoe[0].length];
         for(int y = pentominoe.length - 1; y > -1; y--){
@@ -269,6 +330,11 @@ public class DivideConquerPentominoes {
         }
         return rotated;
     }
+    /**
+     * Used to rotate the String pentominoe
+     * @param pentominoe take a String as a parameter and mirror it
+     * @return a String with mirrored pentominoe
+     */
     public String[][] mirror(String[][] pentominoe){
         String[][] rotated = new String[pentominoe.length][pentominoe[0].length];
         for(int y = 0; y < pentominoe.length; y++){
@@ -278,6 +344,11 @@ public class DivideConquerPentominoes {
         }
         return rotated;
     }
+    /**
+     * Finds the name of the String pentominoe
+     * @param pentominoe String pentominoe
+     * @return A String with the name of the pentominoe
+     */
     public String name(String[][] pentominoe){
         int x = 0;
         while(pentominoe[0][x] == null){
@@ -285,6 +356,13 @@ public class DivideConquerPentominoes {
         }
         return pentominoe[0][x];
     }
+    /**
+     * Checks if a pentominoe will fit at a certain position in a layer.
+     * @param pentominoe the String representation of the pentominoe
+     * @param yy the height coordinate
+     * @param xx the width coordinate
+     * @return boolean true/false depending if it fits
+     */
     public boolean doesFit(String[][] pentominoe, int yy, int xx) {
         for(int y = 0; y < pentominoe.length; y++){
             for(int x = 0; x < pentominoe[0].length; x++){
@@ -298,6 +376,12 @@ public class DivideConquerPentominoes {
         }
 	return true;
     }
+    /**
+     * If a pentominoe fits it will be placed at these positions.
+     * @param pentominoe String representation of pentominoe
+     * @param yy the height coordinate
+     * @param xx the width coordinate
+     */
     public void place(String[][] pentominoe, int yy, int xx) {
         for(int y = 0; y < pentominoe.length; y++){
             for(int x = 0; x < pentominoe[0].length; x++){
@@ -308,8 +392,11 @@ public class DivideConquerPentominoes {
         }    
     }
 
-    /*
-     * removes the last pentomino from the list and set's its coordinates in the container matrix to false in reverse order
+    /**
+     * If a pentominoe is to be removed this method is called.
+     * @param pentominoe the pentominoe that should be removed
+     * @param yy the height coordinate of the pentominoe
+     * @param xx the width coordinate of the pentominoe
      */
     public void removeLast(String[][] pentominoe, int yy, int xx) {
         for(int y = 0; y < pentominoe.length; y++){
@@ -320,6 +407,10 @@ public class DivideConquerPentominoes {
             }
         } 
     }
+    /**
+     * Prints a String array
+     * @param layer a String
+     */
     public void printLayer(String[][] layer){
         for(int i = 0; i < layer.length; i++){
             for(int x = 0; x < layer[0].length; x++){
@@ -328,6 +419,10 @@ public class DivideConquerPentominoes {
             System.out.println();
         }
     }
+    /**
+     * Prints first five coordinates of pentominoes added to a list.
+     * @param loadedPentominoes arrayList with pentominoes to be printed
+     */
     public void printContainedShapes(ArrayList<PentominoShape> loadedPentominoes){
         for(int  i = 0; i < 5; i++){
             System.out.println("Parcel: " + i);

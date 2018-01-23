@@ -1,11 +1,9 @@
 package View.Options;
 
-import View.Options.BacktrackingOptionsPane;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -21,7 +19,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
-import static javafx.scene.layout.GridPane.setHalignment;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,6 +27,7 @@ import javafx.scene.text.Font;
  * This class opens a stage with options used by backtracking algorithm when we use set amount of parcels.
  * @author Basia, Jordan
  * @version 1.5
+ * @date 23.01.2018
  */
 public class ParcelsSet extends VBox{
     /**
