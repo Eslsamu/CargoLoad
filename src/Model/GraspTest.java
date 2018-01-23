@@ -26,18 +26,21 @@ public class GraspTest {
 
         //MaximalSpace chosenMaximalSpace = graspModel.chooseMaximalSpace();
 
+        //Grasp graspModel = new Grasp();
+
+        ParcelShape parcel = new ParcelB();
+
         Coordinates coords1 = new Coordinates(0,0,0);
         Coordinates coords2 = new Coordinates(5,8,12);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel3);
+        ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
 
         System.out.println("Best: " + bestLayer.toString());
 
         graspModel.placeLayer(space, bestLayer);
 
         graspModel.testPrintContainer();
-
     }
 }

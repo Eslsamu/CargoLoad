@@ -174,14 +174,14 @@ public class Grasp {
     }
 
     public void graspTest(){
-        ParcelShape parcel3 = new ParcelB();
+        ParcelShape parcel = new ParcelB();
 
         Coordinates coords1 = new Coordinates(0,0,0);
         Coordinates coords2 = new Coordinates(5,8,12);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        ParcelLayer bestLayer = findBestLayer(space, parcel3);
+        ParcelLayer bestLayer = findBestLayer(space, parcel);
 
         System.out.println("Best: " + bestLayer.toString());
 
@@ -191,6 +191,8 @@ public class Grasp {
     }
 
     public void placeLayer(MaximalSpace space, ParcelLayer layer) {
+        if(layer == null) return;
+
         Coordinates origin = space.getMinCoords();
 
         int originX = origin.getX();
@@ -235,7 +237,7 @@ public class Grasp {
             parcelDim2 = usedParcel.getShapeVector().getY();
         }
         if (axis == axis.XZ || axis == axis.YZ) {
-            originDim2 = origin.getY();
+            originDim2 = origin.getZ();
             parcelDim2 = usedParcel.getShapeVector().getZ();
         }
 
@@ -253,9 +255,6 @@ public class Grasp {
             parcelDim3 = usedParcel.getShapeVector().getX();
         }
 
-
-
-
         for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
             for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {
 
@@ -264,16 +263,22 @@ public class Grasp {
                     switch (axis) {
                         case XY:
                             currentParcel.setCurrentCoordinates(new Coordinates(dim1, dim2, originZ));
+                            break;
                         case YX:
                             currentParcel.setCurrentCoordinates(new Coordinates(dim2, dim1, originZ));
+                            break;
                         case XZ:
                             currentParcel.setCurrentCoordinates(new Coordinates(dim1, originY, dim2));
+                            break;
                         case ZX:
                             currentParcel.setCurrentCoordinates(new Coordinates(dim2, originY, dim1));
+                            break;
                         case YZ:
                             currentParcel.setCurrentCoordinates(new Coordinates(originX, dim1, dim2));
+                            break;
                         case ZY:
                             currentParcel.setCurrentCoordinates(new Coordinates(originX, dim2, dim1));
+                            break;
                     }
 
                     parcelsPacked.add(currentParcel);
@@ -314,7 +319,7 @@ public class Grasp {
     }
 
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
-        int currentValue;
+        int currentValue = 0;
         int bestValue = 0;
 
         ParcelLayer currentLayer;
@@ -323,7 +328,9 @@ public class Grasp {
         for(AxisMaxSpaces axes : AxisMaxSpaces.values()){
             currentLayer = createLayer(space, p, axes);
             //System.out.println(currentLayer.toString());
-            currentValue = createLayer(space, p, axes).getVolume();
+            if(currentLayer != null) currentValue = createLayer(space, p, axes).getVolume();
+            //else System.exit(0);
+
             //System.out.println("currentVolume: " + currentValue);
 
             //if(currentValue == bestValue && axes == AxisMaxSpaces.ZY || axes == AxisMaxSpaces.ZX)
@@ -454,7 +461,7 @@ public class Grasp {
             }
 
         }
-        System.out.println("Sub-best: " + bestValueLayer.toString());
+        if(bestValueLayer != null)System.out.println("Sub-best: " + bestValueLayer.toString());
         return bestValueLayer;
     }
 

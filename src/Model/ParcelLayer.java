@@ -4,7 +4,7 @@ import Shapes.*;
 
 public class ParcelLayer {
     private ParcelShape parcelType;
-    private int amountOfParcels;
+    private int requiredParcels;
     private Facing orientation;
     private AxisMaxSpaces a;
     private int dim1Used;
@@ -21,6 +21,7 @@ public class ParcelLayer {
         this.volumeLayer = volumeLayer;
         this.valueLayer = valueLayer;
         this.a = a;
+        this.requiredParcels = dim1Used * dim2Used;
     }
 
     public int getVolume(){
