@@ -466,7 +466,7 @@ public class Grasp {
     }
 
     public void fillChosenMaximalSpace(){
-        //we place parcels in the chosen space to try to either completely fill the container or get the highest value
+        //we place parcels in the chosen space to try to either completely fill the container or get the highest value.
 
 
     }
