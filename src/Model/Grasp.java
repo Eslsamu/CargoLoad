@@ -113,11 +113,12 @@ public class Grasp {
         return minDistance;
     }
 
-    public int computeLexicographicalDestinance(MaximalSpace space) {
+    public Coordinates computeLexicographicalDestinance(MaximalSpace space) {
 
         Coordinates minCoords = space.getMinCoords();
         Coordinates maxCoords = space.getMaxCoords();
         Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
+        Coordinates minDistanceVertex = maximalSpaceVertices[0];
 
         int[][][] distance = new int[8][8][3]; //distance of each MaximalSpace vertex to each container corner
         int[][] minDistancePerVertex = new int[8][3]; //distance of each MaximalSpace vertex to its closest container corner
@@ -148,11 +149,19 @@ public class Grasp {
                     }   
                 }
             }
-            if(i == 0) minDistance = minDistancePerVertex[i][0];
-            else if(minDistancePerVertex[i][0] < minDistance) minDistance = minDistancePerVertex[i][0];
-
+            //if(i == 0) minDistance = minDistancePerVertex[i][0];
+            //else if(minDistancePerVertex[i][0] < minDistance) minDistance = minDistancePerVertex[i][0]
+              if(i == 0){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[0];
+              }
+              else if(minDistancePerVertex[i][0] < minDistance){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[i];
+              }
         }
-        return minDistance;
+        //return minDistance;
+        return minDistanceVertex;
     }
 
     public int[] sortDistances(int[] distances){
@@ -238,8 +247,8 @@ public class Grasp {
     public void graspTest(){
         ParcelShape parcel = new ParcelB();
 
-        Coordinates coords1 = new Coordinates(0,0,0);
-        Coordinates coords2 = new Coordinates(5,8,12);
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
@@ -255,7 +264,11 @@ public class Grasp {
     public void placeLayer(MaximalSpace space, ParcelLayer layer) {
         if(layer == null) return;
 
+        //Coordinates minCoords = space.getMinCoords();
+
         Coordinates origin = space.getMinCoords();
+        //Coordinates origin = computeLexicographicalDestinance(space);
+        System.out.println(origin.getX() + " " + origin.getY() + " " + origin.getZ());
 
         int originX = origin.getX();
         int originY = origin.getY();
@@ -316,6 +329,8 @@ public class Grasp {
             originDim3 = origin.getX();
             parcelDim3 = usedParcel.getShapeVector().getX();
         }
+
+        //if(axis == axis.XY || axis == axis.YX && minCoords.getX() < origin.getX())
 
         for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
             for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {

@@ -16,12 +16,16 @@ public class GraspTest {
 
         ParcelShape parcel = new ParcelB();
 
-        Coordinates coords1 = new Coordinates(1,3,5);
-        Coordinates coords2 = new Coordinates(4,7,25);
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        System.out.println(graspModel.computeLexicographicalDestinance(space));
+        Coordinates minDistVertex = graspModel.computeLexicographicalDestinance(space);
+
+        System.out.println(minDistVertex.getX() + " " + minDistVertex.getY() + " " + minDistVertex.getZ());
+
+        //System.out.println(graspModel.computeLexicographicalDestinance(space));
 
         //ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
 
