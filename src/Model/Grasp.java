@@ -69,7 +69,7 @@ public class Grasp {
         return vertices;
     }
 
-    public double computeDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
+    public double computeEuclideanDistanceClosestCorner(MaximalSpace space){ //returns the coordinates of the corner closest to the input MaximalSpace space
         /*
         "For each
         new maximal-space, we compute the distance from every corner of the
@@ -98,7 +98,7 @@ public class Grasp {
         for (int i = 0; i < maximalSpaceVertices.length; i++) {
             for(int j = 0; j < containerVertices.length; j++){
                 distance[i][j] =  Math.sqrt(
-                                   Math.pow(/*containerVertices[j].getX()*/ - maximalSpaceVertices[i].getX(),2)
+                                   Math.pow(containerVertices[j].getX() - maximalSpaceVertices[i].getX(),2)
                                  + Math.pow(containerVertices[j].getY() - maximalSpaceVertices[i].getY(),2)
                                  + Math.pow(containerVertices[j].getZ() - maximalSpaceVertices[i].getZ(),2));
                 if(j == 0) minDistancePerVertex[i] = distance[i][0];
@@ -113,7 +113,78 @@ public class Grasp {
         return minDistance;
     }
 
-    public MaximalSpace chooseMaximalSpace() {
+    public Coordinates computeLexicographicalDestinance(MaximalSpace space) {
+
+        Coordinates minCoords = space.getMinCoords();
+        Coordinates maxCoords = space.getMaxCoords();
+        Coordinates[] maximalSpaceVertices = findAllVertices(minCoords, maxCoords);
+        Coordinates minDistanceVertex = maximalSpaceVertices[0];
+
+        int[][][] distance = new int[8][8][3]; //distance of each MaximalSpace vertex to each container corner
+        int[][] minDistancePerVertex = new int[8][3]; //distance of each MaximalSpace vertex to its closest container corner
+        int minDistance = 0;
+        int k = 0;
+
+        for (int i = 0; i < maximalSpaceVertices.length; i++) {
+            for (int j = 0; j < containerVertices.length; j++) {
+                distance[i][j][0] = Math.abs(containerVertices[j].getX() - maximalSpaceVertices[i].getX());
+                distance[i][j][1] = Math.abs(containerVertices[j].getY() - maximalSpaceVertices[i].getY());
+                distance[i][j][2] = Math.abs(containerVertices[j].getZ() - maximalSpaceVertices[i].getZ());
+
+                sortDistances(distance[i][j]); //sorts distances from lowest to highest
+
+                //for(int k = 0; k < distance[i][j].length; k++){
+                k = 0;
+
+                if(j == 0) minDistancePerVertex[i] = distance[i][j];
+                else if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                else if(distance[i][j][k] == minDistancePerVertex[i][k]){
+                    k++;
+                    if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                    else if(distance[i][j][k] == minDistancePerVertex[i][k]) {
+                        k++;
+                        if(distance[i][j][k] < minDistancePerVertex[i][k]) minDistancePerVertex[i] = distance[i][j];
+                        else if(distance[i][j][k] == minDistancePerVertex[i][k]){ break; //should  have tie-breaker: volume of maximal space
+                        }
+                    }   
+                }
+            }
+            //if(i == 0) minDistance = minDistancePerVertex[i][0];
+            //else if(minDistancePerVertex[i][0] < minDistance) minDistance = minDistancePerVertex[i][0]
+              if(i == 0){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[0];
+              }
+              else if(minDistancePerVertex[i][0] < minDistance){
+                minDistance = minDistancePerVertex[i][0];
+                minDistanceVertex = maximalSpaceVertices[i];
+              }
+        }
+        //return minDistance;
+        return minDistanceVertex;
+    }
+
+    public int[] sortDistances(int[] distances){
+        for(int i = 0; i < distances.length - 1; i++){
+            if(distances[i] > distances[i+1]){
+                int temp = distances[i];
+                distances[i] = distances[i+1];
+                distances[i+1] = temp;
+                for(int j = i; j > 0; j--)
+                {
+                    if(distances[j] < distances[j-1]) {
+                        int temp2 = distances[j];
+                        distances[j] = distances[j - 1];
+                        distances[j - 1] = temp2;
+                    }
+
+                }
+            }
+        }
+        return distances;
+    }
+
+    public MaximalSpace chooseMaximalSpace(){
 
         ArrayList<Double> closestCornerDistances = new ArrayList<>();
         //double[] closestCornerDistances = new double[8];
@@ -123,7 +194,7 @@ public class Grasp {
             //computeDistanceClosestCorner(space);
 
             //closestCornerDistances[i] = computeDistanceClosestCorner(maximalSpaces.get(i));
-            closestCornerDistances.add(computeDistanceClosestCorner(maximalSpaces.get(i)));
+            closestCornerDistances.add(computeEuclideanDistanceClosestCorner(maximalSpaces.get(i)));
         }
 
         double minimumClosestCornerDistance = 0;
@@ -176,8 +247,8 @@ public class Grasp {
     public void graspTest(){
         ParcelShape parcel = new ParcelB();
 
-        Coordinates coords1 = new Coordinates(0,0,0);
-        Coordinates coords2 = new Coordinates(5,8,12);
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
@@ -193,7 +264,11 @@ public class Grasp {
     public void placeLayer(MaximalSpace space, ParcelLayer layer) {
         if(layer == null) return;
 
+        //Coordinates minCoords = space.getMinCoords();
+
         Coordinates origin = space.getMinCoords();
+        //Coordinates origin = computeLexicographicalDestinance(space);
+        System.out.println(origin.getX() + " " + origin.getY() + " " + origin.getZ());
 
         int originX = origin.getX();
         int originY = origin.getY();
@@ -254,6 +329,8 @@ public class Grasp {
             originDim3 = origin.getX();
             parcelDim3 = usedParcel.getShapeVector().getX();
         }
+
+        //if(axis == axis.XY || axis == axis.YX && minCoords.getX() < origin.getX())
 
         for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
             for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {

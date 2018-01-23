@@ -14,33 +14,27 @@ public class GraspTest {
         ParcelShape parcel3 = new ParcelB();
         ParcelShape parcel4 = new ParcelC();
 
-
-
-        //graspModel.testPlaceParcel(1,1,1,parcel2);
-        //graspModel.generateMaximalSpaces(parcel2);
-        // graspModel.testPrintContainer();
-
-        //graspModel.testPlaceParcel(20,1,1,parcel1);
-        //graspModel.generateMaximalSpaces(parcel1);
-        //graspModel.testPrintContainer();
-
-        //MaximalSpace chosenMaximalSpace = graspModel.chooseMaximalSpace();
-
-        //Grasp graspModel = new Grasp();
-
         ParcelShape parcel = new ParcelB();
 
-        Coordinates coords1 = new Coordinates(0,0,0);
-        Coordinates coords2 = new Coordinates(5,8,12);
+        Coordinates coords1 = new Coordinates(2,4,6);
+        Coordinates coords2 = new Coordinates(4,8,33);
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
+        Coordinates minDistVertex = graspModel.computeLexicographicalDestinance(space);
 
-        System.out.println("Best: " + bestLayer.toString());
+        System.out.println(minDistVertex.getX() + " " + minDistVertex.getY() + " " + minDistVertex.getZ());
 
-        graspModel.placeLayer(space, bestLayer);
+        //System.out.println(graspModel.computeLexicographicalDestinance(space));
 
-        graspModel.testPrintContainer();
+        //ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
+
+        //System.out.println("Best: " + bestLayer.toString());
+
+        //graspModel.placeLayer(space, bestLayer);
+
+        //graspModel.testPrintContainer();
+
+
     }
 }
