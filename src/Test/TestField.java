@@ -68,6 +68,37 @@ public class TestField {
 		 }
 		 return foundRectangles;
 	 }
+
+    public ArrayList<int[]> findRectangles2D(int[][] matrix){
+        ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
+        int[] heights = new int[matrix[0].length];
+
+        ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
+        for(int rows = 0; rows < matrix.length;rows++) {
+
+            //for each column increase the heights of the histogram if it the matrix index is empty
+            for(int col = 0; col < heights.length; col++) {
+                if(matrix[rows][col] == 0)heights[col]++;
+                else {
+                    heights[col]=0;
+                    //if it is not empty, then check if
+                    for(int[] rect: rectanglesRow) {
+                        if(rectangleFinished(heights,col)) foundRectangles.add(rect);
+                    }
+                }
+            }
+
+            rectanglesRow.clear();
+            rectanglesRow.addAll(largestRectangles(heights));
+
+            if((rows+1)==container.length) {
+                for(int[] rect: rectanglesRow) {
+                    foundRectangles.add(rect);
+                }
+            }
+        }
+        return foundRectangles;
+    }
 	 /*
 	  * if position is filled or if next block is the containerlength
 	  */

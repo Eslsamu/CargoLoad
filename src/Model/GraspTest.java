@@ -21,19 +21,21 @@ public class GraspTest {
 
         MaximalSpace space = new MaximalSpace(coords1, coords2);
 
-        Coordinates minDistVertex = graspModel.computeLexicographicalDestinance(space);
+        //Coordinates minDistVertex = graspModel.computeLexicographicalDestinance(space);
 
-        System.out.println(minDistVertex.getX() + " " + minDistVertex.getY() + " " + minDistVertex.getZ());
+        //System.out.println(minDistVertex.getX() + " " + minDistVertex.getY() + " " + minDistVertex.getZ());
 
         //System.out.println(graspModel.computeLexicographicalDestinance(space));
 
-        //ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
+        ParcelLayer bestLayer = graspModel.findBestLayer(space, parcel);
 
-        //System.out.println("Best: " + bestLayer.toString());
+        System.out.println("Best: " + bestLayer.toString());
 
         //graspModel.placeLayer(space, bestLayer);
 
-        //graspModel.testPrintContainer();
+        graspModel.testPrintContainer();
+
+        graspModel.findAllMaximalLayers();
 
 
     }

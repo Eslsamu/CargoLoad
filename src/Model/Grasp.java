@@ -4,6 +4,8 @@ import Shapes.*;
 
 import java.lang.reflect.Array;
 import java.util.*;
+
+import Test.TestField;
 import Util.Coordinates;
 import Util.Vertex;
 
@@ -267,13 +269,13 @@ public class Grasp {
 
         //Coordinates minCoords = space.getMinCoords();
 
-        //Coordinates origin = space.getMinCoords();
-        Coordinates maxCoords = space.getMaxCoords();
+        Coordinates origin = space.getMinCoords();
+        //Coordinates maxCoords = space.getMaxCoords();
 
         //Coordinates[] vertices = findAllVertices(origin,maxCoords);
 
-        Vertex origin = computeLexicographicalDestinance(space);
-        int nrOfVertex = origin.getVertexNr();
+        //Vertex origin = computeLexicographicalDestinance(space);
+        //int nrOfVertex = origin.getVertexNr();
 
         System.out.println(origin.getX() + " " + origin.getY() + " " + origin.getZ());
 
@@ -337,10 +339,7 @@ public class Grasp {
             parcelDim3 = usedParcel.getShapeVector().getX();
         }
 
-
-
-
-
+        /*
         int dim1 = originDim1;
         int dim2 = originDim2;
 
@@ -362,7 +361,7 @@ public class Grasp {
             if(axis == axis.XY || axis == axis.XZ){
                 posDirectionDim1 = !posDirectionDim1;
             }
-            if(axis == axis.YX )
+            if(axis == axis.YX)
         }
 
 
@@ -427,9 +426,9 @@ public class Grasp {
             }
         }
     }
+*/
 
 
-/*
         for (int dim1 = originDim1; dim1 < originDim1 + parcelDim1 * dim1Used; dim1 += parcelDim1) {
             for (int dim2 = originDim2; dim2 < originDim2 + parcelDim2 * dim2Used; dim2 += parcelDim2) {
 
@@ -492,7 +491,7 @@ public class Grasp {
             }
         }
     }
-*/
+
     public ParcelLayer findBestLayer(MaximalSpace space, ParcelShape p){
         int currentValue = 0;
         int bestValue = 0;
@@ -640,10 +639,27 @@ public class Grasp {
         return bestValueLayer;
     }
 
-    public void fillChosenMaximalSpace(){
-        //we place parcels in the chosen space to try to either completely fill the container or get the highest value.
+    public ArrayList<ArrayList<int[]>> findAllMaximalLayers(){
 
+        ArrayList<ArrayList<int[]>> allMaxLayers = new ArrayList<>();
+        TestField testF = new TestField();
 
+        //ContainerModel model = new ContainerModel();
+        //model.setContainerDimensions(33,8,5);
+
+        exampleContainer.containerMatrix = new int[5][8][33];
+
+        for(int x = 0; x < exampleContainer.containerX; x++){
+            allMaxLayers.add(testF.findRectangles2D(exampleContainer.containerMatrix[x]));
+            for(int i = 0; i < allMaxLayers.get(x).size(); i++){
+                int[] values = allMaxLayers.get(x).get(i);
+                for(int j = 0; j < values.length; j++){
+                    System.out.println("height: " + allMaxLayers.get(x).get(i)[j]);
+                }
+            }
+        }
+        System.out.println("size: " + allMaxLayers.size());
+        return allMaxLayers;
     }
 
     public ArrayList<ParcelShape> getParcelsPacked() {
