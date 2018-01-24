@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import Model.PentoContainer;
+import Shapes.PentominoP;
 import Shapes.PentominoShape;
 import Util.Coordinates;
 
@@ -26,6 +27,12 @@ public class TestField extends PentoContainer{
 	 public static void main(String[] args) {
 		 PentoBox testBox1 = new PentoBox(5,2);
 		 testBox1.loadContainer();
+		 
+		 TestField test = new TestField();
+		 test.place(new PentominoP(), new Coordinates(0,0,10));
+		 test.printContainer();
+		 EML testLayer = test.getBestEmptyLayer();
+		 System.out.println("best"+testLayer.closestDistance[0]+" "+testLayer.closestDistance[1]+" "+testLayer.closestDistance[2]);
 	 }
 	 
 	 public boolean loadMaxLayerAlg() {
@@ -33,7 +40,7 @@ public class TestField extends PentoContainer{
 				printContainer();
 				return true;
 		}
-		
+		EML nextSpace = getBestEmptyLayer();
 		return false;
 	 }
 	 
@@ -41,14 +48,17 @@ public class TestField extends PentoContainer{
 	  * returns the layer of a list which is the closest to a corner/edge/wall
 	  */
 	 public EML getBestEmptyLayer() {
-		 EML best = new EML();
+		 EML best = null;
 		 for(EML layer: getMaxLayers()) {
 			 //!global variable
 			 findClosestCorner(layer);
+			 System.out.println(layer.toString());
+			 System.out.println(layer.closestDistance[0]+" "+layer.closestDistance[1]+" "+layer.closestDistance[2]);
+			 System.out.println(layer.closestContainerCorner.toString());
 			 if(layer.closestDistance[0]==0&&layer.closestDistance[1]==0&&layer.closestDistance[2]==0) {
 				 return layer;
 			 }
-			 else if(isCloser(layer.closestDistance,best.closestDistance)){
+			 else if(best==null||isCloser(layer.closestDistance,best.closestDistance)){
 				 best = layer;
 			 }
 		 } 
@@ -61,7 +71,7 @@ public class TestField extends PentoContainer{
 			 if(stop) break;
 			 for(Coordinates layCorner : layer.corners) {
 				 int[] distance = getDistance(layCorner,contCorner);
-				 if(isCloser(distance,layer.closestDistance)){
+				 if(layer.closestDistance==null||isCloser(distance,layer.closestDistance)){
 					 layer.closestDistance = distance;
 					 layer.closestContainerCorner = contCorner;
 					 layer.closestLayerCorner = layCorner;
