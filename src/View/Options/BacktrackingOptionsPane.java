@@ -114,7 +114,7 @@ public class BacktrackingOptionsPane extends VBox{
                 view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
                 testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes", "Y");
+                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes");
             }});
         getChildren().add(packPentominoes);
 
