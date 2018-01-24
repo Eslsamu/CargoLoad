@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View.Options;
 
 import java.io.FileInputStream;
@@ -13,9 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,14 +21,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-/**
- *
- * @author danyp
+/**This class opens a stage with options used by random algorithm when we use set amount of parcels.
+ * @author Basia, Jordan
+ * @version 1.5
+ * @date 23.01.2018
  */
 public class ParcelSetRandom extends VBox{
     /**
      * Constructor generates all options.
-     * @param options an instance of BacktrackingOptionsPane
+     * @param options an instance of RandomOptionsPane
      */
     public ParcelSetRandom(RandomOptionsPane options){
 

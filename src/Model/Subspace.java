@@ -47,21 +47,4 @@ public class Subspace extends ContainerModel{
         }
     }
 
-    /*
-    public void copySubspace(ContainerModel subspaceContainer, int i){
-        clone(subspaceContainer);
-        int[][][] subspaceMatrix = subspaceContainer.getContainerMatrix();
-
-        //i = nrOfPlacedSubspaces
-
-        for(int z = i * subspaceContainer.getContainerZ(); z < (i+1) * subspaceContainer.getContainerZ(); z++){
-            for(int y = i * subspaceContainer.getContainerY(); y < (i+1) * subspaceContainer.getContainerY(); y++){
-                for(int x = i * subspaceContainer.getContainerX(); z < (i+1) * subspaceContainer.getContainerX(); x++){
-                    containerMatrix[z][y][x] = subspaceMatrix[z - i * subspaceContainer.getContainerZ()][y - i * subspaceContainer.getContainerZ()][x - i * subspaceContainer.getContainerZ()];
-                }
-            }
-        }
-
-    }
-   */
 }

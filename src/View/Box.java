@@ -3,13 +3,21 @@ package View;
 import javafx.scene.shape.TriangleMesh;
 
 /**
- *
- * @author danyp
+ * Create a custom Box class using TriangleMesh to avoid bugs with original javafx BOX class.
+ * @author Jordan, Basia
+ * @version 1.1
+ * @date 23.01.2017
  */
 public class Box extends TriangleMesh {
     private float w;
     private float h;
     private float d;
+    /**
+     * Constructor will create a triangle mesh with points, textCoords, faces and faceSmoothingGroups
+     * @param w the width of the wanted box
+     * @param h the height of the wanted box
+     * @param d the depth of the wanted box
+     */
     public Box(float w, float h, float d) {
         this.w = w;
         this.h = h;
@@ -54,12 +62,24 @@ public class Box extends TriangleMesh {
         this.getTexCoords().setAll(texCoords);
         this.getFaces().setAll(faces);
     }
+    /**
+     * Get the width of the box
+     * @return the width of the box
+     */
     public float getWidth(){
         return w;
     }
+    /**
+     * Get the height of the box
+     * @return the height of the box
+     */
     public float getHeight(){
         return h;
     }
+    /**
+     * Get the depth of the box
+     * @return the depth of the box
+     */
     public float getDepth(){
         return d;
     }

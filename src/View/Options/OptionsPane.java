@@ -2,31 +2,32 @@ package View.Options;
 
 import View.ContainerPane;
 import View.ContainerView;
-import View.Options.BacktrackingOptionsPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 
 /**
  * This class makes a vbox containing currently displayed options
- * @author Basia
+ * @author Basia, Jordan
  * @version 1.2
+ * @date 23.01.2018
  */
 public class OptionsPane extends VBox{
     private BacktrackingOptionsPane options;
     private AlgorithmsPane algorithms;
     private DivideConquerOptions divideOptions;
     private RandomOptionsPane randomOptions;
-    private GraspOptionsPane graspOptions;
+    private MaximalSpaceOptionsPane maximalSpaceOptions;
     /**
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
+     * @param view an instance of ContainerView
      */
     public OptionsPane(ContainerPane container, ContainerView view){
         options = new BacktrackingOptionsPane(container, this, view);
         algorithms = new AlgorithmsPane(this);
         divideOptions = new DivideConquerOptions(container, this, view);
         randomOptions = new RandomOptionsPane(container, this, view);
-        graspOptions = new GraspOptionsPane(container, this, view);
+        maximalSpaceOptions = new MaximalSpaceOptionsPane(container, this, view);
          
         drawAlgorithmOptions();
         
@@ -40,26 +41,35 @@ public class OptionsPane extends VBox{
         getChildren().remove(algorithms);
         getChildren().add(options);
     }
+    /**
+     * Remove algorithm options and open divide and conquer options.
+     */
     public void drawDivideConquerOptions(){
         getChildren().remove(algorithms);
         getChildren().add(divideOptions);
     }
+    /**
+     * Remove algorithm options and open random options.
+     */
     public void drawRandomOptions(){
         getChildren().remove(algorithms);
         getChildren().add(randomOptions);
     }
-    public void drawGraspOptions(){
+    /**
+     * Remove algorithm options and open grasp options.
+     */
+    public void drawMaximalSpaceOptions(){
         getChildren().remove(algorithms);
-        getChildren().add(graspOptions);
+        getChildren().add(maximalSpaceOptions);
     }
     /**
-     * Remove backtracking options and open algorithm options
+     * Remove all other options and open algorithm options
      */
     public void drawAlgorithmOptions(){
         getChildren().remove(options);
         getChildren().remove(divideOptions);
         getChildren().remove(randomOptions);
-        getChildren().remove(graspOptions);
+        getChildren().remove(maximalSpaceOptions);
         getChildren().add(algorithms);
     }
 }

@@ -105,4 +105,8 @@ public abstract class PentominoShape {
 			m.setContainerPosition(new Coordinates(m.getPositionShape().x + c.x, m.getPositionShape().y + c.y, m.getPositionShape().z + c.z));
 		}
 	}
+	
+	public ShapeMaterial getMaterial() {
+		return material;
+	}
 }

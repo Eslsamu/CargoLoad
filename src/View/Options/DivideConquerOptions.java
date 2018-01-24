@@ -1,10 +1,7 @@
 package View.Options;
 
-import View.Options.ParcelSetDivideConquer;
-import View.Options.OptionsPane;
-import View.Options.ORDER;
 import Model.ContainerModel;
-import Model.PentoContainer;
+import Model.DivideConquerPentominoes;
 import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
@@ -39,8 +36,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- *
- * @author danyp
+ * This class draws options for the Divide and Conquer algorithm.
+ * @author Jordan, Basia
+ * @version 1.2
+ * @date 23.01.2018
  */
 public class DivideConquerOptions extends VBox{
     private Stage stage;
@@ -48,7 +47,12 @@ public class DivideConquerOptions extends VBox{
     private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     private ContainerView view;
-    
+    /**
+     * The constructor will draw all needed options.
+     * @param container instance of current running ContainerPane
+     * @param options instance of OptionsPane to control currently shown options
+     * @param view instance of ContainerView to control shown container 
+     */
     public DivideConquerOptions(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
         this.view = view;
@@ -64,8 +68,6 @@ public class DivideConquerOptions extends VBox{
         packBox.setMinSize(225, 50);
         RadioButton infiniteAmount = new RadioButton("Infinite amount of boxes");
         RadioButton setAmount = new RadioButton("Custom amount of boxes");
-        /* when button is pressed it checks, which radiobutton is selected and then acts accordingly
-        */
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -105,35 +107,20 @@ public class DivideConquerOptions extends VBox{
         packPentominoes.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         packPentominoes.setFocusTraversable(false);
         packPentominoes.setMinSize(225, 50);
-        //RadioButton fill = new RadioButton("Fill cargo-space");
-        //RadioButton maximum = new RadioButton("Maximum value");
         packPentominoes.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
                 view.hideButtons();
-                PentoContainer testContainer = new PentoContainer();
-                testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Pentominoes");
+                DivideConquerPentominoes sth = new DivideConquerPentominoes();
+                container.drawPentominoes(sth.getContainedPentominoes(), sth.getContainerValue(), "D&C, Pentominoes", "X");
             }});
-        //getChildren().add(packPentominoes);
-
-        /* ToggleGroup packPentoGroup = new ToggleGroup();
-
-        fill.setFont(new Font("Arial", 15));
-        fill.setToggleGroup(packPentoGroup);
-        fill.setSelected(true);
-        fill.setFocusTraversable(false);
+        getChildren().add(packPentominoes);
         
-        maximum.setFont(new Font("Arial", 15));
-        maximum.setToggleGroup(packPentoGroup);
-        maximum.setFocusTraversable(false); */
         Button shownContainers = new Button("Generated Containers");
         shownContainers.setFocusTraversable(false);
         shownContainers.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         shownContainers.setFocusTraversable(false);
         shownContainers.setMinSize(225, 50);
-        //RadioButton fill = new RadioButton("Fill cargo-space");
-        //RadioButton maximum = new RadioButton("Maximum value");
         shownContainers.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
@@ -160,6 +147,10 @@ public class DivideConquerOptions extends VBox{
         setSpacing(15);
         setAlignment(Pos.CENTER);
     }
+    /**
+     * This method generates a new stage that will ask the user to specify how he wants the divide and conquer to sort.
+     * It will give options as:(by value, by ratio).
+     */
     public void setPackingOrder(){
         VBox pane = new VBox();
         Label title = new Label("Choose packing order:");
@@ -232,8 +223,8 @@ public class DivideConquerOptions extends VBox{
      * @param a number of boxes typeA
      * @param b number of boxes typeB
      * @param c number of boxes typeC
-     * @param order Order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order Order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int timer){
         stage.close();
@@ -242,8 +233,8 @@ public class DivideConquerOptions extends VBox{
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
      * at the end draws the best found result.
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();
@@ -277,8 +268,8 @@ public class DivideConquerOptions extends VBox{
      * @param a number of boxes typeA
      * @param b number of boxes typeB
      * @param c number of boxes typeC
-     * @param order order type, used by backtracking
-     * @param timer representing the timer of backtracking
+     * @param order order type, used by divide and conquer
+     * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
         ArrayList<ParcelShape> givenParcels = new ArrayList<>();

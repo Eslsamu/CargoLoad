@@ -1,0 +1,293 @@
+diff a/src/Test/TestField.java b/src/Test/TestField.java	(rejected hunks)
+@@ -4,138 +4,197 @@
+ import java.util.Stack;
+ 
+ public class TestField {
+-	 boolean[][] container = new boolean[6][6];
+-	 ArrayList<SubSpace> maxSpaces = new ArrayList<SubSpace>();
++	 boolean[][] layer = new boolean[6][6];
++	 boolean[][][] container = new boolean[3][3][3];
+ 	 
+ 	 public static void main(String[] args) {
+ 		 TestField testF = new TestField();
+-		 testF.container[1][1]=true;
+-
+-		 for(int[] rect : testF.findRectangles2D(testF.container)) {
+-			 System.out.print("pos:"+rect[0]+" height"+rect[1]+" width"+rect[2]);
+-			 System.out.println();
+-		 }
++		 testF.layer[0][0]=true;
++		 
++		 testF.test();
++	 }
++	 
++	 public void test() {
++		 XZ[] hist = new XZ[]{new XZ(2,1),new XZ(true), new XZ(3,2), new XZ(true), new XZ(2,3), new XZ(1,3), new XZ(2,2)};
++		 XZ[] histPre = new XZ[]{new XZ(true), new XZ(true), new XZ(3,2), new XZ(2,3), new XZ(1,1),new XZ(1,3), new XZ(2,3)};
+ 		 
+-		
++		 for(EMS s : maxInHistogram(hist, histPre, 4, 2)) {
++			 System.out.println(s.toString());
++		 }
++	 }
++	 
++	 /*
++	  * an z vector for the height and an x vector for the depth used in the histogram
++	  */
++	 class XZ{
++		 int xDep;
++		 int zHei;
++		 boolean isBlocked;
++		 public XZ(int z, int x) {
++			 this.xDep = x;
++			 this.zHei = z;
++			 this.isBlocked = false;
++		 }	
++		 public XZ(boolean isB) {
++			 this.xDep = 0;
++			 this.zHei = 0;
++			 this.isBlocked = isB;
++		 }	
+ 	 }
+ 	 
+-	 class SubSpace {
++	 class EMS {
+ 		 int vectorX;
+ 		 int vectorY;
++		 int vectorZ;
+ 		 int startX;
+ 		 int startY;
++		 int startZ;
+ 		 
+-		 public SubSpace(int vx, int vy, int xS, int yS) {
+-			 vectorX = vx;
+-			 vectorY = vy;
++		 public EMS(int xS, int yS, int zS, int xV, int yV, int zV) {
++			 vectorX = xV;
++			 vectorY = yV;
++			 vectorZ = zV;
+ 			 startX = xS;
+ 			 startY = yS;
++			 startZ = zS;
+ 		 }
+ 		 
+ 		 public String toString() {
+-			 return new String("vectorX:" +vectorX+" vectorY:"+vectorY+" startX:"+startX+" startY:"+startY);
++			 return new String("vectorX:" +vectorX+" vectorY:"+vectorY+" vectorZ: "+vectorZ+" startX:"+startX+" startY:"+startY+" startZ"+startZ);
+ 		 }
+ 	 }
+ 	 
+-	 //TODO save row position of rectangle
+-	 public ArrayList<int[]> findRectangles2D(boolean[][] matrix){
+-		 ArrayList<int[]> foundRectangles = new ArrayList<int[]>();
+-		 int[] heights = new int[matrix[0].length];
++	 public ArrayList<EMS> findEMS(){
++		 ArrayList<EMS> closedSpaces = new ArrayList<EMS>();
+ 		 
+-		 ArrayList<int[]> rectanglesRow = new ArrayList<int[]>();
+-		 for(int rows = 0; rows < matrix.length;rows++) {					 		 
+-			
+-			 //for each column increase the heights of the histogram if it the matrix index is empty
+-			 for(int col = 0; col < heights.length; col++) {
+-				 if(!matrix[rows][col])heights[col]++;
+-				 else {
+-					 heights[col]=0;
+-					 //if it is not empty, then check if 
+-					 for(int[] rect: rectanglesRow) {
+-						 if(rectangleFinished(heights,col)) foundRectangles.add(rect); 
+-					 }
+-				 }
+-			 }
+-				 
+-			 rectanglesRow.clear();
+-			 rectanglesRow.addAll(largestRectangles(heights));
++		 ArrayList<EMS> openedSpaces = new ArrayList<EMS>();	 
++		 for(int layer = 0; layer < container.length; layer++) {
+ 			 
+-			 if((rows+1)==container.length) {				 
+-				for(int[] rect: rectanglesRow) {
+-					foundRectangles.add(rect); 
+-				}		 
+-			 } 
+ 		 }
+-		 return foundRectangles;
+-	 }
+-	 /*
+-	  * if position is filled or if next block is the containerlength
+-	  */
+-	 public boolean rectangleFinished(int[] rect, int pos) {
+-		return ((rect[0]+rect[2] - pos)>0) ? true : false;
++		 
++		 return null;
+ 	 }
+-	 
++
+ 	 //time: O(n), space:O(n) n =indexes
+ 	 //TODO potentialRect
+-	 public ArrayList<int[]> largestRectangles(int[] height) {
+-		 	ArrayList<int[]> potentialRect = new ArrayList<int[]>();
+-		 	
+-		 	
+-			if (height == null || height.length == 0) {
++	 public ArrayList<EMS> maxInHistogram(XZ[] heightDepth, XZ[] before, int xPos, int zPos) {
++		 	ArrayList<EMS> potentialSpaces = new ArrayList<EMS>();
++		 	 	
++			if (heightDepth == null || heightDepth.length == 0) {
+ 				return null;
+ 			}
+-		 
++			//height
+ 			Stack<Integer> hStack = new Stack<Integer>();
++			//depth
++			Stack<Integer> dStack = new Stack<Integer>();
++			//position
+ 			Stack<Integer> pStack = new Stack<Integer>();
+ 			
+-			int pos = 0;
+-			
+-			while (pos < height.length) {
++			int pos = 0;		
++			while (pos < heightDepth.length) {
++				XZ hdPos = heightDepth[pos];
++				XZ hdBefore = before[pos];
+ 				
+-				//if the height is bigger than the top of the stack, then add the position and an increasing height
+-				//to both stacks until the peek of hStack is equal to the height of the current position
+-				if (hStack.empty()) {
+-					for(int i = 0; i <= height[pos]; i++) {
+-					hStack.push(i);
+-					pStack.push(pos);
++				System.out.println("Position: "+pos+" Height:"+hdPos.zHei+ " Depth:"+ hdPos.xDep);
++				System.out.println("Stack:");
++				for(int i = 0; i < hStack.size(); i++) {
++					System.out.println(pStack.get(i)+" "+hStack.get(i)+" "+dStack.get(i));
++				}
++				
++				if(hdPos.isBlocked) {
++					while(!pStack.empty()&&!hStack.empty()&&!dStack.empty()) {
++						int yPos = pStack.pop();
++						int height = hStack.pop();
++						int width = pos - yPos;
++						int depth = dStack.pop();
++						
++						EMS lastAddedSpace = !potentialSpaces.isEmpty() ? potentialSpaces.get(potentialSpaces.size()-1) : null;
++						if(lastAddedSpace==null||!(yPos==lastAddedSpace.startY && width <= lastAddedSpace.startY+lastAddedSpace.vectorY&&height==lastAddedSpace.vectorZ)) {
++							potentialSpaces.add(new EMS(xPos, yPos, zPos, depth, width, height));
++							System.out.println(potentialSpaces.get(potentialSpaces.size()-1).toString());
++						}
+ 					}
++					pStack.push(pos);
++					hStack.push(0);
++					dStack.push(0);
++					pos++;
++				}
++				/*else if(hdBefore.xDep != hdPos.xDep){
++					//double push of layers of different depth in order of the smaller height first
++					//TODO for loop
++					pStack.push(pos);
++					pStack.push(pos);
++					pStack.push((hdPos.zHei>=hdBefore.zHei) ? hdPos.zHei : hdBefore.zHei);
++					pStack.push((hdPos.zHei<=hdBefore.zHei) ? hdPos.zHei : hdBefore.zHei);
++					dStack.push((hdPos.zHei>=hdBefore.zHei) ? hdPos.xDep : hdBefore.xDep);
++					dStack.push((hdPos.zHei<=hdBefore.zHei) ? hdPos.xDep : hdBefore.xDep);
++				}*/
++				//if EMPTYALL
++				else if(pStack.empty()&&dStack.empty()) {
++					//TODO for loop
++					pStack.push(pos);
++					hStack.push(hdPos.zHei);
++					dStack.push(hdPos.xDep);
+ 				}
+-				else if(hStack.peek()==height[pos]) pos++;
+-				else if(hStack.peek()>height[pos]) {
+-					int p = pStack.pop();
+-					int h = hStack.pop();
+-					int w = pos-p;
+-					int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+-					if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
+-						potentialRect.add(new int[]{p,h,w});
++				//if EQUALALL
++				else if(hStack.peek()==hdPos.zHei&&dStack.peek()==hdPos.xDep) pos++;
++				//Y lower than peek
++				else if(hdPos.zHei<hStack.peek()) {
++					if(hdPos.xDep<dStack.peek()) {
++						//is it gets less deep then cut the hole and add it. Then replace the stack peeks with a new depth
++						int yPos = pStack.peek();
++						int height = hStack.peek();
++						int width = pos - yPos;
++						int depth = dStack.pop();
++						
++						EMS lastAddedSpace = !potentialSpaces.isEmpty() ? potentialSpaces.get(potentialSpaces.size()-1) : null;
++						if(lastAddedSpace==null||!(yPos==lastAddedSpace.startY && width <= lastAddedSpace.startY+lastAddedSpace.vectorY&&height==lastAddedSpace.vectorZ)) {
++							potentialSpaces.add(new EMS(xPos, yPos, zPos, depth, width, height));
++							System.out.println(potentialSpaces.get(potentialSpaces.size()-1).toString());
++						}
++							
++						dStack.push(hdPos.xDep);
++					}
++					
++					int yPos = pStack.pop();
++					int height = hStack.pop();
++					int width = pos - yPos;
++					int depth = dStack.pop();
++					
++					EMS lastAddedSpace = !potentialSpaces.isEmpty() ? potentialSpaces.get(potentialSpaces.size()-1) : null;
++					if(lastAddedSpace==null||!(yPos==lastAddedSpace.startY && width <= lastAddedSpace.startY+lastAddedSpace.vectorY&&height==lastAddedSpace.vectorZ)) {
++						potentialSpaces.add(new EMS(xPos, yPos, zPos, depth, width, height));
++						System.out.println(potentialSpaces.get(potentialSpaces.size()-1).toString());
+ 					}
+ 				}
+-				//if height(pos) is bigger than hStack
+-				else{
+-					for(int i = hStack.peek()+1; i <= height[pos];i++) {
++				else if(hdPos.zHei>hStack.peek()) {
++					for(int i = hStack.peek()+1; i <= hdPos.zHei;i++) {
+ 						pStack.push(pos);
+ 						hStack.push(i);
++						dStack.push(hdPos.xDep);
+ 					}
+ 				}
+-				//System.out.println(pStack.peek()+" "+hStack.peek()+" "+pos+" "+height[pos]);
+-			}
++				else if(hdPos.xDep>dStack.peek()&&hdPos.zHei==hStack.peek()) {
++					for(int i = dStack.peek()+1; i <= hdPos.xDep; i++) {
++						pStack.push(pos);
++						hStack.push(hdPos.zHei);
++						dStack.push(hdPos.xDep);
++					}
++				}	
++		}
++		while(!pStack.empty()&&!hStack.empty()&&!dStack.empty()) {
++			int yPos = pStack.pop();
++			int height = hStack.pop();
++			int width = pos - yPos;
++			int depth = dStack.pop();
+ 			
+-			while (!hStack.isEmpty()) {
+-				int p = pStack.isEmpty() ? 0 : pStack.pop();
+-				int h = hStack.pop();
+-				int w = height.length-p;
+-				int[] lastRect = potentialRect.size()==0 ? null : potentialRect.get(potentialRect.size()-1);
+-				if((lastRect==null)||!(lastRect[0]==p&&lastRect[2]==w&&lastRect[1]>h)&&h!=0) {
+-					potentialRect.add(new int[]{p,h,w});
+-				};
++			EMS lastAddedSpace = !potentialSpaces.isEmpty() ? potentialSpaces.get(potentialSpaces.size()-1) : null;
++			if(lastAddedSpace==null||!(yPos==lastAddedSpace.startY && width <= lastAddedSpace.startY+lastAddedSpace.vectorY&&height==lastAddedSpace.vectorZ)) {
++				potentialSpaces.add(new EMS(xPos, yPos, zPos, depth, width, height));
++				System.out.println(potentialSpaces.get(potentialSpaces.size()-1).toString());
+ 			}
+-		 
+-			return potentialRect;
+-		}
+-	 
+-	 public void printList() {
+-		 for(SubSpace s : maxSpaces) {
+-			 System.out.println(s.toString());
+-		 }
+-	 }
++		}			
++		System.out.println("pSpaces size: "+potentialSpaces.size());
++		return potentialSpaces;
++ 	}
+ }
+\ No newline at end of file

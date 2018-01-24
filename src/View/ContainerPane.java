@@ -96,7 +96,8 @@ public class ContainerPane extends Parent {
     /**
      * This method will draw boxes with given containedShapes and ContainerModel
      * @param containedShapes an array list with all boxes in the container
-     * @param solver an instance of the ContainerModel that found the solution
+     * @param totalValue is the value of the drawn container
+     * @param name contains information about the displayed filled container for future uses
      */
     public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue, String name){
         ArrayList<ParcelShape> list = new ArrayList<>();
@@ -135,6 +136,12 @@ public class ContainerPane extends Parent {
         }
             
     }
+    /**
+     * This method is a copy of the one above, which is used when displaying already generated containers, to
+     * avoid adding and adding the same container to the displayed containers list.
+     * @param containedShapes an arrayList containing the parcels coordinates
+     * @param totalValue the value of the container
+     */
      public void drawBoxes(ArrayList<ParcelShape> containedShapes, int totalValue){
         root.getChildren().remove(2, root.getChildren().size());
         container.setCullFace(CullFace.FRONT);
@@ -167,8 +174,11 @@ public class ContainerPane extends Parent {
     /**
      * This method will draw pentominoes in the container after a solution has been found.
      * @param loadedPentominoes array list with loaded pentominoes
+     * @param value is the value of the container
+     * @param name is the name that is later used when showing the already displayed containers
+     * @param param is a String that is used to fix some in group errors;
      */
-    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value, String name){
+    public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value, String name, String param){
         ArrayList<PentominoShape> pentominoes = new ArrayList<>(loadedPentominoes);
         ShownContainers shownContainer = new ShownContainers(value, pentominoes, name);
         shownContainers.add(shownContainer);
@@ -181,19 +191,31 @@ public class ContainerPane extends Parent {
             ArrayList<Monimo> PentominoBoxCoordinates = loadedPentominoes.get(i).getChildren();
             
             for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
-                Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
-                
+                //Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
+                Monimo monimo = PentominoBoxCoordinates.get(m);
                 Box boxMesh = new Box(Box_Width, Box_Height, Box_Depth);
                 MeshView box = new MeshView(boxMesh);
                 box.setDrawMode(DrawMode.FILL);
                 box.setMaterial(new PhongMaterial(ranColor));
-                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*coordinates.getY());
-                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*coordinates.getX());
-                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*coordinates.getZ());
+                if(param == "X"){
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().x);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().y);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*monimo.getPositionShape().z);
+                }
+                else if(param == "Y"){
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().y);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().x);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*monimo.getPositionShape().z);
+                }
                 root.getChildren().add(box);
             }
         }
     }
+    /**
+     * Similar to the second drawBoxes, this method will draw an already drawn container.
+     * @param loadedPentominoes an array list with coordinates for the loaded pentominoes
+     * @param value value of the container
+     */
     public void drawPentominoes(ArrayList<PentominoShape> loadedPentominoes, int value){
         container.setCullFace(CullFace.FRONT);
         container.setDrawMode(DrawMode.LINE);
@@ -240,7 +262,7 @@ public class ContainerPane extends Parent {
         zAxis.setAngle(angle);
     }
     /**
-     * Method will make container again to appear like a real container.
+     * Method will make container again to appear like a real container(with image).
      */
     public void redrawContainer(){
         root.getChildren().remove(2, root.getChildren().size());
@@ -258,6 +280,10 @@ public class ContainerPane extends Parent {
         };
         container.setMaterial(material);    
     }
+    /**
+     * this method will draw an already displayed container.
+     * @param n the index of the already displayed container
+     */
     public void drawShownContainers(int n){
         view.setHeading(shownContainers.get(n).getName());
         try{ 
@@ -267,6 +293,10 @@ public class ContainerPane extends Parent {
             drawPentominoes(shownContainers.get(n).getContainedPentominoes(), shownContainers.get(n).getValue());
         }
     }
+    /**
+     * This method is used to get the size of already displayed containers.
+     * @return size of an arrayList with displayed containers
+     */
     public int getSizeShownContainers(){
         return shownContainers.size();
     }
