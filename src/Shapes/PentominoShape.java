@@ -12,27 +12,38 @@ import Util.Coordinates;
  * the change occurs in each of its children.
  * Once it is placed in the container, it's coordinates and shape shouldn't be changed anymore. 
  */
-public abstract class PentominoShape {
+public abstract class PentominoShape extends Shape{
 	
 	protected final ArrayList<Monimo> children = new ArrayList<Monimo>();
-	protected final String name;
-	protected final int value;
-	protected final ShapeMaterial material;
-	
-	public PentominoShape(String n, int v, ShapeMaterial m) {
-		this.name = n;
-		this.value = v;
-		this.material = m;		
+	public static void main(String[]args) {
+		PentominoP testP = new PentominoP();
+		System.out.println(testP.toString());
+		
+		testP.rotate(90, Axis.X);
+		System.out.println(testP.toString());
+		testP.rotate(180, Axis.Y);
+		System.out.println(testP.toString());
+
+		testP.moveToOrigin();
+		System.out.println(testP.toString());
+	}
+	public ShapeMaterial getMaterial(){
+		return material;
+
+	}
+	public PentominoShape(ShapeMaterial m,  String n, int v) {
+		super(m, n, v);
 		addChildren();
 	}
-	public int getValue(){
-            return value;
-        }
-	
 	public void rotate(double angle, Axis ax) {
 		for(Monimo m : children) {
 			m.positionParentshape = Algebra.rotateUV(angle,ax,m.positionParentshape);
 		}
+	}
+
+	public double getRatio() {
+		double doubleValue = value;
+		return  doubleValue/5.0;
 	}
 	
 	public void reflect(Axis ax) {
@@ -76,6 +87,11 @@ public abstract class PentominoShape {
 			String c = m.positionParentshape.toString();
 			s+=c;
 		}
+		s+= "Container Pos:";
+		for(Monimo m : children) {
+			String c = m.positionContainer.toString();
+			s+=c;
+		}
 		return s;
 	}
 	
@@ -84,13 +100,11 @@ public abstract class PentominoShape {
 	 */
 	@Override
 	public abstract PentominoShape clone();
-	
+
 	public abstract void addChildren();
 	
-	public String getName() {
-		return name;
-	}
-	
+
+	public abstract PentominoShape cloneWithCoords();
 	/*
 	 * @return children returns the list of monimoes
 	 */
@@ -105,8 +119,10 @@ public abstract class PentominoShape {
 			m.setContainerPosition(new Coordinates(m.getPositionShape().x + c.x, m.getPositionShape().y + c.y, m.getPositionShape().z + c.z));
 		}
 	}
-	
-	public ShapeMaterial getMaterial() {
-		return material;
+	public Coordinates getPositionParcelContainer(){
+		return positionParcelContainer;
 	}
+
+
+
 }

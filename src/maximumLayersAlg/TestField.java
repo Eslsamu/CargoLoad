@@ -6,7 +6,6 @@ import java.util.Stack;
 
 import Model.PentoContainer;
 import Shapes.PentominoP;
-import Shapes.PentominoShape;
 import Util.Coordinates;
 
 public class TestField extends PentoContainer{
@@ -14,19 +13,20 @@ public class TestField extends PentoContainer{
 	@SuppressWarnings("serial")
 	private ArrayList<Coordinates> containerCorners = new ArrayList<Coordinates>() {{
 		add(new Coordinates(0,0,0));
-		add(new Coordinates(0,0,containerHeight));
-		add(new Coordinates(0,containerWidth,0));
-		add(new Coordinates(0,containerWidth,containerHeight));
-		add(new Coordinates(containerLength,0,0));
-		add(new Coordinates(containerLength,0,containerHeight));
-		add(new Coordinates(containerLength,containerWidth,0));
-		add(new Coordinates(containerLength,containerWidth,containerHeight));
+		add(new Coordinates(0,0,containerZ));
+		add(new Coordinates(0,containerY,0));
+		add(new Coordinates(0,containerY,containerZ));
+		add(new Coordinates(containerX,0,0));
+		add(new Coordinates(containerX,0,containerZ));
+		add(new Coordinates(containerX,containerY,0));
+		add(new Coordinates(containerX,containerY,containerZ));
 	}};
 	
 	
 	 public static void main(String[] args) {
 		 PentoBox testBox1 = new PentoBox(5,2);
-		 testBox1.loadContainer();
+                 PentoBox maxValueBox = new PentoBox(5,2);
+		 testBox1.loadContainer(maxValueBox, true, true);
 		 
 		 TestField test = new TestField();
 		 test.place(new PentominoP(), new Coordinates(0,0,10));
@@ -36,7 +36,7 @@ public class TestField extends PentoContainer{
 	 }
 	 
 	 public boolean loadMaxLayerAlg() {
-		 if(loadedPentominoes.size() >= (containerLength*containerWidth*containerHeight/5)) {
+		 if(containedParcels.size() >= (containerX*containerY*containerZ/5)) {
 				printContainer();
 				return true;
 		}

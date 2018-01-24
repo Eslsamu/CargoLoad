@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @version 2.1
  * @date 23.01.2018
  */
-public class DivideConquerPentominoes {
+public class DivideConquerPentominoes extends SuperContainer {
     private String[][][] CONTAINER = new String[33][8][5];
     private String[][] t = {{"T", "T", "T"},
                           {null, "T", null},

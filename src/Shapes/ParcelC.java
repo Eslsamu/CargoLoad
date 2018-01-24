@@ -11,7 +11,7 @@ public class ParcelC extends ParcelShape{
 	protected static int value = 5;
 	
 	public ParcelC() {
-		super(material, width, height, length, value, name);
+		super(material, name, value, width, height, length);;
 	}
 	
 	/*

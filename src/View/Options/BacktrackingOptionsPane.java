@@ -1,5 +1,6 @@
 package View.Options;
 
+import Shapes.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -44,7 +45,7 @@ import javafx.scene.layout.BackgroundSize;
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
+    private ArrayList<Shape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     
     /**
@@ -113,8 +114,17 @@ public class BacktrackingOptionsPane extends VBox{
             public void handle(ActionEvent e){
                 view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
-                testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Backtracking, Pentominoes");
+                ArrayList<Shape> givenParcels = new ArrayList<>();
+                givenParcels.add(new PentominoP());
+                givenParcels.add(new PentominoT());
+                givenParcels.add(new PentominoL());
+                givenParcels = testContainer.orderParcelListByValue(givenParcels);
+                testContainer.setParcelList(givenParcels);
+                testContainer.setDelay(5000);
+                PentoContainer maxValueContainer = new PentoContainer();
+                maxValueContainer.setParcelList(givenParcels);
+                testContainer.loadContainer(maxValueContainer,true,true);
+                container.drawPentominoes(testContainer.getContainedParcels(), testContainer.computeTotalValue(), "Backtracking, Pentominoes");
             }});
         getChildren().add(packPentominoes);
 
@@ -249,7 +259,7 @@ public class BacktrackingOptionsPane extends VBox{
      * @param timer representing the timer of backtracking
      */
     public void generateSolution(ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -283,7 +293,7 @@ public class BacktrackingOptionsPane extends VBox{
      * @param timer representing the timer of backtracking
      */
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());

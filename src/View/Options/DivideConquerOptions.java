@@ -6,6 +6,7 @@ import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
 import Shapes.ParcelShape;
+import Shapes.Shape;
 import View.ContainerPane;
 import View.ContainerView;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ import javafx.stage.Stage;
 public class DivideConquerOptions extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
+    private ArrayList<Shape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     private ContainerView view;
     /**
@@ -112,7 +113,8 @@ public class DivideConquerOptions extends VBox{
             public void handle(ActionEvent e){
                 view.hideButtons();
                 DivideConquerPentominoes sth = new DivideConquerPentominoes();
-                container.drawPentominoes(sth.getContainedPentominoes(), sth.getContainerValue(), "D&C, Pentominoes");
+                System.out.println(sth.getContainedParcels().size());
+                container.drawPentominoes(sth.getContainedParcels(), sth.getContainerValue(), "D&C, Pentominoes");
             }});
         getChildren().add(packPentominoes);
         
@@ -237,7 +239,7 @@ public class DivideConquerOptions extends VBox{
      * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -272,7 +274,7 @@ public class DivideConquerOptions extends VBox{
      * @param timer representing the timer of divide and conquer
      */
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             if(a != 0){
                 givenParcels.add(new ParcelA());

@@ -9,11 +9,8 @@ public class PentominoP extends PentominoShape{
 	private static ShapeMaterial material = ShapeMaterial.RED;
 	
 	public PentominoP() {
-		super(name,value, material);
+		super(material, name, value);
 	}
-	public int getValue(){
-            return value;
-        }
 	@Override
 	public void addChildren() {
 		super.children.add(new Monimo(new Coordinates(0,0,0), material));
@@ -26,6 +23,16 @@ public class PentominoP extends PentominoShape{
 	@Override
 	public PentominoShape clone() {
 		return new PentominoP();
+	}
+	public PentominoP cloneWithCoords(){
+		PentominoP p = new PentominoP();
+		p.setContainerPosition(positionParcelContainer);
+
+		for(int i=0;i<p.children.size();i++){
+			p.children.set(i,this.children.get(i).clone());
+		}
+		System.out.println("Position XXparcel z:"+p.getPositionParcelContainer().z+" "+p.getPositionParcelContainer().y+" "+p.getPositionParcelContainer().x);
+		return p;
 	}
 	
 }

@@ -21,6 +21,7 @@ public class Monimo {
 	public Monimo(Coordinates p, ShapeMaterial m) {
 		this.positionParentshape = p;
 		this.material = m;
+		positionContainer = new Coordinates(0,0,0);
 	}
 	
 	public Coordinates getContainerPosition() {
@@ -28,10 +29,21 @@ public class Monimo {
 	}
 	
 	public void setContainerPosition(Coordinates p) {
-		positionContainer = p;
+		positionContainer.x=p.x;
+		positionContainer.y=p.y;
+		positionContainer.z=p.z;
 	}
 	
 	public Coordinates getPositionShape() {
 		return positionParentshape;
+	}
+
+	// creates a copy of a certain monimo (incl. coords)
+	public Monimo clone(){
+		Coordinates cC = positionContainer;
+		Coordinates cP = positionParentshape;
+		Monimo clone = new Monimo(new Coordinates(cP.x,cP.y,cP.z), material);
+		clone.setContainerPosition(cC.clone());
+		return clone;
 	}
 }

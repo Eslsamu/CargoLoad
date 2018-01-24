@@ -1,9 +1,6 @@
 package Model;
 
-import Shapes.ParcelA;
-import Shapes.ParcelB;
-import Shapes.ParcelC;
-import Shapes.ParcelShape;
+import Shapes.*;
 
 import java.util.ArrayList;
 
@@ -12,12 +9,13 @@ public class Subspace extends ContainerModel{
     // in 0.5 meters
     // these are need for subspaces
 
-    public Subspace(int z, int y, int x, ArrayList<ParcelShape> subspaceParcelList){
+    public Subspace(int z, int y, int x, ArrayList<Shape> subspaceParcelList){
         containerZ = z;
         containerY = y;
         containerX = x;
         neededParcels = new int[3];
         parcelList = subspaceParcelList;
+
         containerMatrix = new int[containerZ][containerY][containerX];
         containedParcels = new ArrayList<>();
 
@@ -28,7 +26,7 @@ public class Subspace extends ContainerModel{
         int nrOfBNeeded = 0;
         int nrOfCNeeded = 0;
 
-        for(ParcelShape parcel : containedParcels){
+        for(Shape parcel : containedParcels){
             if(parcel instanceof ParcelA) nrOfANeeded++;
             if(parcel instanceof ParcelB) nrOfBNeeded++;
             if(parcel instanceof ParcelC) nrOfCNeeded++;

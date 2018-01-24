@@ -4,7 +4,7 @@ import Model.ContainerModel;
 import Shapes.ParcelA;
 import Shapes.ParcelB;
 import Shapes.ParcelC;
-import Shapes.ParcelShape;
+import Shapes.Shape;
 import View.ContainerPane;
 import View.ContainerView;
 import java.io.FileInputStream;
@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 public class RandomOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
+    private ArrayList<Shape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     /**
      * Constructor creates a pane with options
@@ -192,7 +192,7 @@ public class RandomOptionsPane extends VBox{
      * @param timer representing the timer of the algorithm
      */
     public void generateSolution(int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -218,7 +218,7 @@ public class RandomOptionsPane extends VBox{
      * @param timer representing the timer of the algorithm
      */
     public void generateSolution(int a, int b, int c, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
