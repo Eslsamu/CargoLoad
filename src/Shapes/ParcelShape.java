@@ -84,6 +84,8 @@ public abstract class ParcelShape extends Shape{
 	@Override
 	public abstract ParcelShape clone();
 	
+
+        public abstract ParcelShape cloneWithCoordinates();
 	/*
 	 * @param o set the orientation of the parcel and changes it's shape accordingly
 	 *  UpA,   //Length is Z Axis, Width is Y

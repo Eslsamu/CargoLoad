@@ -1,5 +1,6 @@
 package View;
 
+import Model.SuperContainer;
 import Shapes.Monimo;
 import Shapes.ParcelShape;
 import Shapes.PentominoShape;
@@ -30,9 +31,9 @@ import javafx.scene.transform.Translate;
  */
 public class ContainerPane extends Parent {
     //predifined sizes of the container and boxes
-    private float CONTAINER_DEPTH = 16.5f;
-    private float CONTAINER_WIDTH = 2.5f;
-    private float CONTAINER_HEIGHT = 4.0f;
+    private float CONTAINER_DEPTH = SuperContainer.CONTAINERZ/2f;
+    private float CONTAINER_WIDTH = SuperContainer.CONTAINERX/2f;
+    private float CONTAINER_HEIGHT = SuperContainer.CONTAINERY/2f;
     //box type small
     private float Box_Depth = 0.5f;
     private float Box_Width = 0.5f;
@@ -335,6 +336,11 @@ public class ContainerPane extends Parent {
             drawPentominoes(shownContainers.get(n).getContainedPentominoes(), shownContainers.get(n).getValue());
         }
     }
+    /**
+     * This method checks how the Container should be drawn.
+     * @param arrayList of Shapes to be drawn
+     * @return boolean true/false of the two ways it could be drawn
+     */
     public boolean draw(ArrayList<Shape> arrayList){
         ArrayList<Monimo> PentominoBoxCoordinates = ((PentominoShape) (arrayList.get(0))).getChildren();
 

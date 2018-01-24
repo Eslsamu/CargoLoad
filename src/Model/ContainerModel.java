@@ -3,79 +3,21 @@ package Model;
 import Shapes.*;
 import Util.Coordinates;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.lang.*;
 
+/**
+ * This class is used for backtracking and divide and conquer with boxes
+ * @author Blazej, Samuel, Yvar, Stijn
+ */
 public class ContainerModel extends SuperContainer{
-
-
-    // in 0.5 meters
-    protected int[][][] containerMatrix = new int[containerZ][containerY][containerX];
-
-
-
-
-    /**
-     * This method packs the problem with a simple backtracking algorithm similar to that one from Phase 1.
-     * @return
-     */
-//    public boolean solveFirstPackedCargo(){
-//        //printContainer();
-//
-//        //The end condition of the recursive loop --> checks if the container is completely filled
-//        if(checkIfFull()){
-//        	showResults();
-//            System.out.println("The cargo is full.");
-//            return true;
-//        }
-//        for(int z=0;z<containerZ;z++){
-//            for(int y=0;y<containerY;y++){
-//                for(int x=0;x<containerX;x++){
-//                    //check if it is empty
-//                    if(containerMatrix[z][y][x]==0){
-//                        //for each available parcel type in the parcel list
-//                        for(int parcelType = 0; parcelType<parcelList.size();parcelType++){
-//                            //create a clone of the current parcel in your list
-//                            ParcelShape parcel = (ParcelShape) parcelList.get(parcelType);
-//                            ParcelShape currentParcel =  parcel.clone();
-//                            //for each possible orientation of the parcel -> set it to this orientation(changes it's shape)
-//                            for(Facing o: Facing.values()) {
-//                                currentParcel.setOrientation(o);
-//                                //check if this parcel with this orientation can be placed onto these coordinates
-//                                if (doesFit(z, y, x, currentParcel)) {
-//                                    //place the parcel onto the container matrix
-//                                    placeParcel(z, y, x, currentParcel);
-//                                    //add the parcel object to the containedParcel list
-//                                    containedParcels.add(currentParcel);
-//                                    if (solveFirstPackedCargo()) {
-//                                        return true;
-//                                    }
-//                                    else {
-//                                        removeParcel(currentParcel);
-//                                        containedParcels.remove(containedParcels.size() - 1);
-//                                                                            }
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//        showResults();
-//        return true;
-//    }
-
+    protected int[][][] containerMatrix = new int[SuperContainer.CONTAINERZ][SuperContainer.CONTAINERY][SuperContainer.CONTAINERX];
     /**
      * Solves the problem with a greedy algorithm with certain amounts of parcels.
      * @return
      */
     public boolean solveFirstPackedCargoSetAmount(){
-        //printContainer();
-
-        //The end condition of the recursive loop --> checks if the container is completely filled
         if(checkIfFull()){
         	showResults();
             System.out.println("The cargo is full.");
@@ -356,7 +298,12 @@ public class ContainerModel extends SuperContainer{
         }
         return doesFit;
     }
-
+    /**
+     * Adds a layer(subspace) solution to the container we are displaying
+     * @param z coordinate depth
+     * @param y coordinate height
+     * @param x coordinate width
+     */
     public void copySubspace(int z, int y, int x){
         for(int zCoord = z; zCoord < z + subspace.containerZ; zCoord++){
             for(int yCoord = y; yCoord < y + subspace.containerY; yCoord++){
@@ -367,10 +314,20 @@ public class ContainerModel extends SuperContainer{
                 }
             }
         }
-        containedParcels.addAll(subspace.containedParcels);
+        for(Shape parcel: subspace.containedParcels){
+            ParcelShape clonedParcel =  ((ParcelShape)parcel).cloneWithCoordinates();
+            
+            Coordinates newCoords = clonedParcel.getPosition();
+            clonedParcel.setCurrentCoordinates(new Coordinates(newCoords.x + x,newCoords.y + y,newCoords.z + z));
+            this.containedParcels.add(clonedParcel);
+            //}
+        }
+        //this.containedParcels.addAll(subspace.containedParcels);
         deductNeededParcels();
     }
-
+    /**
+     * When solving divide and conquer with set amount of boxes, this method is used to deduct boxes, when we add them to the container.
+     */
     private void deductNeededParcels() {
         for (int parcelTypeIndex = 0; parcelTypeIndex < parcelList.size(); parcelTypeIndex++) {
             remainingParcelsEachType[parcelTypeIndex] -= subspace.neededParcels[parcelTypeIndex];
@@ -399,7 +356,10 @@ public class ContainerModel extends SuperContainer{
 
         return enoughLeft;
     }
-
+    /**
+     * set the delay of the timer
+     * @param newDelay time in milliseconds
+     */
     public void setDelay(int newDelay){
         delay = newDelay;
     }
@@ -428,7 +388,10 @@ public class ContainerModel extends SuperContainer{
         }
         model.setContainedParcels(newContainedParcels);
     }
-
+    /**
+     * When timer has finished or a solution has been found we copy the best solution we have from another instance of ContainerModel
+     * @param model instance of ContainerModel that stores best solution so far
+     */
     public void cloneFinish(ContainerModel model){
         int[][][] newContainerMatrix = new int[containerZ][containerY][containerX];
         for(int i=0;i<containerMatrix.length;i++){
@@ -450,13 +413,12 @@ public class ContainerModel extends SuperContainer{
         setContainedParcels(newContainedParcels);
     }
 
-
+    /**
+     * @return matrix representation of container
+     */
     public int[][][] getContainerMatrix(){
         return  containerMatrix;
     }
-
-    //only for infinite amount of parcels
-
     /**
      * Pack container with random parcel multiple times and pick up the best result.
      * @param maxValueContainer
@@ -576,7 +538,10 @@ public class ContainerModel extends SuperContainer{
         showResults();
         return true;
     }
-
+    /**
+     * Method used for testing.
+     * @return boolean true if it has found a solution
+     */
     public boolean solveHalfRandomHalfDeterministic(){
         //printContainer();
 
@@ -636,7 +601,10 @@ public class ContainerModel extends SuperContainer{
         showResults();
         return true;
     }
-
+    /**
+     * method will check if we have tried all types of boxes and if none of them fit
+     * @return true if there is no box left to be tried
+     */
     public boolean triedAllTypes(){
         if (triedParcel[0] && triedParcel[1] && triedParcel[2])
             return true;
@@ -676,7 +644,10 @@ public class ContainerModel extends SuperContainer{
             System.out.println();
         }
     }
-
+    /**
+     * Compute the value of the container
+     * @return value
+     */
     public int computeTotalValue(){
         int totalValue=0;
         for(Shape parcel:containedParcels){
@@ -686,7 +657,9 @@ public class ContainerModel extends SuperContainer{
     }
 
 
-
+    /**
+     * Used for printing the result in the command line
+     */
     public void showResults(){
         printContainer();
         System.out.println("The best value is :"+computeTotalValue());
@@ -767,22 +740,11 @@ public class ContainerModel extends SuperContainer{
         }
     }
     
-
+    /**
+     * Set the matrix representation of container
+     * @param newValues new matrix
+     */
     public void setContainerMatrix(int[][][] newValues){
         containerMatrix = newValues;
     }
-
-
-
-
-
-
-//    //when setAmountOfParcels is called without parameters we consider the amount of each parcel as "infinite"
-//    public void setContainerDimensions(int x, int y, int z){
-//        containerX = x;
-//        containerY = y;
-//        containerZ = z;
-//        containerMatrix = new int[z][y][x];
-//    }
-
 }

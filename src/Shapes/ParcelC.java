@@ -23,4 +23,12 @@ public class ParcelC extends ParcelShape{
 		clone.setOrientation(this.orientation);
 		return clone;	
 	}
+        
+        @Override 
+        public ParcelC cloneWithCoordinates(){
+            ParcelC clone = new ParcelC();
+            clone.setOrientation(this.orientation);
+            clone.setCurrentCoordinates(this.positionParcelContainer.clone());
+            return clone;
+        }
 }

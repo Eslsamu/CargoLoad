@@ -22,4 +22,11 @@ public class ParcelA extends ParcelShape{
 		clone.setOrientation(this.orientation);
 		return clone;	
 	}
+        @Override 
+        public ParcelA cloneWithCoordinates(){
+            ParcelA clone = new ParcelA();
+            clone.setOrientation(this.orientation);
+            clone.setCurrentCoordinates(this.positionParcelContainer.clone());
+            return clone;
+        }
 }

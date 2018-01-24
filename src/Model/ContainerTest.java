@@ -1,12 +1,14 @@
 package Model;
 import Shapes.*;
 import java.util.ArrayList;
-import java.util.zip.CheckedOutputStream;
 
-
+/**
+ * Class used for testing containerModel
+ */
 public class ContainerTest {
-
-
+    /**
+     * Main method used for testing
+     */
     public static void main(String[] args) {
         ArrayList<Shape> givenParcels = new ArrayList<>();
 
@@ -25,7 +27,5 @@ public class ContainerTest {
         int delay = 5000; // in milliseconds
         container.setDelay(delay);
         container.loadContainer(maxValueContainer,true,true);
-
-
     }
 }

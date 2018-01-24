@@ -4,13 +4,18 @@ import Shapes.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+/**
+ * A general class for our solver classes
+ * @author Blazej, Samuel, Yvar, Stijn
+ */
 public abstract class SuperContainer {
 
-    protected int containerX = 5;
-    protected int containerY = 8;
-    protected int containerZ = 33;
-
+    public static int CONTAINERX = 5;
+    public static int CONTAINERY = 8;
+    public static int CONTAINERZ = 33;
+    protected int containerX = CONTAINERX;
+    protected int containerY = CONTAINERY;
+    protected int containerZ = CONTAINERZ;
     protected ArrayList<Shape> parcelList;
 
     protected ArrayList<Shape> containedParcels = new ArrayList<>();
@@ -78,7 +83,6 @@ public abstract class SuperContainer {
     /**
      * Sorts the parcelList from the highest to the lowest value density.
      * @param givenParcels
-     * @return
      */
     public ArrayList<Shape> orderParcelListByRatio(ArrayList<Shape> givenParcels) {
         ArrayList<Double> parcelRatios = new ArrayList<>();
@@ -134,25 +138,31 @@ public abstract class SuperContainer {
         return orderedParcelListbyRatio;
 
     }
-
+    /**
+     * Sets the parcels that are needed for solution
+     * @param newContainedParcels 
+     */
     public void setContainedParcels(ArrayList<Shape> newContainedParcels) {
         containedParcels = newContainedParcels;
     }
-
+    /**
+     * Set the list of parcels we can choose from for finding a solution
+     * @param parcelList 
+     */
     public void setParcelList(ArrayList<Shape> parcelList) {
         this.parcelList = parcelList;
     }
-
+    /**
+     * Set amount of parcels of each type that can be used for finding a solution
+     * @param nrOfA
+     * @param nrOfB
+     * @param nrOfC 
+     */
     public void setAmountOfParcels(int nrOfA, int nrOfB, int nrOfC) {
         AmountTypeA = nrOfA;
         AmountTypeB = nrOfB;
         AmountTypeC = nrOfC;
         totalGivenParcels = nrOfA + nrOfB + nrOfC;
-        /**
-         * Always run this method after calling setParcelList().This method needs a parcelList containing parcels to run correctly,
-         * however before running setParcelList() the parcelList doesn't contain any value.
-         *
-         */
         for(int parcelTypeIndex=0;parcelTypeIndex<parcelList.size();parcelTypeIndex++){
             if(parcelList.get(parcelTypeIndex) instanceof ParcelA){
                 remainingParcelsEachType[parcelTypeIndex] = nrOfA;
@@ -166,7 +176,9 @@ public abstract class SuperContainer {
         }
 
     }
-
+    /**
+     * A default "infinite amount" parcels
+     */
     public void setAmountOfParcels() {
         remainingParcelsEachType = new int[]{1000,1000,1000};
     }
@@ -179,19 +191,21 @@ public abstract class SuperContainer {
         delay = newDelay;
     }
 
-
+    /**
+     * @return parcels in the container
+     */
     public ArrayList<Shape> getContainedParcels() {
         return containedParcels;
     }
-
+    /**
+     * @return types of parcels
+     */
     public ArrayList<Shape> getParcelList() {
         return parcelList;
     }
-
-
-
-
-
+    /**
+     * Print shapes in the container
+     */
     public void printContainedShapes(){
 
         for(int  i = 0; i < containedParcels.size(); i++){
@@ -210,22 +224,24 @@ public abstract class SuperContainer {
             }
         }
     }
-
+    /**
+     * @return depth
+     */
     public int getContainerZ(){
         return containerZ;
     }
 
-
+    /**
+     * @return height
+     */
     public int getContainerY(){
         return containerY;
     }
 
-
+    /**
+     * @return width
+     */
     public int getContainerX(){
         return containerX;
     }
-
-
-
-
 }

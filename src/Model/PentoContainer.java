@@ -5,10 +5,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import Shapes.*;
-import Util.Algebra;
 import Util.Axis;
 import Util.Coordinates;
-
+/**
+ * Class used for solving the container with pentominoes
+ * @author Samuel, Blazej, Yvar, Stijn
+ */
 public class PentoContainer extends SuperContainer{
         /**
 	 * A matrix representing the container. Each index of this matrix represents a 0,5 x 0,5 x 0,5 space.
@@ -24,7 +26,6 @@ public class PentoContainer extends SuperContainer{
 	 * @param firstCall
 	 * @return
 	 */
-	
 	public boolean loadContainer(PentoContainer maxValueContainer, boolean startTimer, boolean firstCall) {
 		if (startTimer) {
 			java.util.Timer timer = new Timer();
@@ -41,7 +42,6 @@ public class PentoContainer extends SuperContainer{
 
 		//The end condition of the recursive loop --> checks if the container is completely filled
 		if (checkIfFull()) {
-			printContainer();
 			System.out.println("The cargo is full.");
 
 			return true;
@@ -115,7 +115,6 @@ public class PentoContainer extends SuperContainer{
 			for(Shape parcel:containedParcels){
 				System.out.println(((PentominoShape) parcel).getPositionParcelContainer());
 			}
-			printContainer();
 			return true;
 		}
 
@@ -124,18 +123,23 @@ public class PentoContainer extends SuperContainer{
 		if(firstCall){
 			System.out.println("Finish first call");
 			cloneFinish(maxValueContainer);
-			printContainer();
 //			showResults();
 //            printContainedShapes();
 			return true;
 		}
 		return false;
 	}
-
+        /**
+         * Set matrix representation of container
+         * @param newValues matrix
+         */
 	public void setContainerMatrix(String[][][] newValues){
 		containerMatrix = newValues;
 	}
-
+        /**
+        * When timer has finished or a solution has been found we copy the best solution we have from another instance of ContainerModel
+        * @param model instance of ContainerModel that stores best solution so far
+        */
 	public void cloneFinish(PentoContainer model){
 		String[][][] newContainerMatrix = new String[containerX][containerY][containerZ];
 		for(int i=0;i<containerMatrix.length;i++){
@@ -155,11 +159,17 @@ public class PentoContainer extends SuperContainer{
 		}
 		setContainedParcels(newContainedParcels);
 	}
-
+        /**
+         * @return current matrix representation of container
+         */
 	public String[][][] getContainerMatrix(){
 		return  containerMatrix;
 	}
-
+        
+        /**
+         * Saves a container packing that is the best (most valuable) solution so far.
+         * @param model
+         */
 	public void clone(PentoContainer model){
 		String[][][] newContainerMatrix = new String[containerX][containerY][containerZ];
 		for(int i=0;i<containerMatrix.length;i++){
@@ -258,84 +268,8 @@ public class PentoContainer extends SuperContainer{
 		for(Monimo m : (((PentominoShape)(p)).getChildren())) {
 			containerMatrix[m.getContainerPosition().x][m.getContainerPosition().y][m.getContainerPosition().z] = null;
 		}
+        }        
 
-	}
-
-	public void printContainer(){
-//		int holes = 0;
-//        for(int z=0;z<containerZ;z++){
-//            System.out.println("Layer for z = "+z);
-//            for(int y =0;y<containerY;y++){
-//                for (int x=0;x<containerX;x++){
-//                    if(containerMatrix[x][y][z]!=null) System.out.print(containerMatrix[x][y][z]+" ");
-//                    else {
-//                    	System.out.print("O ");
-//                    	holes++;
-//                    	}
-//                }
-//                System.out.println();
-//            }
-//            System.out.println();
-//        }
-//        System.out.println("holes: "+ holes);
-//        System.out.println("loaded shapes: "+ containedParcels.size());
-//		System.out.println("value: "+computeTotalValue());
-	}
-
-//	public boolean loadContainerRandom(int iteration) {
-//		//to find a perfect solution, there have to be 264 pentominoes in the loaded list. 1320(containervolume)/5(pento volume)
-//		//the other stopping condition is the given amount of time or iterations
-//		if(containedParcels.size() >= containerX*containerY*containerZ/5 || iteration <= 0) {
-//			printContainer();
-//			return true;
-//		}
-//
-//		//for each index in the space
-//		for(int z = 0; z < containerZ; z++) {
-//			for(int y = 0; y < containerY; y++) {
-//				for(int x = 0; x < containerX; x++) {
-//					//if nothing is placed here
-//					if(containerMatrix[x][y][z]==null) {
-//						//for each pentomino in our list of given shapes
-//						for(int i = 0; i < parcelList.size(); i++) {
-//							// take a random shape and clone it
-//							PentominoShape current = parcelList.get((int)(Math.random()*3)).clone();
-//							//rotates around the each of it's axis with moving the down-left-back most monimo to the origin
-//							// so that it doesnt try orientations which are blocked anyway and also to 'flip' it this way around its own body
-//							for(int xAxis = 0; xAxis < 4; xAxis++) {
-//								current.rotate(90, Axis.X);
-//								for(int yAxis = 0; yAxis < 4; yAxis++) {
-//									current.rotate(90, Axis.Y);
-//									for(int zAxis = 0; zAxis < 4; zAxis++) {
-//										current.rotate(90, Axis.Z);
-//										current.moveToOrigin();
-//										//check if all of the current pentominos monimoes do fit onto these coordinates in the container
-//										if(doesFit(current, new Coordinates(x,y,z))){
-//											place(current, new Coordinates(x,y,z));
-//											iteration--;
-//											if(loadContainer(iteration)) {
-//												return true;
-//											}
-//											else {
-//												removeLast(current);
-//											}
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return false;
-//	}
-
-	public ArrayList<String[][][]> findMaximalSpaces() {
-
-		return null;
-
-	}
 
 	/**
 	 * Checks if the container is fully packed.

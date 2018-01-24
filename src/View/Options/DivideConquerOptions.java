@@ -292,6 +292,7 @@ public class DivideConquerOptions extends VBox{
         switch(order){
             case VALUE :    givenParcels = solver.orderParcelListByValue(givenParcels); 
                             solver.setParcelList(givenParcels);
+                            maxValueContainer.setParcelList(givenParcels);
                             solver.setAmountOfParcels(a, b, c);
                             solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();
@@ -300,6 +301,7 @@ public class DivideConquerOptions extends VBox{
                             break;
             case RATIO :    givenParcels = solver.orderParcelListByRatio(givenParcels);
                             solver.setParcelList(givenParcels);
+                            maxValueContainer.setParcelList(givenParcels);
                             solver.setAmountOfParcels(a, b, c);
                             solver.solveDivideAndConquer(maxValueContainer);
                             containedShapes = solver.getContainedParcels();

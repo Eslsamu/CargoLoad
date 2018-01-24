@@ -3,12 +3,21 @@ package Model;
 import Shapes.*;
 
 import java.util.ArrayList;
-
+/**
+ * Class is used when solving by divide and Conquer, subspace is a layer in the container that we are trying to fill
+ * @author Blazej, Samuel, Yvar, Stijn
+ */
 public class Subspace extends ContainerModel{
     protected int[] neededParcels;
     // in 0.5 meters
     // these are need for subspaces
-
+    /**
+     * Construct a 3d layer 
+     * @param z depth
+     * @param y height
+     * @param x width
+     * @param subspaceParcelList list of parcels that should be tried
+     */
     public Subspace(int z, int y, int x, ArrayList<Shape> subspaceParcelList){
         containerZ = z;
         containerY = y;
@@ -20,7 +29,9 @@ public class Subspace extends ContainerModel{
         containedParcels = new ArrayList<>();
 
     }
-
+    /**
+     * Computes how many parcels we need to fill the subspace
+     */
     protected void computeNeededParcels(){
         int nrOfANeeded = 0;
         int nrOfBNeeded = 0;

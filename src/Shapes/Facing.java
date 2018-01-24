@@ -1,5 +1,8 @@
 package Shapes;
-
+/**
+ * Rotation of parcels
+ * @author Blazej
+ */
 public enum Facing {
 	
 	UpA,   //Length is Z Axis, Width is Y 
