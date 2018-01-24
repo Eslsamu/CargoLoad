@@ -113,8 +113,8 @@ public class DivideConquerOptions extends VBox{
             public void handle(ActionEvent e){
                 view.hideButtons();
                 DivideConquerPentominoes sth = new DivideConquerPentominoes();
-                System.out.println(sth.getContainedParcels().size());
-                container.drawPentominoes(sth.getContainedParcels(), sth.getContainerValue(), "D&C, Pentominoes");
+                //System.out.println(sth.getContainedPentominoes().size());
+                //container.drawPentominoes(sth.getContainedPentominoes(), sth.getContainerValue(), "D&C, Pentominoes");
             }});
         getChildren().add(packPentominoes);
         

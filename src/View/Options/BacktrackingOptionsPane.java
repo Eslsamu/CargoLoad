@@ -107,37 +107,43 @@ public class BacktrackingOptionsPane extends VBox{
         packPentominoes.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         packPentominoes.setFocusTraversable(false);
         packPentominoes.setMinSize(225, 50);
-        //RadioButton fill = new RadioButton("Fill cargo-space");
-        //RadioButton maximum = new RadioButton("Maximum value");
+        RadioButton fill = new RadioButton("Infinite amount pentominoes");
+        RadioButton maximum = new RadioButton("Set amount of pentominoes");
         packPentominoes.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
                 view.hideButtons();
-                PentoContainer testContainer = new PentoContainer();
-                ArrayList<Shape> givenParcels = new ArrayList<>();
-                givenParcels.add(new PentominoP());
-                givenParcels.add(new PentominoT());
-                givenParcels.add(new PentominoL());
-                givenParcels = testContainer.orderParcelListByValue(givenParcels);
-                testContainer.setParcelList(givenParcels);
-                testContainer.setDelay(5000);
-                PentoContainer maxValueContainer = new PentoContainer();
-                maxValueContainer.setParcelList(givenParcels);
-                testContainer.loadContainer(maxValueContainer,true,true);
-                container.drawPentominoes(testContainer.getContainedParcels(), testContainer.computeTotalValue(), "Backtracking, Pentominoes");
+                if(maximum.isSelected()){
+                    PentominoSet set = new PentominoSet(getButtonPane());
+                    Scene scene = new Scene(set);
+                    
+                    stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setWidth(450);
+                    stage.setHeight(500);
+                    stage.setResizable(false);
+                    stage.initModality(Modality.APPLICATION_MODAL); 
+                    stage.show();
+                }
+                else{ 
+                        setPackingOrderPentominoes();
+                }
             }});
         getChildren().add(packPentominoes);
 
-        /* ToggleGroup packPentoGroup = new ToggleGroup();
+        ToggleGroup packPentoGroup = new ToggleGroup();
 
         fill.setFont(new Font("Arial", 15));
         fill.setToggleGroup(packPentoGroup);
         fill.setSelected(true);
         fill.setFocusTraversable(false);
+        getChildren().add(fill);
         
         maximum.setFont(new Font("Arial", 15));
         maximum.setToggleGroup(packPentoGroup);
-        maximum.setFocusTraversable(false); */
+        maximum.setFocusTraversable(false);
+        getChildren().add(maximum);
+        
         Button shownContainers = new Button("Generated Containers");
         shownContainers.setFocusTraversable(false);
         shownContainers.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
@@ -238,6 +244,87 @@ public class BacktrackingOptionsPane extends VBox{
                 }
         }});
     }
+    
+    /**
+     * This method generates a new stage that will ask the user to specify how he wants the backtracking to sort.
+     * It will give options as:(by value, by ratio).
+     */
+     public void setPackingOrderPentominoes(){
+        VBox pane = new VBox();
+        Label title = new Label("Choose packing order:");
+        title.setFont(new Font("Arial", 19));
+        pane.getChildren().add(title);
+        
+        ToggleGroup packingOrderGroup = new ToggleGroup();
+        
+        RadioButton value = new RadioButton("By value");
+        value.setFocusTraversable(false);
+        value.setFont(new Font("Arial", 15));
+        value.setToggleGroup(packingOrderGroup);
+        value.setSelected(true);
+        pane.getChildren().add(value);
+        
+        RadioButton ratio  = new RadioButton("By value/volume ratio");
+        ratio.setFocusTraversable(false);
+        ratio.setFont(new Font("Arial", 15));
+        ratio.setToggleGroup(packingOrderGroup);
+        pane.getChildren().add(ratio);
+        
+        Label timer = new Label("Set timer for backtracking:");
+        timer.setFont(new Font("Arial", 19));
+        pane.getChildren().add(timer);
+        
+        TextField Timer = new TextField();
+        Timer.setMaxWidth(175);
+        pane.getChildren().add(Timer);
+        
+        try {
+            FileInputStream input = new FileInputStream("background.jpeg");
+            pane.setBackground(new Background(new BackgroundImage(new Image(input,1000,1000,false,true),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+            BackgroundSize.DEFAULT)));
+        } catch (FileNotFoundException ex) {
+            pane.setBackground(new Background(new BackgroundFill(Color.rgb(186, 216, 227), CornerRadii.EMPTY, new Insets(0, 0, 0, 0))));
+        }     
+        Button pack = new Button("Pack");
+        pack.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
+        pack.setMinSize(150, 50);
+        
+        pane.getChildren().add(pack);
+        pane.setSpacing(5);
+        pane.setAlignment(Pos.CENTER);
+        
+        Scene scene = new Scene(pane);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setWidth(300);
+        stage.setHeight(300);
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL); 
+        stage.show();
+        pack.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                stage.close();
+                PentoContainer testContainer = new PentoContainer();
+                ArrayList<Shape> givenParcels = new ArrayList<>();
+                givenParcels.add(new PentominoP());
+                givenParcels.add(new PentominoT());
+                givenParcels.add(new PentominoL());
+                if(value.isSelected()){
+                    givenParcels = testContainer.orderParcelListByValue(givenParcels);
+                }
+                else if(ratio.isSelected()){
+                    givenParcels = testContainer.orderParcelListByRatio(givenParcels);
+                }
+                testContainer.setParcelList(givenParcels);
+                testContainer.setDelay((Integer.parseInt(Timer.getText())*1000));
+                PentoContainer maxValueContainer = new PentoContainer();
+                maxValueContainer.setParcelList(givenParcels);
+                testContainer.loadContainer(maxValueContainer,true,true);
+                container.drawPentominoes(testContainer.getContainedParcels(), testContainer.computeTotalValue(), "BacktrackingPentominoes, infinite amount of pentominoes, timer: " + (Integer.parseInt(Timer.getText())) + " seconds");
+        }});
+    }
     /**
      * If the user chooses option set amount of boxes and submits them this method will be called.
      * It will close the other stage and generate Solutions according to the set amount of boxes,
@@ -251,6 +338,21 @@ public class BacktrackingOptionsPane extends VBox{
     public void solveSetAmountBoxes(int a, int b, int c, ORDER order, int timer){
         stage.close();
         generateSolution(a, b, c, order, timer);
+    }
+    
+    /**
+     * If the user chooses option set amount of pentominoes and submits them this method will be called.
+     * It will close the other stage and generate Solutions according to the set amount of boxes,
+     * give timer and Order type.
+     * @param a number of boxes typeA
+     * @param b number of boxes typeB
+     * @param c number of boxes typeC
+     * @param order Order type, used by backtracking
+     * @param timer representing the timer of backtracking
+     */
+    public void solveSetAmountPentominoes(int a, int b, int c, ORDER order, int timer){
+        stage.close();
+        generateSolutionPentominoes(a, b, c, order, timer);
     }
     /**
      * This is the actual method that generates an instance of ContainerModel. Tries to solve the container and
@@ -319,6 +421,39 @@ public class BacktrackingOptionsPane extends VBox{
                             
                             break;
         }
+    }
+    
+    /**
+     * This is the actual method that generates an instance of ContainerModel. Tries to solve the container with
+     * give set of pentominoes and at the end draws the best found result.
+     * @param a number of pentominoes l
+     * @param b number of pentominoes p
+     * @param c number of pentominoes t
+     * @param order order type, used by backtracking
+     * @param timer representing the timer of backtracking
+     */
+    public void generateSolutionPentominoes(int a, int b, int c, ORDER order, int timer){
+        PentoContainer testContainer = new PentoContainer();
+       ArrayList<Shape> givenParcels = new ArrayList<>();
+       givenParcels.add(new PentominoP());
+        givenParcels.add(new PentominoT());
+        givenParcels.add(new PentominoL());
+        switch(order){
+            case VALUE :    
+                            givenParcels = testContainer.orderParcelListByValue(givenParcels);
+                            break;
+            case RATIO :    givenParcels = testContainer.orderParcelListByRatio(givenParcels); 
+                            break;
+        }
+        
+        testContainer.setParcelList(givenParcels);
+        testContainer.setDelay(timer*1000);
+        PentoContainer maxValueContainer = new PentoContainer();
+        maxValueContainer.setParcelList(givenParcels);
+        testContainer.setAmountOfParcels(a, b, c);
+        testContainer.loadContainer(maxValueContainer,true,true);
+        container.drawPentominoes(testContainer.getContainedParcels(), testContainer.computeTotalValue(), "BacktrackingPentominoes, L: " + a + " P: " + b + " T: " + c + " timer: " + timer + " seconds");
+       
     }
     /**
      * A method that returns an instance of this class
