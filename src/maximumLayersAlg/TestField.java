@@ -1,10 +1,12 @@
-package Test;
+package maximumLayersAlg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
 import Model.PentoContainer;
+import Shapes.PentominoP;
+import Shapes.PentominoShape;
 import Util.Coordinates;
 
 public class TestField extends PentoContainer{
@@ -22,30 +24,44 @@ public class TestField extends PentoContainer{
 	}};
 	
 	
-	private Coordinates closestContainerCorner;
-	private int[] closestDistance;
-	private Coordinates closestLayerCorner;
-	
 	 public static void main(String[] args) {
-		 TestField testF = new TestField();
-		 testF.containerMatrix[0][0][0]="A";
+		 PentoBox testBox1 = new PentoBox(5,2);
+		 testBox1.loadContainer();
 		 
-		 for(EML l: testF.getMaxLayers()) {
-			 System.out.println(l.toString());
-		 } 
+		 TestField test = new TestField();
+		 test.place(new PentominoP(), new Coordinates(0,0,10));
+		 test.printContainer();
+		 EML testLayer = test.getBestEmptyLayer();
+		 System.out.println("best"+testLayer.closestDistance[0]+" "+testLayer.closestDistance[1]+" "+testLayer.closestDistance[2]);
+	 }
+	 
+	 public boolean loadMaxLayerAlg() {
+		 if(loadedPentominoes.size() >= (containerLength*containerWidth*containerHeight/5)) {
+				printContainer();
+				return true;
+		}
+		EML nextSpace = getBestEmptyLayer();
+		return false;
 	 }
 	 
 	 /*
 	  * returns the layer of a list which is the closest to a corner/edge/wall
 	  */
-	 public EML getBestLayer() {
-		 EML best = new EML();
+	 public EML getBestEmptyLayer() {
+		 EML best = null;
 		 for(EML layer: getMaxLayers()) {
 			 //!global variable
 			 findClosestCorner(layer);
-			 
-		 }
-		 
+			 System.out.println(layer.toString());
+			 System.out.println(layer.closestDistance[0]+" "+layer.closestDistance[1]+" "+layer.closestDistance[2]);
+			 System.out.println(layer.closestContainerCorner.toString());
+			 if(layer.closestDistance[0]==0&&layer.closestDistance[1]==0&&layer.closestDistance[2]==0) {
+				 return layer;
+			 }
+			 else if(best==null||isCloser(layer.closestDistance,best.closestDistance)){
+				 best = layer;
+			 }
+		 } 
 		 return best;
 	 }
 	 
@@ -55,10 +71,10 @@ public class TestField extends PentoContainer{
 			 if(stop) break;
 			 for(Coordinates layCorner : layer.corners) {
 				 int[] distance = getDistance(layCorner,contCorner);
-				 if(isCloser(distance,closestDistance)){
-					 closestDistance = distance;
-					 closestContainerCorner = contCorner;
-					 closestLayerCorner = layCorner;
+				 if(layer.closestDistance==null||isCloser(distance,layer.closestDistance)){
+					 layer.closestDistance = distance;
+					 layer.closestContainerCorner = contCorner;
+					 layer.closestLayerCorner = layCorner;
 				 }
 				 if(distance[0]==0&&distance[1]==0&&distance[2]==0) {
 					 stop = true;
@@ -230,57 +246,5 @@ public class TestField extends PentoContainer{
 	 public boolean rectangleFinished(EML rect, int pos) {
 		return ((rect.startY+rect.vectorY - pos)>0) ? true : false;
 	 }
-	 /*
-	  * empty maximal layer
-	  */
-	 class EML {
-		 int vectorX;
-		 int vectorY;
-		 int vectorZ;
-		 int startX;
-		 int startY;
-		 int startZ;
-		 
-		 ArrayList<Coordinates> corners = new ArrayList<Coordinates>();
-		 
-		 public EML(int xS, int yS, int zS, int yV, int zV) {
-			 vectorY = yV;
-			 vectorZ = zV;
-			 startX = xS;
-			 startY = yS;
-			 startZ = zS;
-			 generateCorners();
-		 }
-		 
-		public EML() {
-			// TODO Auto-generated constructor stub
-		}
-		
-		private void generateCorners() {
-			corners.add(new Coordinates(startX,startY,startZ));
-			corners.add(new Coordinates(startX,startY,startZ+vectorZ));
-			corners.add(new Coordinates(startX,startY+vectorY,startZ));
-			corners.add(new Coordinates(startX,startY+vectorY,startZ+vectorZ));
-			corners.add(new Coordinates(startX+vectorX,startY,startZ));
-			corners.add(new Coordinates(startX+vectorX,startY,startZ+vectorZ));
-			corners.add(new Coordinates(startX+vectorX,startY+vectorY,startZ));
-			corners.add(new Coordinates(startX+vectorX,startY+vectorY,startZ+vectorZ));
-		}
-		
-		public void switchToY() {
-			 vectorX = vectorY;
-			 vectorY = 0;
-			 generateCorners();
-		 }
-		 
-		 public void switchToZ() {
-			 vectorX = vectorZ;
-			 vectorZ = 0;
-			 generateCorners();
-		 }
-		 
-		 public String toString() {
-			 return new String("vectorX: "+ vectorZ+" vectorY:"+vectorY+" vectorZ: "+vectorZ+" startX:"+startX+" startY:"+startY+" startZ: "+startZ);
-		 }
-	 }
+	 
 }

@@ -239,8 +239,6 @@ public class ContainerModel {
 
     public void solveDivideAndConquer(ContainerModel maxValueContainer){
 
-
-
         ArrayList<int[]> subspaces = generateSubspaces();
         for(int[] subspaceShape:subspaces){
             newContainer();

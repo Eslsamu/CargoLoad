@@ -2,7 +2,6 @@ package View.Options;
 
 import Model.ContainerModel;
 import Model.DivideConquerPentominoes;
-import Model.Grasp;
 import Shapes.ParcelShape;
 import View.ContainerPane;
 import View.ContainerView;
@@ -56,9 +55,8 @@ public class MaximalSpaceOptionsPane extends VBox{
             public void handle(ActionEvent e){
                 //view.hideButtons();
                 //stage.close();
-                Grasp graspModel = new Grasp(100,100,100);
-                graspModel.graspTest();
-                container.drawBoxes(graspModel.getParcelsPacked(), graspModel.getTotalValue(), "Maximal spaces, infinite amount of boxes");
+                //TODO maximal layer alg
+                //container.drawBoxes(graspModel.getParcelsPacked(), graspModel.getTotalValue(), "Maximal spaces, infinite amount of boxes");
 
             }});
         getChildren().add(packBox);
