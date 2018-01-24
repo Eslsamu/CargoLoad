@@ -44,15 +44,15 @@ public class TitlePane extends GridPane{
         value.setFont(new Font("Arial", 18));
         gridPane.add(value, 0, 1);
         
-        Label parcelValueA = new Label("Parcel A value = 3");
+        Label parcelValueA = new Label("Parcel A/ Pentomino L value = 3");
         parcelValueA.setFont(new Font("Arial", 16));
         gridPane.add(parcelValueA, 0, 2);
         
-        Label parcelValueB = new Label("Parcel B value = 4");
+        Label parcelValueB = new Label("Parcel B/ Pentomino P  value = 4");
         parcelValueB.setFont(new Font("Arial", 16));
         gridPane.add(parcelValueB, 0, 3);
         
-        Label parcelValueC = new Label("Parcel C value = 5");
+        Label parcelValueC = new Label("Parcel C/ Pentomino T value = 5");
         parcelValueC.setFont(new Font("Arial", 16));
         gridPane.add(parcelValueC, 0, 4);
         
