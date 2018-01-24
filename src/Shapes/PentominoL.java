@@ -8,11 +8,8 @@ public class PentominoL extends PentominoShape{
 	private static ShapeMaterial material = ShapeMaterial.BLUE;
 	
 	public PentominoL() {
-		super(name,value,material);
+		super(material, name, value);
 	}
-        public int getValue(){
-            return value;
-        }
 	
 	@Override
 	public void addChildren() {
@@ -26,5 +23,14 @@ public class PentominoL extends PentominoShape{
 	@Override
 	public PentominoShape clone() {
 		return new PentominoL();
+	}
+	public PentominoL cloneWithCoords(){
+		PentominoL p = new PentominoL();
+		p.setContainerPosition(positionParcelContainer.clone());
+		System.out.println("Position parcel z:"+positionParcelContainer.z+" "+positionParcelContainer.y+" "+positionParcelContainer.x);
+		for(int i=0;i<p.children.size();i++){
+			p.children.set(i,this.children.get(i).clone());
+		}
+		return p;
 	}
 }

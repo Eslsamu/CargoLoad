@@ -1,5 +1,6 @@
 package View;
 
+import Shapes.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,10 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import Model.ContainerModel;
 import Model.PentoContainer;
-import Shapes.ParcelA;
-import Shapes.ParcelB;
-import Shapes.ParcelC;
-import Shapes.ParcelShape;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ import javafx.scene.layout.BackgroundSize;
 public class BacktrackingOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
-    private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
+    private ArrayList<Shape> containedShapes = new ArrayList<>();
     private ContainerModel solver;
     private ContainerView view;
     
@@ -111,8 +109,18 @@ public class BacktrackingOptionsPane extends VBox{
             public void handle(ActionEvent e){
                 view.hideButtons();
                 PentoContainer testContainer = new PentoContainer();
-                testContainer.loadContainer(300);
-                container.drawPentominoes(testContainer.getLoadedPentominoes(), testContainer.getValue(), "Pentominoes");
+                //TODO
+                ArrayList<Shape> givenParcels = new ArrayList<>();
+                givenParcels.add(new PentominoP());
+                givenParcels.add(new PentominoT());
+                givenParcels.add(new PentominoL());
+                givenParcels = testContainer.orderParcelListByValue(givenParcels);
+                testContainer.setParcelList(givenParcels);
+                testContainer.setDelay(5000);
+                PentoContainer maxValueContainer = new PentoContainer();
+                maxValueContainer.setParcelList(givenParcels);
+                testContainer.loadContainer(maxValueContainer,true,true);
+                container.drawPentominoes(testContainer.getContainedParcels(), testContainer.computeTotalValue(), "Pentominoes");
             }});
         getChildren().add(packPentominoes);
 
@@ -258,7 +266,7 @@ public class BacktrackingOptionsPane extends VBox{
      * @param timer representing the timer of backtracking
      */
     public void generateSolution(ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());
@@ -298,7 +306,7 @@ public class BacktrackingOptionsPane extends VBox{
      * @param timer representing the timer of backtracking
      */
     public void generateSolution(int a, int b, int c, ORDER order, int timer){
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
         
             givenParcels.add(new ParcelA());
             givenParcels.add(new ParcelB());

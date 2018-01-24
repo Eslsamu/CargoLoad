@@ -6,7 +6,7 @@ import Util.Coordinates;
 /*
  * An abstraction of the Parcel classes
  */
-public abstract class ParcelShape {
+public abstract class ParcelShape extends Shape{
 	
 	/*
 	 * The fixed dimensions of the parcel
@@ -14,10 +14,8 @@ public abstract class ParcelShape {
 	private final int width;
 	private final int length;
 	private final int height;
-	
-	private final String name;
-	private final ShapeMaterial material;
-	private final int value;
+
+
 
 	
 	/*
@@ -28,7 +26,7 @@ public abstract class ParcelShape {
 	/*
 	 * The coordinates onto which the of the parcel is placed from it's current shape
 	 */
-	protected Coordinates positionContainer;
+
 	
 	/*
 	 * A Parcel can face towards 3 different directions --> up/down(Z), left/right(Y), front/back(X),
@@ -37,11 +35,8 @@ public abstract class ParcelShape {
 	protected Facing orientation;
 	
 	
-	public ParcelShape(ShapeMaterial material, int w, int h, int l, int value, String name) {
-		this.material = material;
-		this.value = value;
-		this.name = name;
-		
+	public ParcelShape(ShapeMaterial m, String n,  int v, int w, int h, int l) {
+		super(m,n,v);
 		this.width = w;
 		this.length = l;
 		this.height = h;
@@ -49,7 +44,7 @@ public abstract class ParcelShape {
 		shapeVector = new Coordinates(w,l,h);
 		
 		orientation = Facing.UpA;
-		positionContainer = new Coordinates(0,0,0);	
+		positionParcelContainer = new Coordinates(0,0,0);
 	}
 	
 	
@@ -57,9 +52,7 @@ public abstract class ParcelShape {
 	    return shapeVector;
     }
 
-    public int getValue(){
-	    return value;
-    }
+
 
     public double getRatio() {
     	double doubleValue = value;
@@ -77,14 +70,12 @@ public abstract class ParcelShape {
 	 * @return the position in the container
 	 */
 	public Coordinates getPosition() {
-		return this.positionContainer;
+		return this.positionParcelContainer;
 	}
 	
-	/**
-	 * @param set the positionContainer
-	 */
+
 	public void setCurrentCoordinates(Coordinates coords) {
-		this.positionContainer = coords;
+		this.positionParcelContainer = coords;
 	}
 	
 	/*

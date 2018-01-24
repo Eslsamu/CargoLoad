@@ -11,7 +11,7 @@ public class ParcelA extends ParcelShape{
 	protected static int value = 3;
 	
 	public ParcelA() {
-		super(material, width, height, length, value, name);
+		super(material, name, value, width, height, length);
 	}
 	/*
 	 * @see Shapes.ParcelShape#clone()

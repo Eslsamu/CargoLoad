@@ -8,27 +8,23 @@ public class ContainerTest {
 
 
     public static void main(String[] args) {
-        ArrayList<ParcelShape> givenParcels = new ArrayList<>();
+        ArrayList<Shape> givenParcels = new ArrayList<>();
 
-        givenParcels.add(new ParcelA());
-        givenParcels.add(new ParcelB());
-        givenParcels.add(new ParcelC());
-       
-        ContainerModel container = new ContainerModel();
+        givenParcels.add(new PentominoP());
+        givenParcels.add(new PentominoL());
+        givenParcels.add(new PentominoT());
 
-        givenParcels = container.orderParcelListByValue(givenParcels);
-        //givenParcels = container.orderParcelListByRatio(givenParcels);
+       PentoContainer container = new PentoContainer();
+        System.out.println(givenParcels.size());
+        //givenParcels = container.orderParcelListByValue(givenParcels);
+        givenParcels = container.orderParcelListByRatio(givenParcels);
         container.setParcelList(givenParcels);
-        container.setAmountOfParcels(30,20,10);
-        ContainerModel maxValueContainer = new ContainerModel();
+        container.setAmountOfParcels(100,100,100);
+        PentoContainer maxValueContainer = new PentoContainer();
         maxValueContainer.setParcelList(givenParcels);
         int delay = 5000; // in milliseconds
         container.setDelay(delay);
-        //container.solveRandom(maxValueContainer);
-        //container.solveBacktracking(maxValueContainer,true,true);
-        //container.setContainerDimensions(5,33,8);
-        container.solveHalfRandomHalfDeterministic();
-
+        container.loadContainer(maxValueContainer,true,true);
 
 
     }
