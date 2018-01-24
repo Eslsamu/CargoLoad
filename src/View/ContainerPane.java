@@ -212,6 +212,38 @@ public class ContainerPane extends Parent {
             }
         }
     }
+    
+    /**
+     * This method will draw pentominoes in the container after a solution has been found.
+     * @param loadedPentominoes array list with loaded pentominoesShape
+     * @param value is the value of the container
+     * @param name is the name that is later used when showing the already displayed containers
+     */
+     public void drawPentominoes(String name, ArrayList<PentominoShape> loadedPentominoes, int value){
+        ArrayList<Shape> pentominoes = new ArrayList<>(loadedPentominoes);
+        ShownContainers shownContainer = new ShownContainers(value, pentominoes, name);
+        shownContainers.add(shownContainer);
+        container.setCullFace(CullFace.FRONT);
+        container.setDrawMode(DrawMode.LINE);
+        title.setDisplayedValue(value);
+        root.getChildren().remove(2, root.getChildren().size());
+        for(int i = 0; i < loadedPentominoes.size(); i++){
+            Color ranColor = Color.rgb((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+            ArrayList<Monimo> PentominoBoxCoordinates = ((PentominoShape) (loadedPentominoes.get(i))).getChildren();
+            
+            for(int m = 0; m < PentominoBoxCoordinates.size(); m++){
+                Box boxMesh = new Box(Box_Width, Box_Height, Box_Depth);
+                MeshView box = new MeshView(boxMesh);
+                box.setDrawMode(DrawMode.FILL);
+                box.setMaterial(new PhongMaterial(ranColor));
+                Monimo monimo = PentominoBoxCoordinates.get(m);
+                box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().x);
+                box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().y);
+                box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*monimo.getPositionShape().z);
+                root.getChildren().add(box);
+            }
+        }
+    }
     /**
      * Similar to the second drawBoxes, this method will draw an already drawn container.
      * @param loadedPentominoes an array list with coordinates for the loaded pentominoes
@@ -233,13 +265,13 @@ public class ContainerPane extends Parent {
                 MeshView box = new MeshView(boxMesh);
                 box.setDrawMode(DrawMode.FILL);
                 box.setMaterial(new PhongMaterial(ranColor));
-                try{
+                if(draw(loadedPentominoes)){
                 Coordinates coordinates = PentominoBoxCoordinates.get(m).getContainerPosition();
                 box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*coordinates.getX());
                 box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*coordinates.getY());
                 box.setTranslateZ(CONTAINER_DEPTH/2 - boxMesh.getDepth()/2 - 0.5*coordinates.getZ());
                 }
-                catch(Exception e){
+                else{
                 Monimo monimo = PentominoBoxCoordinates.get(m);
                 box.setTranslateX(-CONTAINER_WIDTH/2 + boxMesh.getWidth()/2 + 0.5*monimo.getPositionShape().x);
                 box.setTranslateY(-CONTAINER_HEIGHT/2 + boxMesh.getHeight()/2 + 0.5*monimo.getPositionShape().y);
@@ -302,6 +334,23 @@ public class ContainerPane extends Parent {
         catch(Exception e){
             drawPentominoes(shownContainers.get(n).getContainedPentominoes(), shownContainers.get(n).getValue());
         }
+    }
+    public boolean draw(ArrayList<Shape> arrayList){
+        ArrayList<Monimo> PentominoBoxCoordinates = ((PentominoShape) (arrayList.get(0))).getChildren();
+
+            Coordinates coordinates = PentominoBoxCoordinates.get(0).getContainerPosition();
+            int x1 = coordinates.getX();
+            int y1 = coordinates.getY();
+            int z1 = coordinates.getZ();
+
+            Coordinates coordinates2 = PentominoBoxCoordinates.get(1).getContainerPosition();
+            int x2 = coordinates2.getX();
+            int y2 = coordinates2.getY();
+            int z2 = coordinates2.getZ();
+        if(x1 == x2 && y1 == y2 && z1 == z2){
+            return false;
+        }
+        return true;
     }
     /**
      * This method is used to get the size of already displayed containers.
