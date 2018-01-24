@@ -33,7 +33,11 @@ public class Coordinates {
     public int getZ(){
         return z;
     }
-	
+
+    public void setX(int newX){x=newX;}
+    public void setY(int newY){x=newY;}
+    public void setZ(int newZ){x=newZ;}
+
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
