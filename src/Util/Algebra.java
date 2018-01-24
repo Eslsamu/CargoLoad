@@ -1,19 +1,8 @@
 package Util;
-
+/**
+ * Used for calculating rotation and mirroring of pentominoes
+ */
 public class Algebra {
-	
-	/*
-	 * test main
-	 */
-	public static void main(String[]args) {
-		Coordinates test = new Coordinates(2,3,4);
-		test = rotateUV(90, Axis.X,test);
-		System.out.println(test.toString());
-		test=reflect(Axis.Y,test);
-		
-		System.out.println(test.toString());
-	}
-	
 	/*
 	 * rotates an point in a coordinate system around a unit vector (UV/xyz-axis) and returns a rotated version of this point
 	 * @param 
@@ -53,7 +42,12 @@ public class Algebra {
 	
 		return new Coordinates(reflectedVector[0][0],reflectedVector[1][0],reflectedVector[2][0]);
 	}
-	
+	/**
+         * Multiplies two 2D matrixes
+         * @param matrix1
+         * @param matrix2
+         * @return the result as a 2D matrix
+         */
 	public static int[][] multiplyMatrix(int[][] matrix1, int[][] matrix2){
 		int[][] matrix = new int[matrix1.length][matrix2[0].length];
 		if (matrix1[0].length != matrix2.length){

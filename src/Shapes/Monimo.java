@@ -17,28 +17,42 @@ public class Monimo {
 	
 	private ShapeMaterial material;
 	
-	
+	/**
+         * Construct monimo
+         * @param p coordinates
+         * @param m material
+         */
 	public Monimo(Coordinates p, ShapeMaterial m) {
 		this.positionParentshape = p;
 		this.material = m;
 		positionContainer = new Coordinates(0,0,0);
 	}
-	
+	/**
+         * 
+         * @return coordinates
+         */
 	public Coordinates getContainerPosition() {
 		return positionContainer;
 	}
-	
+	/**
+         * Set coordinates
+         * @param p coordinates
+         */
 	public void setContainerPosition(Coordinates p) {
 		positionContainer.x=p.x;
 		positionContainer.y=p.y;
 		positionContainer.z=p.z;
 	}
-	
+	/**
+         * @return coordinates
+         */
 	public Coordinates getPositionShape() {
 		return positionParentshape;
 	}
-
-	// creates a copy of a certain monimo (incl. coords)
+        /**
+         * Clone the monimo
+         * @return a cloned copy of monimo
+         */
 	public Monimo clone(){
 		Coordinates cC = positionContainer;
 		Coordinates cP = positionParentshape;

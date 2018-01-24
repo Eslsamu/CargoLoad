@@ -6,7 +6,7 @@ import Util.Algebra;
 import Util.Axis;
 import Util.Coordinates;
 
-/*
+/**
  * PentominoShape is an abstract class for pentominoes. A pentomino has five children which are monimoes.
  * When the orientation in the container of the pentominoe has to be changed, then
  * the change occurs in each of its children.
@@ -15,37 +15,45 @@ import Util.Coordinates;
 public abstract class PentominoShape extends Shape{
 	
 	protected final ArrayList<Monimo> children = new ArrayList<Monimo>();
-	public static void main(String[]args) {
-		PentominoP testP = new PentominoP();
-		System.out.println(testP.toString());
-		
-		testP.rotate(90, Axis.X);
-		System.out.println(testP.toString());
-		testP.rotate(180, Axis.Y);
-		System.out.println(testP.toString());
-
-		testP.moveToOrigin();
-		System.out.println(testP.toString());
-	}
+        /**
+         * @return material
+         */
 	public ShapeMaterial getMaterial(){
 		return material;
 
 	}
+        /**
+         * Constructor
+         * @param m material
+         * @param n name
+         * @param v value
+         */
 	public PentominoShape(ShapeMaterial m,  String n, int v) {
 		super(m, n, v);
 		addChildren();
 	}
+        /**
+         * Rotates a pentominoe
+         * @param angle to rotate it
+         * @param ax Axis to rotate around
+         */
 	public void rotate(double angle, Axis ax) {
 		for(Monimo m : children) {
 			m.positionParentshape = Algebra.rotateUV(angle,ax,m.positionParentshape);
 		}
 	}
-
+        /**
+         * Calculate ratio
+         * @return ratio
+         */
 	public double getRatio() {
 		double doubleValue = value;
 		return  doubleValue/5.0;
 	}
-	
+	/**
+         * Mirror a pentomino
+         * @param axis to mirror around
+         */
 	public void reflect(Axis ax) {
 		for(Monimo m: children ) {
 			m.positionParentshape = Algebra.reflect(ax, m.positionParentshape);
@@ -79,7 +87,9 @@ public abstract class PentominoShape extends Shape{
 			m.positionParentshape.z -= zDiff;
 		}
 	}
-	
+	/**
+         * @return String representation of pentomino
+         */
 	@Override
 	public String toString() {
 		String s = "Monimos:";
@@ -119,6 +129,10 @@ public abstract class PentominoShape extends Shape{
 			m.setContainerPosition(new Coordinates(m.getPositionShape().x + c.x, m.getPositionShape().y + c.y, m.getPositionShape().z + c.z));
 		}
 	}
+        /**
+         * 
+         * @return coordinates of pentomino
+         */
 	public Coordinates getPositionParcelContainer(){
 		return positionParcelContainer;
 	}

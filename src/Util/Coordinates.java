@@ -21,15 +21,24 @@ public class Coordinates {
 		this.y = y;
 		this.z = z;
 	}
-
+        /**
+         * 
+         * @return width
+         */
 	public int getX(){
 	    return x;
     }
-
+    /**
+     * 
+     * @return height
+     */
     public int getY(){
         return y;
     }
-
+    /**
+     * 
+     * @return depth
+     */
     public int getZ(){
         return z;
     }
@@ -66,8 +75,8 @@ public class Coordinates {
 		return "("+x+","+y+","+z+")";
 	}
 	
-	/*
-	 * returns an integer 2D array that stores the (x,y,z) values in form of a vector
+	/**
+	 * @return an integer 2D array that stores the (x,y,z) values in form of a vector
 	 */
 	public int[][] toVector() {
 		int[][] array = {{x},

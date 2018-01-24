@@ -3,7 +3,7 @@ package Util;
 import Shapes.ShapeMaterial;
 import javafx.scene.paint.Color;
 
-/*
+/**
  * A 2d shape with four vertices that is used to construct 3d object (not used right now)
  */
 public class Quadrilateral {

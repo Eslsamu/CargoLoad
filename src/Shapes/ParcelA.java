@@ -1,5 +1,7 @@
 package Shapes;
-
+/**
+ * Class representing ParcelA
+ */
 public class ParcelA extends ParcelShape{
 	
 	protected static ShapeMaterial material = ShapeMaterial.GREEN;
@@ -9,7 +11,9 @@ public class ParcelA extends ParcelShape{
 	protected static String name = "A";
 	
 	protected static int value = 3;
-	
+	/**
+         * Create ParcelA
+         */
 	public ParcelA() {
 		super(material, name, value, width, height, length);
 	}
@@ -22,6 +26,10 @@ public class ParcelA extends ParcelShape{
 		clone.setOrientation(this.orientation);
 		return clone;	
 	}
+        /**
+         * Make a clone that has the coordinates
+         * @return a clone
+         */
         @Override 
         public ParcelA cloneWithCoordinates(){
             ParcelA clone = new ParcelA();

@@ -34,7 +34,15 @@ public abstract class ParcelShape extends Shape{
 	 */
 	protected Facing orientation;
 	
-	
+	/**
+         * Constructor
+         * @param m material
+         * @param n name
+         * @param v value
+         * @param w width
+         * @param h height
+         * @param l length
+         */
 	public ParcelShape(ShapeMaterial m, String n,  int v, int w, int h, int l) {
 		super(m,n,v);
 		this.width = w;
@@ -47,13 +55,19 @@ public abstract class ParcelShape extends Shape{
 		positionParcelContainer = new Coordinates(0,0,0);
 	}
 	
-	
+	/**
+         * Return vector representation of coordinates
+         * @return coordinates
+         */
 	public Coordinates getShapeVector(){
 	    return shapeVector;
     }
 
 
-
+        /**
+         * Computes value/volume ratio
+         * @return ratio
+         */
     public double getRatio() {
     	double doubleValue = value;
         return  doubleValue/ (shapeVector.x * shapeVector.y * shapeVector.z);
@@ -73,7 +87,10 @@ public abstract class ParcelShape extends Shape{
 		return this.positionParcelContainer;
 	}
 	
-
+        /**
+         * Sets the coordinates of the parcel
+         * @param coords coordinates
+         */
 	public void setCurrentCoordinates(Coordinates coords) {
 		this.positionParcelContainer = coords;
 	}

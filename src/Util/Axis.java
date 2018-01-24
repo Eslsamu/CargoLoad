@@ -1,11 +1,17 @@
 package Util;
 
-
+/**
+ * Axises around which a rotation can be made
+ * @author danyp
+ */
 public enum Axis {
 	X,
 	Y,
 	Z;
-	
+	/**
+         * 
+         * @return coordinates
+         */
 	public Coordinates toUnitVector() {
         switch (this) {
             case X	: return new Coordinates(1,0,0);

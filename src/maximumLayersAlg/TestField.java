@@ -24,20 +24,10 @@ public class TestField extends PentoContainer{
 	
 	
 	 public static void main(String[] args) {
-		 PentoBox testBox1 = new PentoBox(5,2);
-                 PentoBox maxValueBox = new PentoBox(5,2);
-		 testBox1.loadContainer(maxValueBox, true, true);
-		 
-		 TestField test = new TestField();
-		 test.place(new PentominoP(), new Coordinates(0,0,10));
-		 test.printContainer();
-		 EML testLayer = test.getBestEmptyLayer();
-		 System.out.println("best"+testLayer.closestDistance[0]+" "+testLayer.closestDistance[1]+" "+testLayer.closestDistance[2]);
-	 }
+		}
 	 
 	 public boolean loadMaxLayerAlg() {
 		 if(containedParcels.size() >= (containerX*containerY*containerZ/5)) {
-				printContainer();
 				return true;
 		}
 		EML nextSpace = getBestEmptyLayer();
