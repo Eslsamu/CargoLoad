@@ -239,8 +239,6 @@ public class ContainerModel {
 
     public void solveDivideAndConquer(ContainerModel maxValueContainer){
 
-
-
         ArrayList<int[]> subspaces = generateSubspaces();
         for(int[] subspaceShape:subspaces){
             newContainer();
@@ -363,11 +361,7 @@ public class ContainerModel {
                 }
             }
         }
-        for(ParcelShape parcel: subspace.containedParcels){
-            ParcelShape someParcel = parcel.clone();
-            someParcel.setCurrentCoordinates(new Coordinates(parcel.getPosition().getX() + x, parcel.getPosition().getY() + y, parcel.getPosition().getZ() + z));
-            containedParcels.add(someParcel);
-        }
+        containedParcels.addAll(subspace.containedParcels);
         deductNeededParcels();
     }
 

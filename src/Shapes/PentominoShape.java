@@ -19,22 +19,6 @@ public abstract class PentominoShape {
 	protected final int value;
 	protected final ShapeMaterial material;
 	
-	//for debug
-	private String label = ".";
-	
-	public static void main(String[]args) {
-		PentominoP testP = new PentominoP();
-		System.out.println(testP.toString());
-		
-		testP.rotate(90, Axis.X);
-		System.out.println(testP.toString());
-		testP.rotate(180, Axis.Y);
-		System.out.println(testP.toString());
-
-		testP.moveToOrigin();
-		System.out.println(testP.toString());
-	}
-	
 	public PentominoShape(String n, int v, ShapeMaterial m) {
 		this.name = n;
 		this.value = v;
@@ -44,6 +28,7 @@ public abstract class PentominoShape {
 	public int getValue(){
             return value;
         }
+	
 	public void rotate(double angle, Axis ax) {
 		for(Monimo m : children) {
 			m.positionParentshape = Algebra.rotateUV(angle,ax,m.positionParentshape);
@@ -121,13 +106,7 @@ public abstract class PentominoShape {
 		}
 	}
 	
-	public void setLabel(String l) {
-		label = l;
+	public ShapeMaterial getMaterial() {
+		return material;
 	}
-	public String getLabel() {
-		return label;
-	}
-        public ShapeMaterial getMaterial(){
-            return material;
-        }
 }

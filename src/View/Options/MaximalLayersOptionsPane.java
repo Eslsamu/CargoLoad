@@ -2,7 +2,6 @@ package View.Options;
 
 import Model.ContainerModel;
 import Model.DivideConquerPentominoes;
-import Model.Grasp;
 import Shapes.ParcelShape;
 import View.ContainerPane;
 import View.ContainerView;
