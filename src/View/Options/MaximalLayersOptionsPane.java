@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  * @version 2.0
  * @date 23.01.2018
  */
-public class MaximalSpaceOptionsPane extends VBox{
+public class MaximalLayersOptionsPane extends VBox{
     private Stage stage;
     private ContainerPane container;
     private ArrayList<ParcelShape> containedShapes = new ArrayList<>();
@@ -35,7 +35,7 @@ public class MaximalSpaceOptionsPane extends VBox{
      * @param options an instance of OptionsPane to control shown options
      * @param view an instance of ContainerView to control shown container
      */
-    public MaximalSpaceOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
+    public MaximalLayersOptionsPane(ContainerPane container, OptionsPane options, ContainerView view){
         this.container = container;
         
         Label title = new Label("Choose packing:");
@@ -54,26 +54,20 @@ public class MaximalSpaceOptionsPane extends VBox{
         packBox.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                //view.hideButtons();
-                //stage.close();
-                Grasp graspModel = new Grasp(100,100,100);
-                graspModel.graspTest();
-                container.drawBoxes(graspModel.getParcelsPacked(), graspModel.getTotalValue(), "Maximal spaces, infinite amount of boxes");
-
             }});
-        getChildren().add(packBox);
+        //getChildren().add(packBox);
         
         ToggleGroup packBoxGroup = new ToggleGroup();
         infiniteAmount.setFont(new Font("Arial", 15));
         infiniteAmount.setSelected(true);
         infiniteAmount.setFocusTraversable(false);
         infiniteAmount.setToggleGroup(packBoxGroup);
-        getChildren().add(infiniteAmount);
+        //getChildren().add(infiniteAmount);
         
         setAmount.setFont(new Font("Arial", 15));
         setAmount.setFocusTraversable(false);
         setAmount.setToggleGroup(packBoxGroup);
-        getChildren().add(setAmount);
+        //getChildren().add(setAmount);
         
         Button packPentominoes = new Button("Pack pentominoes");
         packPentominoes.setFocusTraversable(false);
@@ -83,10 +77,8 @@ public class MaximalSpaceOptionsPane extends VBox{
         packPentominoes.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                //code for pentominoes
-                
             }});
-        getChildren().add(packPentominoes);
+        //getChildren().add(packPentominoes);
 
         Button shownContainers = new Button("Generated Containers");
         shownContainers.setFocusTraversable(false);

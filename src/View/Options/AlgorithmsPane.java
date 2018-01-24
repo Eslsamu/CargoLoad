@@ -57,7 +57,7 @@ public class AlgorithmsPane extends VBox{
             }});
         getChildren().add(divide);
         
-        Button maximalSpace = new Button("Maximal spaces");
+        Button maximalSpace = new Button("Maximal layers");
         maximalSpace.setStyle("-fx-font: 22 arial; -fx-base: #6495ED ");
         maximalSpace.setMinSize(225, 50);
         maximalSpace.setFocusTraversable(false);

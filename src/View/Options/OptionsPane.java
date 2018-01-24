@@ -16,7 +16,7 @@ public class OptionsPane extends VBox{
     private AlgorithmsPane algorithms;
     private DivideConquerOptions divideOptions;
     private RandomOptionsPane randomOptions;
-    private MaximalSpaceOptionsPane maximalSpaceOptions;
+    private MaximalLayersOptionsPane maximalSpaceOptions;
     /**
      * Constructor creates an instance of each pane that we want to display.
      * @param container an instance of containerPane, needed for BacktrackingOptionsPane
@@ -27,7 +27,7 @@ public class OptionsPane extends VBox{
         algorithms = new AlgorithmsPane(this);
         divideOptions = new DivideConquerOptions(container, this, view);
         randomOptions = new RandomOptionsPane(container, this, view);
-        maximalSpaceOptions = new MaximalSpaceOptionsPane(container, this, view);
+        maximalSpaceOptions = new MaximalLayersOptionsPane(container, this, view);
          
         drawAlgorithmOptions();
         
